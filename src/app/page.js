@@ -18,7 +18,14 @@ export default function Home() {
   }, []);
   return (
     <div className="  flex flex-col items-center justify-center min-h-screen text-black bg-gray-100">
-     Hello world
-    </div>
-  );
+      <h1 className="text-3xl font-bold mb-6">Landing Page</h1>
+      {users?.map((user) => (
+        <div key={user.id} className="p-4 m-2 bg-white rounded shadow-md">
+
+          <h2 className="text-xl font-bold">{user.username}</h2>
+          <p className="text-gray-600">{user.email}</p>
+        </div>
+      ))}
+      </div>
+      );
 }
