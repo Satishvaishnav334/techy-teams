@@ -1,29 +1,51 @@
 
-import { MongoClient } from 'mongodb'
+// import { MongoClient } from 'mongodb'
 
-const uri = process.env.MONGODB_URI
+// const uri = process.env.MONGODB_URI
+// const options = {
+//   useUnifiedTopology: true,
+//   useNewUrlParser: true,
+// }
+
+// let client
+// let clientPromise
+
+// if (!process.env.MONGODB_URI) {
+//   throw new Error('Add Mongo URI to .env.local')
+// }
+
+// if (process.env.NODE_ENV === 'development') {
+
+//   if (!global._mongoClientPromise) {
+//     client = new MongoClient(uri, options)
+//     global._mongoClientPromise = client.connect()
+//   }
+//   clientPromise = global._mongoClientPromise
+// } else {
+//   client = new MongoClient(uri, options)
+//   clientPromise = client.connect()
+// }
+
+// export default clientPromise
+
+import mongoose from 'mongoose';
+const uri = process.env.MONGODB_URI;  
 const options = {
-  useUnifiedTopology: true,
   useNewUrlParser: true,
-}
-
-let client
-let clientPromise
-
-if (!process.env.MONGODB_URI) {
-  throw new Error('Add Mongo URI to .env.local')
-}
-
-if (process.env.NODE_ENV === 'development') {
-
-  if (!global._mongoClientPromise) {
-    client = new MongoClient(uri, options)
-    global._mongoClientPromise = client.connect()
+  useUnifiedTopology: true,
+};
+let isConnected = false;
+async function connectToDatabase() {
+  if (isConnected) {
+    return;
   }
-  clientPromise = global._mongoClientPromise
-} else {
-  client = new MongoClient(uri, options)
-  clientPromise = client.connect()
+  try {
+    await mongoose.connect(uri, options);
+    isConnected = true;
+    console.log('MongoDB connected successfully');
+  } catch (error) {
+    console.error('MongoDB connection error:', error);
+    throw error;
+  }
 }
-
-export default clientPromise
+export default connectToDatabase;
