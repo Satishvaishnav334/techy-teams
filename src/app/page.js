@@ -8,7 +8,7 @@ export default function Home() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get("/api/request");
+        const response = await axios.post("/api/auth/admin-login");
         setUsers(response.data);
       } catch (error) {
         console.error("Error fetching users:", error);
@@ -19,8 +19,8 @@ export default function Home() {
   return (
     <div className="  flex flex-col items-center justify-center min-h-screen text-black bg-gray-100">
       <h1 className="text-3xl font-bold mb-6">Landing Page</h1>
-      {users?.map((user) => (
-        <div key={user.id} className="p-4 m-2 bg-white rounded shadow-md">
+      {users?.map((user,id) => (
+        <div key={id} className="p-4 m-2 bg-white rounded shadow-md">
 
           <h2 className="text-xl font-bold">{user.username}</h2>
           <p className="text-gray-600">{user.email}</p>

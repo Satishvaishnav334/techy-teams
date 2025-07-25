@@ -1,11 +1,11 @@
 'use server';
 import MongoDb from "../lib/connect.js";
-import user from "../models/users.js";
+import userModel from "../models/users.js";
 import { NextResponse } from "next/server";
 export async function GET(request) {
   try {
     const client = MongoDb();
-    const users = await user.find({});
+    const users = await userModel.find({});
     console.log(users)
     return  NextResponse.json(users);
   } catch (error) {

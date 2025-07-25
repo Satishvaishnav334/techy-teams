@@ -30,22 +30,21 @@
 
 import mongoose from 'mongoose';
 const uri = process.env.MONGODB_URI;  
-const options = {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-};
+
 let isConnected = false;
 async function connectToDatabase() {
   if (isConnected) {
     return;
   }
   try {
-    await mongoose.connect(uri, options);
+    await mongoose.connect(uri);
     isConnected = true;
     console.log('MongoDB connected successfully');
   } catch (error) {
     console.error('MongoDB connection error:', error);
     throw error;
   }
+
 }
+connectToDatabase()
 export default connectToDatabase;
