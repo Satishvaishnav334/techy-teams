@@ -1,11 +1,23 @@
 'use client';
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { getCookie, setCookie } from "cookies-next/client";
-export default function Home() {
-  const [users, setUsers] = useState([]);
+import { useRouter } from "next/navigation";
+import { getCookie } from "cookies-next/client";
+export default function Page() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [token, setToken] = useState('');
+  const router = useRouter();
+
+  useEffect(() => {
+    const checkSession = () => {
+      setToken(getCookie('token'));
+      if (token) {
+        router.replace('/dashboard')
+      }
+    }
+    checkSession()
+  }, [])
 
   const handleLogIn = async () => {
     try {
@@ -13,21 +25,20 @@ export default function Home() {
       formData.append('email', email);
       formData.append('password', password);
       const response = await axios.post("/api/auth/admin-login", formData)
-      setUsers(response.data);
-      console.log(response.data.token);
-      setCookie('token', response.data.token)
-      console.log(users)
+      if (response.status === 200) {
+        router.push('/dashboard');
+      }
+      setToken(response.data.token);
+      console.log(response.data);
     } catch (error) {
       console.error("Error fetching users:", error);
     }
   };
-
-  console.log(users)
   return (
     <div className="  flex flex-col items-center justify-center min-h-screen text-black bg-gray-100">
       <h1 className="text-3xl font-bold mb-6">Log In</h1>
       <form onSubmit={handleLogIn} className="p-4 m-2 bg-white rounded shadow-md">
-        <label className="block font-semibold text-2xl  my-1">Email</label>
+        <label className="block font-semibold text-2xl  my-1">Email= {token}</label>
         <input
           type="text"
           className="border border-gray-600 text-xl rounded-2xl w-full p-2"

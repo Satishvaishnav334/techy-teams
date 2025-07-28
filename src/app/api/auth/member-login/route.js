@@ -3,29 +3,33 @@ import { NextResponse } from "next/server";
 import { cookies } from 'next/headers';
 import { setCookie } from "cookies-next";
 import jwt from "jsonwebtoken";
+import brecrypt from "bcrypt";
+import connectToDatabase from "../../lib/connect.js";
 export async function POST(request) {
   try {
     const data = await request.formData();
     const email = data.get("email");
     const password = data.get("password");
-    console.log(email, password);  
-    
-    const user = await userModel.findOne({ email });
-    console.log("user", user);
+    console.log(email, password);
+    const user = await userModel.findOne({ $or: [{ email: email }, { name: email }] });
     if (!user) {
       return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
     }
-    const isPasswordValid = await user.comparePassword(password);
-    if (!isPasswordValid) {
-      return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
-    }
+    const isPasswordValid = await brecrypt.compare(password, user.password);
+    console.log(isPasswordValid)
+    // console.log("user 1", user);
+    if (!isPasswordValid) { return NextResponse.json({ error: "Invalid email or password" }, { status: 401 }); }
     const token = jwt.sign(
       { username: user.name, email: user.email },
       process.env.JWT_SECRET,
       { expiresIn: process.env.JWT_EXPIRATION },
     )
-    await cookies().set('token', token)
-    return NextResponse.json({ user, token }, { status: 200 })
+    const cookiesStore = await cookies(); // No need to await
+    cookiesStore.set('token', token);
+    console.log("Token set in cookies 123:", token);
+    return NextResponse.json({  token }, { status: 200 })
+
+
   } catch (error) {
     console.error("Error fetching users:", error);
     return NextResponse.json({ error: "Failed to fetch users" }, { status: 500 });
