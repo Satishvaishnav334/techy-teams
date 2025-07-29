@@ -8,7 +8,7 @@ export default function Home() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.post("/api/auth/admin-login");
+        const response = await axios.post("/api/get-users");
         setUsers(response.data);
       } catch (error) {
         console.error("Error fetching users:", error);

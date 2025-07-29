@@ -1,7 +1,7 @@
 'use client';
 import React from 'react'
 import { DropdownMenu } from "@/components/ui/dropdown-menu"
-import { UserPen, House, LogOut, AlignRight } from "lucide-react"
+import { UserPen, House,User, LogOut, AlignRight } from "lucide-react"
 import { useEffect, useState } from "react";
 import { deleteCookie, getCookie } from 'cookies-next'
 import { useRouter } from 'next/navigation';

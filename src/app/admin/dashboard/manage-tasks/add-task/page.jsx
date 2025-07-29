@@ -19,7 +19,7 @@ function page() {
   console.log(user)
   return (
     <div>
-     Add Teams
+     Add Task
     </div>
   )
 }

@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server';
 import Task from '../models/task.js';
-import connectToDatabase from '../lib/connect';
+import connectToDatabase from '../lib/connect.js';
 import Team from '../models/teams.js';
 import Member from '../models/users.js'; 
-export async function POST() {
+export async function GET() {
     try{
         await connectToDatabase();
        
-        const team = await Member.findOne({})
+        const team = await Member.find({})
         // const team = await Team.create({
         //     teamName: " Team Alpha",
         //     description: "This is a sample task description",

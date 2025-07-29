@@ -1,6 +1,6 @@
 "use client";;
 import { Button } from "./Button.jsx";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown,User } from "lucide-react";
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -21,7 +21,7 @@ const DropdownMenu = ({
         onMouseEnter={() => setIsOpen(true)}
       
         className="px-4 py-2 bg-[#11111198] hover:bg-[#111111d1] shadow-[0_0_20px_rgba(0,0,0,0.2)] border-none rounded-xl backdrop-blur-sm">
-       Menu
+      <User className="h-6 w-6" />
         <>
           <motion.span
             className="ml-2"

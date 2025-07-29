@@ -3,13 +3,13 @@ import React from 'react'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 function page() {
-  const [teams, setTeams] = useState([])
+  const [tasks, setTasks] = useState([])
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch('/api/get-teams');
+        const response = await fetch('/api/get-tasks');
         const data = await response.json();
-        setTeams(data);
+        setTasks(data);
       } catch (error) {
         console.error('Error fetching user:', error);
       }
@@ -17,22 +17,22 @@ function page() {
 
     fetchUser();
   }, []);
-  console.log(teams)
+  console.log(tasks)
   return (
     <div>
-      Manage Teams
+      Manage Tasks
       <div className='flex flex-col gap-5 mt-5'>
          <div  className='flex items-center justify-between p-4 bg-gray-100 rounded-lg shadow'>
             <div className='flex items-center gap-4'>
               <h1>{ }</h1>
-              <h1 className='text-lg font-semibold'><Link href='/admin/dashboard/manage-teams/add-team'>Add New Team</Link></h1>  
+              <h1 className='text-lg font-semibold'><Link href='/admin/dashboard/manage-tasks/add-task'>Add New Task</Link></h1>  
             </div>
           </div>
-        {teams.map((team,id) => (
+        {tasks.map((task,id) => (
           <div key={id} className='flex items-center justify-between p-4 bg-gray-100 rounded-lg shadow'>
             <div className='flex items-center gap-4'>
-              <h1>{ }</h1>
-              <h1 className='text-lg font-semibold'>{team.teamName}</h1>  
+             
+              <h1 className='text-lg font-semibold'>{task.title}</h1>  
             </div>
           </div>
         )

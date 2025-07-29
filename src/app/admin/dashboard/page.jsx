@@ -6,7 +6,8 @@ function page() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch('/api/get-user');
+        const name = 'satish'; 
+        const response = await fetch(`/api/get-users/${name}`);
         const data = await response.json();
         setUser(data);
       } catch (error) {

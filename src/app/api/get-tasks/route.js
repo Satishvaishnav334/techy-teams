@@ -8,9 +8,9 @@ export async function GET() {
     try{
         await connectToDatabase();
        
-        const team = await Team.find({})
-        console.log(team)
-        return NextResponse.json(team, { status: 200 });
+        const task = await Task.find({})
+        console.log(task)
+        return NextResponse.json(task, { status: 200 });
     }
     catch(error){
         console.log(error);
@@ -22,11 +22,11 @@ export async function POST() {
     try{
         await connectToDatabase();
        
-        const team = await Team.create({
+        const task = await Task.create({
             
         })
-        console.log(team)
-        return NextResponse.json(team, { status: 200 });
+        console.log(task)
+        return NextResponse.json(task, { status: 200 });
     }
     catch(error){
         console.log(error);
