@@ -28,6 +28,7 @@ function page() {
       formData.append('title',title)
       formData.append('createBy','6883688467f357f0562544a2')
       formData.append('description',desc)
+      formData.append('members',addmemebers)
 
       const create = await axios.post('/api/get-teams', formData)
       console.log(create.data)

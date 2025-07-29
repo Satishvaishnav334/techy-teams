@@ -22,13 +22,19 @@ export async function POST(req) {
     try {
         await connectToDatabase();
         const formData = await req.formData();
+
         const title = formData.get('title');
         const description = formData.get('description');
         const createBy = formData.get('createBy');
-        console.log(title, description, createBy)
+        const rowmembers = formData.getAll('members');
+        const members = rowmembers
+            .flatMap(item => item.split(','))
+            .map(id => id.trim())
+            .filter(Boolean);
+        console.log(title, description, createBy, members)
         const team = await Team.create({
             teamName: title, description, createBy
-            // ,members. //geting problem
+            ,members 
         })
         console.log(team)
         return NextResponse.json(team, { status: 200 });

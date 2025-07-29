@@ -6,9 +6,9 @@ const TaskSchema = new mongoose.Schema(
     description: { type: String, required: true, trim: true },
     createdBy: { type: Schema.Types.ObjectId, ref: 'Member', required: true },
     status: { type: String, required: true, enum: ["pending", "in-progress", "completed"], default: "pending" },
-    assignedTo: { type: Schema.Types.ObjectId, ref: 'Member', required: true },
+    assignedTo: [{ type: Schema.Types.ObjectId, ref: 'Member', required: true }],
     team: { type: Schema.Types.ObjectId, ref: 'Team' },
-    dueDate: { type: Date, required: true },
+    dueDate: { type: Date,},
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }
   },
