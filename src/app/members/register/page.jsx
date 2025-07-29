@@ -14,7 +14,7 @@ export default function Home() {
       formData.append('email', email);
       formData.append('password', password);
       formData.append('name', name);
-      const response = await axios.post("/api/auth/user-register", formData)
+      const response = await axios.post("/api/auth/member-register", formData)
       setUsers(response.data);
       console.log(response.data.token);
       setCookie('token', response.data.token)
@@ -29,7 +29,7 @@ export default function Home() {
   return (
     <div className="  flex flex-col items-center justify-center min-h-screen text-black bg-gray-100">
       <h1 className="text-3xl font-bold mb-6">Log In</h1>
-      <form onSubmit={handleLogIn} className="p-4 m-2 bg-white rounded shadow-md">
+      <form onSubmit={handleLogIn} encType="multipart/form-data" className="p-4 m-2 bg-white rounded shadow-md">
           <label className="block font-semibold text-2xl  my-1">Name</label>
         <input
           type="text"

@@ -17,7 +17,7 @@ export async function GET() {
         //     createdAt: new Date(),
         //     updatedAt: new Date(),
         // })
-        console.log(team)
+        // console.log(team)
         return NextResponse.json(team, { status: 200 });
     }
     catch(error){
