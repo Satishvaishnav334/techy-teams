@@ -7,10 +7,10 @@ import Member from '../models/users.js';
 export async function GET() {
     try {
         await connectToDatabase();
-
-        const task = await Task.find({}).populate('assignedTo', 'name email role').populate('team', 'name description');
-        console.log(task)
-        return NextResponse.json(task, { status: 200 });
+        Team;
+        Member;
+        const data = await Task.find({}).populate('assignedTo', 'name email role')
+        return NextResponse.json(data, { status: 200 });
     }
     catch (error) {
         console.log(error);
@@ -32,12 +32,14 @@ export async function POST(request) {
             .flatMap(item => item.split(','))
             .map(id => id.trim())
             .filter(Boolean);
-
-        console.log(title, description, createdBy, dueDate,assignedTo)
+      
+        console.log(title, description, createdBy, dueDate, assignedTo)
         const team = await Task.create({
             title, description, createdBy, assignedTo, dueDate, status
         })
         console.log(team)
+
+
         return NextResponse.json(team, { status: 200 });
     }
     catch (error) {

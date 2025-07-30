@@ -1,5 +1,5 @@
 import { Icons } from "./icons.jsx"
-import { Button } from "./Button.jsx"
+import { Button } from "./button.jsx"
 import { Input } from "./Input.jsx"
 import { Label } from "./label.jsx"
 import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react"

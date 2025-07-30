@@ -1,23 +1,9 @@
 'use client'
 import React from 'react'
-import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { useDataContext } from '@/components/context/UserContaxt'
 function page() {
-  const [teams, setTeams] = useState([])
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await fetch('/api/get-teams');
-        const data = await response.json();
-        setTeams(data);
-      } catch (error) {
-        console.error('Error fetching user:', error);
-      }
-    };
-
-    fetchUser();
-  }, []);
-  console.log(teams)
+    const {teams} = useDataContext()
   return (
     <div>
       Manage Teams

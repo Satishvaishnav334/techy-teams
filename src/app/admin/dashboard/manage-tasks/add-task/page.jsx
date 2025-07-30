@@ -1,9 +1,7 @@
 'use client'
 import React from 'react'
 import axios from 'axios'
-import { Calendar } from "@/components/ui/mini-calendar";
-
-
+import Calendar from 'react-calendar'
 import { useEffect, useState } from 'react'
 function page() {
   const [members, setMembers] = useState()
@@ -11,7 +9,8 @@ function page() {
   const [desc, setDesc] = useState()
   const [status, setStatus] = useState("pending")
   const [assignTo, setAssignTo] = useState([])
-  const [date, setDate] = useState()
+  const [dueDate, setDueDate] = useState()
+  const [days, setDays] = useState()
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -25,27 +24,39 @@ function page() {
 
     fetchUser();
   }, []);
-
- 
-
   // console.log(members)
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
-      console.log(date)
+      const date = new Date()
+
+      function addDays(date, day) {
+        const newDate = new Date(date);
+        newDate.setDate(date.getDate() + day);
+        return newDate;
+      }
+      const newdata = addDays(date, Number(days))
+      setDueDate(newdata)
+      console.log(dueDate,Number(days))
       const formData = new FormData();
       formData.append('title', title);
       formData.append('status', status);
       formData.append('createBy', "6883688467f357f0562544a2");
       formData.append('description', desc);
       formData.append('assignTo', assignTo);
-      formData.append('dueDate', date);
+      formData.append('dueDate', dueDate);
 
       const create = await axios.post('/api/get-tasks', formData)
       console.log(create.data)
 
     } catch (error) {
       console.error('Error creating team:', error);
+    }
+    finally{
+      setAssignTo([])
+      setTitle('')
+      setDesc('')
+      setDays('')
     }
   };
   const handleCheckboxChange = (id) => {
@@ -73,9 +84,14 @@ function page() {
           value={desc}
           onChange={(e) => setDesc(e.target.value)}
         />
-            <div className="w-[350px]">
-      <Calendar setDate={setDate}/>
-    </div>
+        <label className="block font-semibold text-2xl  my-1">Task Duration</label>
+        <input
+          type="number"
+          className="border border-gray-600 text-xl rounded-2xl w-full p-2"
+          placeholder="Enter Task Duration"
+          value={days}
+          onChange={(e) => setDays(e.target.value)}
+        />
 
         <div className="p-5 text-2xl rounded-lg border my-4 w-full">
           <h2 className="text-lg font-semibold mb-3">Select User you Want to Assign Task</h2>

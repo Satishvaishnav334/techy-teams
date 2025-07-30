@@ -20,14 +20,10 @@ function page() {
   console.log(teams)
   return (
     <div>
+      
       Manage Teams
       <div className='grid grid-cols-1 md:grid-cols-2 gap-5 mt-5'>
-         <div  className='flex items-center justify-between p-4 bg-gray-100 rounded-lg shadow'>
-            <div className='flex items-center justify-center gap-4'>
-             
-            <Link href='/admin/dashboard/manage-teams/add-team'>   <h1 className='text-lg text-center w-full font-semibold'>Add New Team</h1> </Link> 
-            </div>
-          </div>
+         
         {teams.map((team,id) => (
           <div key={id} className='flex items-center justify-center p-4 bg-gray-100 rounded-lg shadow'>
             <div className='flex flex-col items-center gap-4'>

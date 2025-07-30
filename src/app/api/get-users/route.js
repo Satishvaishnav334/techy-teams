@@ -7,18 +7,8 @@ export async function GET() {
     try{
         await connectToDatabase();
        
-        const team = await Member.find({})
-        // const team = await Team.create({
-        //     teamName: " Team Alpha",
-        //     description: "This is a sample task description",
-        //     createBy: "6883688467f357f0562544a2",
-        //     members: ["6883688467f357f0562544a2", "6883688467f357f0562544a4"], 
-        //     tasks: ["64f1aa01f0aab12345678920", "64f1aa01f0aab12345678921"],
-        //     createdAt: new Date(),
-        //     updatedAt: new Date(),
-        // })
-        // console.log(team)
-        return NextResponse.json(team, { status: 200 });
+        const data = await Member.find({})
+        return NextResponse.json(data, { status: 200 });
     }
     catch(error){
         console.log(error);

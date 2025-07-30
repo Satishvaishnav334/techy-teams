@@ -1,12 +1,13 @@
 "use client";
 import React, { useState } from "react";
+import { DataProvider } from "@/components/context/UserContaxt";
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar";
-import { LayoutDashboard, UserPen, Users, LogOut,ListTodo } from "lucide-react";
+import { LayoutDashboard, UserPen, Users, LogOut, ListTodo } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-
+import { useRouter } from "next/navigation";
 export default function RootLayout({ children }) {
     const links = [
         {
@@ -23,16 +24,17 @@ export default function RootLayout({ children }) {
                 <Users className=" font-bold dark:text-neutral-200 h-6 w-6 flex-shrink-0 text-[#111111d1] transition-colors duration-300 ]" />
             ),
         },
-         {
+        {
             label: "Manage Tasks",
             href: "/admin/dashboard/manage-tasks",
             icon: (
-                <ListTodo  className=" font-bold dark:text-neutral-200 h-6 w-6 flex-shrink-0 text-[#111111d1] transition-colors duration-300 ]" />
+                <ListTodo className=" font-bold dark:text-neutral-200 h-6 w-6 flex-shrink-0 text-[#111111d1] transition-colors duration-300 ]" />
             ),
         },
-      
+
     ];
     const [open, setOpen] = useState(false);
+    const {name} = useRouter()
     return (
         <div
             className={cn(
@@ -50,10 +52,12 @@ export default function RootLayout({ children }) {
                             ))}
                         </div>
                     </div>
-                 
+
                 </SidebarBody>
             </Sidebar>
-            <Dashboard children={children} />
+            <DataProvider >
+                <Dashboard children={children} />
+            </DataProvider>
         </div>
     );
 }
