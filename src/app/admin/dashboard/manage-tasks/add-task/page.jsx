@@ -1,7 +1,9 @@
 'use client'
 import React from 'react'
 import axios from 'axios'
-import Calendar from 'react-calendar'
+import { Calendar } from "@/components/ui/mini-calendar";
+
+
 import { useEffect, useState } from 'react'
 function page() {
   const [members, setMembers] = useState()
@@ -9,7 +11,7 @@ function page() {
   const [desc, setDesc] = useState()
   const [status, setStatus] = useState("pending")
   const [assignTo, setAssignTo] = useState([])
-  const [dueDate, setDueDate] = useState()
+  const [date, setDate] = useState()
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -23,26 +25,21 @@ function page() {
 
     fetchUser();
   }, []);
+
+ 
+
   // console.log(members)
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
-      const date = new Date()
-      
-      function addDays(date, day) {
-        const newDate = new Date(date);
-        newDate.setDate(date.getDate() + day);
-        return newDate;
-      }
-      const newdata = addDays(date,7)
-      setDueDate(newdata)
+      console.log(date)
       const formData = new FormData();
       formData.append('title', title);
       formData.append('status', status);
       formData.append('createBy', "6883688467f357f0562544a2");
       formData.append('description', desc);
       formData.append('assignTo', assignTo);
-      formData.append('dueDate', dueDate);
+      formData.append('dueDate', date);
 
       const create = await axios.post('/api/get-tasks', formData)
       console.log(create.data)
@@ -76,6 +73,9 @@ function page() {
           value={desc}
           onChange={(e) => setDesc(e.target.value)}
         />
+            <div className="w-[350px]">
+      <Calendar setDate={setDate}/>
+    </div>
 
         <div className="p-5 text-2xl rounded-lg border my-4 w-full">
           <h2 className="text-lg font-semibold mb-3">Select User you Want to Assign Task</h2>
