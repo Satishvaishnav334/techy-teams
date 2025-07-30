@@ -10,7 +10,6 @@ export async function POST(request) {
     const data = await request.formData();
     const email = data.get("email");
     const password = data.get("password");
-    console.log(email, password);
     const user = await userModel.findOne({ $or: [{ email: email }, { name: email }] });
     if (!user) {
       return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
@@ -26,7 +25,7 @@ export async function POST(request) {
     )
     const cookiesStore = await cookies(); // No need to await
     cookiesStore.set('token', token);
-    console.log("Token set in cookies 123:", token);
+    // console.log("Token set in cookies 123:", token);
     return NextResponse.json({  token }, { status: 200 })
 
 

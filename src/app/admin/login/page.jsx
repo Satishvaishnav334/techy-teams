@@ -13,10 +13,10 @@ export default function Page() {
      
       const token = getCookie('token')
       const name = getCookie('name')
-      console.log("na,e",name)
+      
       if (token) {
         
-        router.replace(`/admin/dashboard/${name}`)
+        router.replace(`/admin/dashboard/`)
       }
     }
     checkSession()

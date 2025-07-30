@@ -11,7 +11,6 @@ export async function POST(request) {
     const formData = await request.formData();
     const email = formData.get("email");
     const password = formData.get("password");
-    console.log(email, password);
     const user = await userModel.findOne({ $or: [{ email: email }, { name: email }] });
     if (!user) {
       return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });

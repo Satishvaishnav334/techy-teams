@@ -21,9 +21,11 @@ export async function POST(request) {
         process.env.JWT_SECRET,
         { expiresIn: process.env.JWT_EXPIRATION }
       );
-      // console.log(token)
-      await cookies().set('token', token);
-      return NextResponse.json({ user, token }, { status: 201 });
+
+      const cookiesStore = await cookies();
+      const passtoken = cookiesStore.set('token', token);
+      const passname = cookiesStore.set('name', name);
+      return NextResponse.json({ status: 201 });
     }
     return NextResponse.json({ error: "Failed to Create User" }, { status: 400 });
   } catch (error) {

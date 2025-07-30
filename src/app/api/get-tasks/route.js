@@ -33,7 +33,6 @@ export async function POST(request) {
             .map(id => id.trim())
             .filter(Boolean);
       
-        console.log(title, description, createdBy, dueDate, assignedTo)
         const team = await Task.create({
             title, description, createdBy, assignedTo, dueDate, status
         })

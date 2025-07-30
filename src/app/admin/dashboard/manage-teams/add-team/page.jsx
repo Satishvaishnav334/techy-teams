@@ -20,7 +20,7 @@ function page() {
 
     fetchUser();
   }, []);
-  console.log(members)
+
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
@@ -31,7 +31,6 @@ function page() {
       formData.append('members',addmemebers)
 
       const create = await axios.post('/api/get-teams', formData)
-      console.log(create.data)
 
     } catch (error) {
       console.error('Error creating team:', error);
@@ -42,7 +41,6 @@ function page() {
     setAddMembers((prev) => [...prev, id]);
 
   };
-  console.log(addmemebers)
 
   return (
     <div className="  flex flex-col items-center justify-center min-h-screen text-black bg-gray-100">

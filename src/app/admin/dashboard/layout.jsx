@@ -2,10 +2,9 @@
 import React, { useState } from "react";
 import { DataProvider } from "@/components/context/AdminContext";
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar";
-import { LayoutDashboard, UserPen, Users, LogOut, ListTodo } from "lucide-react";
+import { LayoutDashboard,  Users, ListTodo } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 export default function RootLayout({ children }) {
@@ -34,7 +33,7 @@ export default function RootLayout({ children }) {
 
     ];
     const [open, setOpen] = useState(false);
-    const {name} = useRouter()
+   
     return (
         <div
             className={cn(

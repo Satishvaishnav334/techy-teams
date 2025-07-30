@@ -37,7 +37,6 @@ function page() {
       }
       const newdata = addDays(date, Number(days))
       setDueDate(newdata)
-      console.log(dueDate,Number(days))
       const formData = new FormData();
       formData.append('title', title);
       formData.append('status', status);
@@ -47,7 +46,6 @@ function page() {
       formData.append('dueDate', dueDate);
 
       const create = await axios.post('/api/get-tasks', formData)
-      console.log(create.data)
 
     } catch (error) {
       console.error('Error creating team:', error);

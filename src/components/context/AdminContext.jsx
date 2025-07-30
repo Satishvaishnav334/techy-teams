@@ -3,6 +3,7 @@
 
 import { createContext, useContext, useEffect, useState } from 'react';
 import axios from 'axios'
+import { getCookie } from 'cookies-next/client';
 const DataContext = createContext();
 
 export const DataProvider = ({ children, name }) => {
@@ -28,10 +29,9 @@ export const DataProvider = ({ children, name }) => {
     };
 
     useEffect(() => {
-
         fetchContaxtData();
     }, []);
-    console.log("object", tasks)
+    
     return (
         <DataContext.Provider value={{ users, admin, setAdmin, setUsers, refresh: fetchContaxtData, setTeams, teams, setTasks, tasks }}>
             {children}

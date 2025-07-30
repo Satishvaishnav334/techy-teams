@@ -17,7 +17,6 @@ function page() {
 
     fetchUser();
   }, []);
-  console.log(teams)
   return (
     <div>
       
