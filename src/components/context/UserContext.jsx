@@ -3,21 +3,19 @@
 
 import { createContext, useContext, useEffect, useState } from 'react';
 import axios from 'axios'
-const DataContext = createContext();
+import { getCookie } from 'cookies-next/client';
+const UserDataContext = createContext();
 
-export const DataProvider = ({ children,name }) => {
-    const [users, setUsers] = useState([])
-    const [admin, setAdmin] = useState({})
+export const UserDataProvider = ({ children, name }) => {
+    const [user, setUser] = useState({})
     const [tasks, setTasks] = useState([])
     const [teams, setTeams] = useState([])
     const fetchContaxtData = async () => {
         try {
-            const name = 'satish'
-            const res = await axios.get(`/api/get-users`);
-            setUsers(res.data)
-            console.log("object23",res.data)
+            const name = getCookie('name')
+
             const res2 = await axios.get(`/api/get-users/${name}`);
-            setAdmin(res2.data)
+            setUser(res2.data)
             const res3 = await axios.get('/api/get-teams');
             setTeams(res3.data)
             const res4 = await axios.get('/api/get-tasks');
@@ -28,15 +26,15 @@ export const DataProvider = ({ children,name }) => {
     };
 
     useEffect(() => {
-        
+
         fetchContaxtData();
     }, []);
-    console.log("object",tasks)
+    console.log("object", tasks)
     return (
-        <DataContext.Provider value={{ users, admin, setAdmin, setUsers, refresh: fetchContaxtData, setTeams, teams, setTasks, tasks }}>
+        <UserDataContext.Provider value={{ user, setUser, refresh: fetchContaxtData, teams, tasks }}>
             {children}
-        </DataContext.Provider>
+        </UserDataContext.Provider>
     );
 };
 
-export const useDataContext = () => useContext(DataContext);
+export const useUserDataContext = () => useContext(UserDataContext);

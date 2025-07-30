@@ -2,22 +2,9 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { useUserDataContext } from '@/components/context/UserContext'
 function page() {
-  const [tasks, setTasks] = useState([])
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await fetch('/api/get-tasks');
-        const data = await response.json();
-        setTasks(data);
-      } catch (error) {
-        console.error('Error fetching user:', error);
-      }
-    };
-
-    fetchUser();
-  }, []);
-  console.log(tasks)
+  const {tasks} = useUserDataContext()
   return (
     <div>
       Manage Tasks

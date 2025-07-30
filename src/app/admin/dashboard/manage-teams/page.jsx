@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
 import Link from 'next/link'
-import { useDataContext } from '@/components/context/UserContaxt'
+import { useDataContext } from '@/components/context/AdminContext'
 function page() {
     const {teams} = useDataContext()
   return (

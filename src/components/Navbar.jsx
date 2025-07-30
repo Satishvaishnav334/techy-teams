@@ -72,7 +72,7 @@ function Navbar() {
               options={[
                 {
                   label: "Profile",
-                  onClick: () => router.push('/admin/profile'),
+                  onClick: () => router.push('/profile'),
                   Icon: <UserPen className="h-6 w-6" />,
                 },
                 {

@@ -31,12 +31,10 @@ export default function Page() {
       const formData = new FormData();
       formData.append('email', email);
       formData.append('password', password);
-      const response = await axios.post("/api/auth/admin-login", formData)
+      const res = await axios.post("/api/auth/admin-login", formData)
       const token = getCookie('token')
-      const name = getCookie('name')
       if (token) {
-        
-        router.replace(`/admin/dashboard/${name}`)
+        router.replace(`/admin/dashboard`)
       }
     } catch (error) {
       console.error("Error fetching users:", error);

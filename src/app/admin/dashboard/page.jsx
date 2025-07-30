@@ -2,7 +2,7 @@
 import { getCookie } from 'cookies-next';
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation';
-import { useDataContext } from '@/components/context/UserContaxt';
+import { useDataContext } from '@/components/context/AdminContext';
 
 
 function page() {
