@@ -16,6 +16,7 @@ export async function POST(request) {
     }
     const isPasswordValid = await brecrypt.compare(password, user.password);
     console.log(isPasswordValid)
+    const name = user.name
     // console.log("user 1", user);
     if (!isPasswordValid) { return NextResponse.json({ error: "Invalid email or password" }, { status: 401 }); }
     const token = jwt.sign(
@@ -23,9 +24,9 @@ export async function POST(request) {
       process.env.JWT_SECRET,
       { expiresIn: process.env.JWT_EXPIRATION },
     )
-    const cookiesStore = await cookies(); // No need to await
-    cookiesStore.set('token', token);
-    // console.log("Token set in cookies 123:", token);
+     const cookiesStore = await cookies();
+    const passtoken = cookiesStore.set('token', token);
+    const passname = cookiesStore.set('name', name);;
     return NextResponse.json({  token }, { status: 200 })
 
 

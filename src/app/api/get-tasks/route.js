@@ -1,13 +1,11 @@
 import { NextResponse } from 'next/server';
 import Task from '../models/task.js';
 import connectToDatabase from '../lib/connect';
-import Team from '../models/teams.js';
 import Member from '../models/users.js';
 
 export async function GET() {
     try {
         await connectToDatabase();
-        Team;
         Member;
         const data = await Task.find({}).populate('assignedTo', 'name email role')
         return NextResponse.json(data, { status: 200 });
@@ -32,14 +30,22 @@ export async function POST(request) {
             .flatMap(item => item.split(','))
             .map(id => id.trim())
             .filter(Boolean);
-      
-        const team = await Task.create({
+        console.log(assignedTo)
+        const task = await Task.create({
             title, description, createdBy, assignedTo, dueDate, status
         })
-        console.log(team)
+        console.log(task)
+        const users = await Member.updateMany(
+            {
+                _id: assignedTo
+            },
+            {
+                $set: { tasks: task._id }
+            }
+        )
+        console.log(users)
 
-
-        return NextResponse.json(team, { status: 200 });
+        return NextResponse.json(task, { status: 200 });
     }
     catch (error) {
         console.log(error);

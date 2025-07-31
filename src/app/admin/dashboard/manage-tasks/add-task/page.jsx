@@ -3,27 +3,16 @@ import React from 'react'
 import axios from 'axios'
 import Calendar from 'react-calendar'
 import { useEffect, useState } from 'react'
+import { useDataContext } from '@/components/context/AdminContext'
 function page() {
-  const [members, setMembers] = useState()
+  const { users, refresh } = useDataContext()
   const [title, setTitle] = useState()
   const [desc, setDesc] = useState()
   const [status, setStatus] = useState("pending")
   const [assignTo, setAssignTo] = useState([])
   const [dueDate, setDueDate] = useState()
   const [days, setDays] = useState()
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await fetch('/api/get-users');
-        const data = await response.json();
-        setMembers(data);
-      } catch (error) {
-        console.error('Error fetching user:', error);
-      }
-    };
 
-    fetchUser();
-  }, []);
   // console.log(members)
   const handleCreate = async (e) => {
     e.preventDefault();
@@ -44,13 +33,14 @@ function page() {
       formData.append('description', desc);
       formData.append('assignTo', assignTo);
       formData.append('dueDate', dueDate);
-
       const create = await axios.post('/api/get-tasks', formData)
 
+
+      console.log(create)
     } catch (error) {
       console.error('Error creating team:', error);
     }
-    finally{
+    finally {
       setAssignTo([])
       setTitle('')
       setDesc('')
@@ -94,11 +84,12 @@ function page() {
         <div className="p-5 text-2xl rounded-lg border my-4 w-full">
           <h2 className="text-lg font-semibold mb-3">Select User you Want to Assign Task</h2>
           <div className="grid grid-cols-2 gap-3 ">
-            {members?.map((member, index) => {
+            {users?.map((member, index) => {
               return (
                 <label key={index} className="flex items-center space-x-2">
                   <input
                     type="checkbox"
+                   
                     value={member.name}
                     onChange={() => handleCheckboxChange(member._id)}
                   />

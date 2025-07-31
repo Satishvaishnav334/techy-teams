@@ -6,7 +6,7 @@ const TeamSchema = new mongoose.Schema(
     description: { type: String, required: true, trim: true },
     createBy: { type: Schema.Types.ObjectId, ref: 'Member', required: true },
     members: [{ type: Schema.Types.ObjectId, ref: 'Member' }],
-    tasks: [{ type: Schema.Types.ObjectId, ref: 'Task' }],
+    // tasks: [{ type: Schema.Types.ObjectId, ref: 'Task' }],
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }
   },

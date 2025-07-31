@@ -8,7 +8,7 @@ export async function GET() {
     try {
         await connectToDatabase();
         Member;
-        const team = await Team.find({}).populate('members', 'name email role').populate('tasks')
+        const team = await Team.find({}).populate('members', 'name email role')
         // console.log(team)
         return NextResponse.json(team, { status: 200 });
     }

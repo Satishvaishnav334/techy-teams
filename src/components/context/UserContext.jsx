@@ -25,7 +25,7 @@ export const UserDataProvider = ({ children, name }) => {
             console.error('❌ Failed to fetch categories:', err);
         }
     };
-
+console.log("user",user)
     useEffect(() => {
         fetchContaxtData();
      

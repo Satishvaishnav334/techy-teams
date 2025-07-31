@@ -21,7 +21,7 @@ export async function POST(request) {
         process.env.JWT_SECRET,
         { expiresIn: process.env.JWT_EXPIRATION }
       );
-
+      const name = user.name
       const cookiesStore = await cookies();
       const passtoken = cookiesStore.set('token', token);
       const passname = cookiesStore.set('name', name);
