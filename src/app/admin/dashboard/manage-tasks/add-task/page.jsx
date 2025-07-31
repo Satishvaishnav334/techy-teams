@@ -1,41 +1,28 @@
 'use client'
 import React from 'react'
 import axios from 'axios'
-import Calendar from 'react-calendar'
 import { useEffect, useState } from 'react'
 import { useDataContext } from '@/components/context/AdminContext'
+import { Calendar } from "@/components/ui/calendar.jsx"
 function page() {
   const { users, refresh } = useDataContext()
   const [title, setTitle] = useState()
   const [desc, setDesc] = useState()
   const [status, setStatus] = useState("pending")
   const [assignTo, setAssignTo] = useState([])
-  const [dueDate, setDueDate] = useState()
-  const [days, setDays] = useState()
-
-  // console.log(members)
+  const [date,setDate] = useState()
+  
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
-      const date = new Date()
-
-      function addDays(date, day) {
-        const newDate = new Date(date);
-        newDate.setDate(date.getDate() + day);
-        return newDate;
-      }
-      const newdata = addDays(date, Number(days))
-      setDueDate(newdata)
       const formData = new FormData();
       formData.append('title', title);
       formData.append('status', status);
       formData.append('createBy', "6883688467f357f0562544a2");
       formData.append('description', desc);
       formData.append('assignTo', assignTo);
-      formData.append('dueDate', dueDate);
+      formData.append('dueDate', date);
       const create = await axios.post('/api/get-tasks', formData)
-
-
       console.log(create)
     } catch (error) {
       console.error('Error creating team:', error);
@@ -44,7 +31,7 @@ function page() {
       setAssignTo([])
       setTitle('')
       setDesc('')
-      setDays('')
+      setDate('')
     }
   };
   const handleCheckboxChange = (id) => {
@@ -72,15 +59,15 @@ function page() {
           value={desc}
           onChange={(e) => setDesc(e.target.value)}
         />
-        <label className="block font-semibold text-2xl  my-1">Task Duration</label>
-        <input
-          type="number"
-          className="border border-gray-600 text-xl rounded-2xl w-full p-2"
-          placeholder="Enter Task Duration"
-          value={days}
-          onChange={(e) => setDays(e.target.value)}
+        
+       
+        <Calendar
+          mode="single"
+          selected={date}
+          onSelect={setDate}
+          className="rounded-lg border"
         />
-
+       
         <div className="p-5 text-2xl rounded-lg border my-4 w-full">
           <h2 className="text-lg font-semibold mb-3">Select User you Want to Assign Task</h2>
           <div className="grid grid-cols-2 gap-3 ">
@@ -89,7 +76,7 @@ function page() {
                 <label key={index} className="flex items-center space-x-2">
                   <input
                     type="checkbox"
-                   
+
                     value={member.name}
                     onChange={() => handleCheckboxChange(member._id)}
                   />

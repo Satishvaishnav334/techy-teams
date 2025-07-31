@@ -8,6 +8,7 @@ function page() {
   return (
     <div className='h-screen'>
 
+
       My Teams
       <div className='grid grid-cols-1 md:grid-cols-3 gap-5 m-5'>
         {user?.team?.map((team, id) => (

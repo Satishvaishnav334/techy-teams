@@ -31,7 +31,7 @@ export const DataProvider = ({ children, name }) => {
         fetchContaxtData();
 
     }, []);
-    
+    // console.log(tasks)
     return (
         <DataContext.Provider value={{ users, admin, setAdmin, setUsers, refresh: fetchContaxtData, setTeams, teams, setTasks, tasks }}>
             {children}
