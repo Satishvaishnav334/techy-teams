@@ -1,18 +1,21 @@
 "use client";;
 import { Button } from "./button.jsx";
 import { ChevronDown,User } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-
 const DropdownMenu = ({
   options,
-  children
+  children,
+  role
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-
+  const [isAdmin,setIsAdmin] = useState()
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
+
+    
+  
 
   return (
     <div className="relative inline-block">

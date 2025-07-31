@@ -4,14 +4,12 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import axios from 'axios'
 import { getCookie } from 'cookies-next/client';
-import { useRouter } from 'next/navigation';
 const UserDataContext = createContext();
 
 export const UserDataProvider = ({ children, name }) => {
     const [user, setUser] = useState({})
     const [tasks, setTasks] = useState([])
     const [teams, setTeams] = useState([])
-    const router = useRouter() 
     const fetchContaxtData = async () => {
         try {
             const name = getCookie('name')

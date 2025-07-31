@@ -29,7 +29,7 @@ export default function Page() {
       formData.append('email', email);
       formData.append('password', password);
       const res = await axios.post("/api/auth/admin-login", formData)
-      
+      router.push(`/`)
     } catch (error) {
       console.error("Error fetching users:", error);
     }

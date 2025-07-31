@@ -16,7 +16,7 @@ export const DataProvider = ({ children, name }) => {
             const name = getCookie('name')
             const res = await axios.get(`/api/get-users`);
             setUsers(res.data)
-            console.log("object23", res.data)
+ 
             const res2 = await axios.get(`/api/get-users/${name}`);
             setAdmin(res2.data)
             const res3 = await axios.get('/api/get-teams');
@@ -27,9 +27,9 @@ export const DataProvider = ({ children, name }) => {
             console.error('❌ Failed to fetch categories:', err);
         }
     };
-
     useEffect(() => {
         fetchContaxtData();
+
     }, []);
     
     return (

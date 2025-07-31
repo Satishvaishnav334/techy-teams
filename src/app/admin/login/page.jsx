@@ -10,12 +10,9 @@ export default function Page() {
 
   useEffect(() => {
     const checkSession = () => {
-     
       const token = getCookie('token')
       const name = getCookie('name')
-      
       if (token) {
-        
         router.replace(`/admin/dashboard/`)
       }
     }
@@ -32,6 +29,7 @@ export default function Page() {
       formData.append('email', email);
       formData.append('password', password);
       const res = await axios.post("/api/auth/admin-login", formData)
+      console.log(res.data.error)
       const token = getCookie('token')
       if (token) {
         router.replace(`/admin/dashboard`)
