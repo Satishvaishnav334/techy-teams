@@ -12,8 +12,8 @@ function Navbar() {
   const { user  } = useUserDataContext()
   const [isOpen, setIsOpen] = useState(false);
   const items = [
-    { label: 'Tasks', href: '/tasks' },
-    { label: 'Teams', href: '/teams' },
+    { label: 'Tasks', href: '/dashboard/tasks' },
+    { label: 'Teams', href: '/dashboard/teams' },
     { label: 'About', href: '/about' },
     { label: 'Contact', href: '/contact' },
     { label: 'Blogs', href: '/blogs' },
@@ -21,27 +21,19 @@ function Navbar() {
   
   ]
   
-  useEffect(() => {
-    const checkSession = () => {
-      const token = getCookie('token');
-      if (!token) {
-        router.push('/members/login');
-      }
-    };
-    checkSession();
-
-    const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        setIsOpen(false);
-      }
-    }
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    }
-  }, []);
-
+ 
+useEffect(()=>{
+     const handleResize = () => {
+           if (window.innerWidth >= 768) {
+             setIsOpen(false);
+           }
+         } 
+         handleResize();
+         window.addEventListener('resize', handleResize);
+         return () => {
+           window.removeEventListener('resize', handleResize);
+         }
+},[])
 
 
 
@@ -49,20 +41,14 @@ function Navbar() {
   const Logout = async () => {
     deleteCookie('token');
     deleteCookie('name');
-    if (user?.role == 'admin') {
-      router.push('/admin/login');
-    }
-    else {
-      router.push('/members/login');
-    }
+    router.push('/login')
   }
   return (
-    <div className='w-full bg-white border-b-black border-1 shadow-lg  '>
-      <nav className='border-b-1 w-full p-3 '>
+    <div className='w-full bg-white justify-end  flex border-b-black border-1 shadow-lg  '>
+      <nav className='border-b-1 w-[100%] p-3 '>
         <div className=' flex justify-between items-center   text-[#11111198]'>
-
           <div className='text-black w-[25%]  lg:w-[40%]'>
-            <Link href='/'>
+            <Link href='/dashboard'>
               <h1 className='text-2xl lg:text-4xl font-extrabold md:m-2'>Techy_Teams</h1>
             </Link>
           </div>
@@ -70,7 +56,7 @@ function Navbar() {
           <div className=' hidden md:flex justify-between items-center w-[45%]   font-semibold text-lg gap-4'>
             
             {user?.role == 'admin' && (
-              <Link href='/admin/dashboard' className='hover:text-[#111111d1]  font-semibold transition-colors duration-300'>
+              <Link href='/dashboard/admin' className='hover:text-[#111111d1]  font-semibold transition-colors duration-300'>
                 Admin Panel
               </Link>
             )}
@@ -87,7 +73,7 @@ function Navbar() {
               options={[
                 {
                   label: "Profile",
-                  onClick: () => router.push('/profile'),
+                  onClick: () => router.push('/dashboard/profile'),
                   Icon: <UserPen className="h-6 w-6" />,
                 },
                 {

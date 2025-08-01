@@ -13,7 +13,7 @@ export default function Page() {
       const token = getCookie('token')
       const name = getCookie('name')
       if (token) {
-        router.replace(`/admin/dashboard/`)
+        router.replace(`/`)
       }
     }
     checkSession()
@@ -28,12 +28,8 @@ export default function Page() {
       const formData = new FormData();
       formData.append('email', email);
       formData.append('password', password);
-      const res = await axios.post("/api/auth/admin-login", formData)
-      console.log(res.data.error)
-      const token = getCookie('token')
-      if (token) {
-        router.replace(`/admin/dashboard`)
-      }
+      const res = await axios.post("/api/auth/member-login", formData)
+      router.push(`/dashboard`)
     } catch (error) {
       console.error("Error fetching users:", error);
     }

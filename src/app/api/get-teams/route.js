@@ -23,17 +23,25 @@ export async function POST(req) {
         await connectToDatabase();
         const formData = await req.formData();
         const title = formData.get('title');
+        const level = formData.get('level');
         const description = formData.get('description');
-        const createBy = formData.get('createBy');
+        const createdBy = formData.get('createdBy');
         const rowmembers = formData.getAll('members');
         const members = rowmembers
             .flatMap(item => item.split(','))
             .map(id => id.trim())
             .filter(Boolean);
         const team = await Team.create({
-            teamName: title, description, createBy
-            ,members 
+            teamName: title, description, createdBy,level , members
         })
+        const users = await Member.updateMany(
+            {
+                _id: { $in: members }
+            },
+            {
+                $addToSet: { team: team._id }
+            }
+        )
         return NextResponse.json(team, { status: 200 });
     }
     catch (error) {

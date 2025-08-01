@@ -1,8 +1,6 @@
 'use client'
-import { getCookie } from 'cookies-next';
-import { useEffect, useState } from 'react'
+
 import { useRouter } from 'next/navigation';
-import { useDataContext } from '@/components/context/AdminContext';
 import { useUserDataContext } from '@/components/context/UserContext';
 import {
   Table,
@@ -15,13 +13,13 @@ import {
 } from "@/components/ui/table"
 
 function page() {
-  const { users, teams, admin, tasks } = useDataContext()
+  const { users, teams, user, tasks } = useUserDataContext()
   const router = useRouter()
 
 
   return (
-    <div className='flex flex-col items-center justify-start overflow-y-scroll'>
-      <h1 className='text-2xl font-bold my-4'>Welcome Back {admin?.name}</h1>
+    <div className='flex flex-col items-center justify-start w-full'>
+      <h1 className='text-2xl font-bold my-4'>Welcome Back {user?.name}</h1>
       <div>
         <Table>
           <TableCaption>Your Task</TableCaption>
@@ -52,7 +50,7 @@ function page() {
             <TableRow>
               <TableHead className="w-[100px]">Team Name</TableHead>
               <TableHead>Description</TableHead>
-              <TableHead>Pririty</TableHead>
+              <TableHead>Level</TableHead>
               <TableHead>Members</TableHead>
             </TableRow>
           </TableHeader>
@@ -61,7 +59,7 @@ function page() {
               <TableRow>
                 <TableCell className="font-medium">{team?.teamName}</TableCell>
                 <TableCell>{team?.description}</TableCell>
-                <TableCell>{team?.pririty}</TableCell>
+                <TableCell>{team?.level}</TableCell>
                 <TableCell>
                   {team?.members?.map((user,id) => (
                     <TableCell key={id}>{user?.name}</TableCell>

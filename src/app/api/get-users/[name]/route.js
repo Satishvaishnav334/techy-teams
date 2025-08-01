@@ -8,8 +8,14 @@ export async function GET(req, { params }) {
         await connectToDatabase();
         teamModel;
         taskModel;
+         Member;
         const { name } = await params;
-        const data = await Member.findOne({ name }).populate('team').populate('tasks')
+        const data = await Member.findOne({ name }).populate({
+            path: 'team',
+            populate: {
+                path: 'members', // Populates children of children
+            }
+        }).populate('tasks')
         return NextResponse.json(data, { status: 200 });
     }
     catch (error) {

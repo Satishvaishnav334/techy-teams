@@ -2,13 +2,14 @@
 import React from 'react'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { useDataContext } from '@/components/context/AdminContext'
 import { Calendar } from "@/components/ui/calendar.jsx"
+import { useUserDataContext } from '@/components/context/UserContext'
 function page() {
-  const { users, refresh } = useDataContext()
+  const { users, refresh,user } = useUserDataContext
   const [title, setTitle] = useState()
   const [desc, setDesc] = useState()
   const [status, setStatus] = useState("pending")
+  const [priority, setPriority] = useState("medium")
   const [assignTo, setAssignTo] = useState([])
   const [date,setDate] = useState()
   
@@ -18,7 +19,8 @@ function page() {
       const formData = new FormData();
       formData.append('title', title);
       formData.append('status', status);
-      formData.append('createBy', "6883688467f357f0562544a2");
+      formData.append('priority', priority);
+      formData.append('createdBy', user._id);
       formData.append('description', desc);
       formData.append('assignTo', assignTo);
       formData.append('dueDate', date);
@@ -40,7 +42,7 @@ function page() {
   // console.log(assignTo)
 
   return (
-    <div className="  flex flex-col items-center justify-center min-h-screen text-black bg-gray-100">
+      <div className="  flex flex-col items-center justify-center min-h-screen text-black bg-gray-100">
       <h1 className="text-3xl font-bold mb-6">Create Task</h1>
       <form onSubmit={handleCreate} className="p-4 m-2 bg-white rounded shadow-md">
         <label className="block font-semibold text-2xl  my-1">Team Title</label>
@@ -51,6 +53,15 @@ function page() {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
+        <label className="block font-semibold text-2xl  my-1">Task Priority</label>
+        <input
+          type="text"
+          className="border border-gray-600 text-xl rounded-2xl w-full p-2"
+          placeholder="Enter Task Name or Title"
+          value={priority}
+          onChange={(e) => setPriority(e.target.value)}
+        />
+   
         <label className="block font-semibold text-2xl  my-1">Description</label>
         <input
           type="text"

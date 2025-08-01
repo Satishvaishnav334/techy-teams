@@ -14,11 +14,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body
       >
-        <UserDataProvider>
-          <Navbar />
           {children}
-          <Footer />
-        </UserDataProvider>
       </body>
     </html>
   );

@@ -1,31 +1,32 @@
 "use client";
-import React, { useState } from "react";
-import { DataProvider } from "@/components/context/AdminContext";
-import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar";
-import { LayoutDashboard,  Users, ListTodo } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { getCookie } from "cookies-next/client";
+import { UserDataProvider } from "@/components/context/UserContext";
+import { LayoutDashboard, Users, ListTodo } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 export default function RootLayout({ children }) {
     const links = [
         {
             label: "Dashboard",
-            href: "/admin/dashboard",
+            href: "/dashboard/admin",
             icon: (
                 <LayoutDashboard className=" font-bold dark:text-neutral-200 h-6 w-6 flex-shrink-0 text-[#111111d1] transition-colors duration-300 " />
             ),
         },
         {
             label: "Manage Teams",
-            href: "/admin/dashboard/manage-teams",
+            href: "/dashboard/admin/manage-teams",
             icon: (
                 <Users className=" font-bold dark:text-neutral-200 h-6 w-6 flex-shrink-0 text-[#111111d1] transition-colors duration-300 ]" />
             ),
         },
         {
             label: "Manage Tasks",
-            href: "/admin/dashboard/manage-tasks",
+            href: "/dashboard/admin/manage-tasks",
             icon: (
                 <ListTodo className=" font-bold dark:text-neutral-200 h-6 w-6 flex-shrink-0 text-[#111111d1] transition-colors duration-300 ]" />
             ),
@@ -33,31 +34,25 @@ export default function RootLayout({ children }) {
 
     ];
     const [open, setOpen] = useState(false);
-   
-    return (
-        <div
-            className={cn(
-                "rounded-md flex flex-col md:flex-row bg-gray-100 dark:bg-neutral-800 w-full flex-1  mx-auto border border-neutral-200 dark:border-neutral-700 overflow-hidden",
-                "w-[100vw] h-[90vh] overflow-scroll" // for your use case, use `h-screen` instead of `h-[60vh]`
-            )}
-        >
-            <Sidebar open={open} setOpen={setOpen}>
-                <SidebarBody className="justify-between gap-10">
-                    <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
-                        {open ? <Logo /> : <LogoIcon />}
-                        <div className="mt-8 flex flex-col gap-2">
-                            {links.map((link, idx) => (
-                                <SidebarLink key={idx} link={link} />
-                            ))}
-                        </div>
-                    </div>
+    useEffect(() => {
+        const checkSession = () => {
+            const token = getCookie('token');
+            if (!token) {
+                router.push('/login');
+            }
+        };
+        checkSession();
 
-                </SidebarBody>
-            </Sidebar>
-            <DataProvider >
-                <Dashboard children={children} />
-            </DataProvider>
-        </div>
+    }, []);
+    return (
+        <UserDataProvider >
+                
+
+            <Navbar />
+            {children}
+            <Footer />
+        </UserDataProvider>
+
     );
 }
 
@@ -90,13 +85,3 @@ export const LogoIcon = () => {
     );
 };
 
-// Dummy dashboard component with content
-const Dashboard = ({ children }) => {
-    return (
-        <div className="flex flex-1 w-full overflow-scroll">
-            <div className="p-2 md:py-10 rounded-tl-2xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 flex flex-col gap-2 flex-1 w-full h-full">
-                {children}
-            </div>
-        </div>
-    );
-};

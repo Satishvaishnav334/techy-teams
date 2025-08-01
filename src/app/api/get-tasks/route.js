@@ -21,10 +21,11 @@ export async function POST(request) {
         await connectToDatabase();
         const data = await request.formData();
         const title = data.get("title");
+        const description = data.get("description");
+        const priority = data.get("priority");
         const status = data.get("status");
         const dueDate = data.get("dueDate");
-        const description = data.get("description");
-        const createdBy = data.get("createBy");
+        const createdBy = data.get("createdBy");
         const rowassignTo = data.getAll("assignTo");
         const assignedTo = rowassignTo
             .flatMap(item => item.split(','))
@@ -32,18 +33,17 @@ export async function POST(request) {
             .filter(Boolean);
         console.log(assignedTo)
         const task = await Task.create({
-            title, description, createdBy, assignedTo, dueDate, status
+            title, description, createdBy, assignedTo, dueDate, status,priority
         })
         console.log(task)
         const users = await Member.updateMany(
             {
-                _id: assignedTo
+                _id: {$in:assignedTo}
             },
             {
-                $set: { tasks: task._id }
+                $addToSet: { tasks: task._id }
             }
         )
-        console.log(users)
 
         return NextResponse.json(task, { status: 200 });
     }
