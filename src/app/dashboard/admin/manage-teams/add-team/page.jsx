@@ -37,36 +37,53 @@ function page() {
   };
 
   return (
-    <div className="  flex flex-col items-center justify-center min-h-screen text-black bg-gray-100">
-      <h1 className="text-3xl font-bold mb-6">Create Team</h1>
-      <form onSubmit={handleCreate} className="p-4 m-2 bg-white rounded shadow-md">
-        <label className="block font-semibold text-2xl  my-1">Team Title</label>
-        <input
-          type="text"
-          className="border border-gray-600 text-xl rounded-2xl w-full p-2"
-          placeholder="Enter Team Name or Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
+    <div className="  flex flex-col   bg-gray-200 m-20  rounded shadow-md text-black">
+      <h1 className="text-3xl m-5 text-center font-bold">Create Team</h1>
+      <form onSubmit={handleCreate} className="p-10 m-2 w-full  ">
+        <div className='flex gap-10 my-5'>
+          <div>
+
+            <label className="block font-semibold text-xl  my-1"> Title</label>
+            <input
+              type="text"
+              className="border border-gray-600 text-xl rounded-2xl  p-2"
+              placeholder="Enter Team Name or Title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+          </div>
+          <div>
+            <label className="block font-semibold text-xl  my-1"> Level</label>
+
+            <select  className="border border-gray-600 text-xl rounded-2xl  p-2">
+              <option value="">Choose an Level</option>
+          
+              <option value="parrot">Level 1</option>
+              <option value="spider">Level 2</option>
+              <option value="goldfish">Level 3 </option>
+            </select>
+            {/* <input
+              type="text"
+              className="border border-gray-600 text-xl rounded-2xl  p-2"
+              placeholder="Enter Team Level : "
+              value={level}
+              onChange={(e) => setLevel(e.target.value)}
+            /> */}
+          </div>
+        </div>
+
         <label className="block font-semibold text-2xl  my-1">Description</label>
         <input
           type="text"
-          className="border border-gray-600 text-xl rounded-2xl w-full p-2"
+          className="border border-gray-600 text-xl rounded-2xl w-[70%] p-2"
           placeholder="Enter Team Description"
+
           value={desc}
           onChange={(e) => setDesc(e.target.value)}
-        />    
-        <label className="block font-semibold text-2xl  my-1">Team Level</label>
-        <input
-          type="text"
-          className="border border-gray-600 text-xl rounded-2xl w-full p-2"
-          placeholder="Enter Team Level : "
-          value={level}
-          onChange={(e) => setLevel(e.target.value)}
         />
 
-        <div className="p-5 text-2xl rounded-lg border w-full">
-          <h2 className="text-lg font-semibold mb-3">Select up to 5 Categories:</h2>
+        <div className="p-5 my-5 text-2xl rounded-lg border w-full">
+          <h2 className="text-lg font-semibold mb-3">Select Team Members</h2>
           <div className="grid grid-cols-2 gap-3">
             {users?.map((member, index) => {
               return (

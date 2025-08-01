@@ -23,8 +23,8 @@ const DropdownMenu = ({
         onClick={toggleDropdown}
         onMouseEnter={() => setIsOpen(true)}
       
-        className="px-4 py-2 bg-[#11111198] hover:bg-[#111111d1] shadow-[0_0_20px_rgba(0,0,0,0.2)] border-none rounded-xl backdrop-blur-sm">
-       <User />
+        className="py-6 px-4 bg-[#11111198] hover:bg-[#111111d1] shadow-[0_0_20px_rgba(0,0,0,0.2)] border-none rounded-xl backdrop-blur-sm">
+       {children ?? "Menu"}
         <>
           <motion.span
             className="ml-2"

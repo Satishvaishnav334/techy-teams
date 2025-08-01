@@ -22,7 +22,7 @@ function page() {
         <div className='flex items-center justify-between p-4 bg-gray-100 rounded-lg shadow'>
           <div className='flex items-center gap-4'>
 
-            <h1 className='text-lg font-semibold'><Link href='/admin/dashboard/manage-tasks/add-task'>Add New Task</Link></h1>
+            <h1 className='text-lg font-semibold'><Link href='/dashboard/admin/manage-tasks/add-task'>Add New Task</Link></h1>
           </div>
         </div>
 

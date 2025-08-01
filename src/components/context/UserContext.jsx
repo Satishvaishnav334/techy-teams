@@ -11,34 +11,39 @@ export const UserDataProvider = ({ children, name }) => {
     const [users, setUsers] = useState([])
     const [tasks, setTasks] = useState([])
     const [teams, setTeams] = useState([])
+
     const fetchContaxtData = async () => {
         try {
             const name = getCookie('name')
-            console.log(name)
+
             const res2 = await axios.get(`/api/get-users/${name}`);
             setUser(res2.data)
-            const res = await axios.get(`/api/get-users/${name}`);
+
+            const res = await axios.get(`/api/get-users`);
             setUsers(res.data)
 
             const res3 = await axios.get('/api/get-teams');
             setTeams(res3.data)
+
             const res4 = await axios.get('/api/get-tasks');
             setTasks(res4.data)
+
         } catch (err) {
             console.error('❌ Failed to fetch categories:', err);
         }
     };
-    console.log("user", user)
+ 
     useEffect(() => {
+
         fetchContaxtData();
+        
 
-    }, []);
-
-    return (
-        <UserDataContext.Provider value={{ user, setUser, refresh: fetchContaxtData, teams, tasks }}>
-            {children}
-        </UserDataContext.Provider>
-    );
+    }, []);     
+return (
+    <UserDataContext.Provider value={{ user, users, refresh: fetchContaxtData, teams, tasks }}>
+        {children}
+    </UserDataContext.Provider>
+);
 };
 
 export const useUserDataContext = () => useContext(UserDataContext);

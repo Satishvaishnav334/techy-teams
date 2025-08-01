@@ -19,7 +19,7 @@ function page() {
       <div className='flex flex-col  gap-5 mt-5  w-full '>
         <div className='flex flex-col items-center justify-between p-4 bg-gray-200 rounded-lg shadow'>
           <div className='flex items-center justify-center gap-4'>
-            <Link href='/admin/dashboard/manage-teams/add-team'>
+            <Link href='/dashboard/admin/manage-teams/add-team'>
               <h1 className='text-lg text-center w-full font-semibold'>Add New Team</h1>
             </Link>
           </div>
