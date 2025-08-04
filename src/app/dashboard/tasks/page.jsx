@@ -12,9 +12,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { Link } from 'lucide-react';
 
 function page() {
-  const { user} = useUserDataContext()
+  const { user } = useUserDataContext()
   const router = useRouter()
 
 
@@ -31,6 +32,8 @@ function page() {
               <TableHead>Priority</TableHead>
               <TableHead>Status</TableHead>
               <TableHead className="text-right">Due Date</TableHead>
+              <TableHead className="text-right">Edit</TableHead>
+              <TableHead className="text-right">Delete</TableHead>
             </TableRow>
           </TableHeader>
           {user.tasks?.map((task, id) => (
@@ -41,11 +44,23 @@ function page() {
                 <TableCell>{task?.priority}</TableCell>
                 <TableCell>{task?.status}</TableCell>
                 <TableCell className="text-right">{formatDate(task?.dueDate)}</TableCell>
+                <TableCell className="text-right">
+                  <Link href={`/dashboard/admin/manage-tasks/${task.title}`}>
+                    <button className="bg-blue-600 cursor-pointer font-semibold text-white px-3 py-2 my-2 rounded-lg text-xl">
+                      Edit
+                    </button>
+                  </Link>
+                </TableCell>
+                <TableCell className="text-right">
+                  <button className="bg-blue-600 cursor-pointer font-semibold text-white px-3 py-2 my-2 rounded-lg text-xl">
+                    Delete
+                  </button>
+                </TableCell>
               </TableRow>
             </TableBody>
           ))}
         </Table>
-      
+
       </div>
 
     </div>

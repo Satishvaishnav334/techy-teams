@@ -1,6 +1,7 @@
 'use client';
 import React from 'react'
 import { useUserDataContext } from '@/components/context/UserContext';
+import Link from 'next/link';
 function page() {
   const { user, refresh } = useUserDataContext()
 
@@ -11,6 +12,9 @@ function page() {
         <h1 className='text-2xl lg:text-3xl  md:m-2'> Email : {user.email}</h1>
         <h1 className='text-2xl lg:text-3xl  md:m-2'>Role : {user.role}</h1>
         <h1 className='text-2xl lg:text-3xl  md:m-2'>Joing Date : {formatDate(user.createdAt)}</h1>
+        <Link href='/dashboard/profile/update'>
+          <button className='bg-blue-300 px-4 py-3 rounded-xl shadow-xl m-5'>Update Profile</button>
+        </Link>
       </div>
     </div>
   )

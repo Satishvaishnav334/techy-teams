@@ -1,6 +1,8 @@
+
 'use client'
-import React from 'react'
-import Link from 'next/link'
+
+import { useRouter } from 'next/navigation';
+import { useUserDataContext } from '@/components/context/UserContext';
 import {
   Table,
   TableBody,
@@ -8,57 +10,60 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
+  TableRow,TableLink
 } from "@/components/ui/table"
-import { useUserDataContext } from '@/components/context/UserContext'
+import { Link } from 'lucide-react';
+
 function page() {
+  const { user } = useUserDataContext()
+  const router = useRouter()
 
-  const { tasks } = useUserDataContext()
-  
+
   return (
-    <div className='overflow-scroll'>
-      Manage Tasks
-      <div className='flex flex-col gap-5 mt-5  w-full'>
-        <div className='flex items-center justify-between p-4 bg-gray-100 rounded-lg shadow'>
-          <div className='flex items-center gap-4'>
-
-            <h1 className='text-lg font-semibold'><Link href='/dashboard/admin/manage-tasks/add-task'>Add New Task</Link></h1>
-          </div>
-        </div>
-
+    <div className='flex flex-col items-center justify-start h-screen w-full'>
+      <h1 className='text-2xl font-bold my-4'>Welcome Back {user?.name}</h1>
+      <div>
         <Table>
           <TableCaption>Your Task</TableCaption>
           <TableHeader>
             <TableRow>
               <TableHead className="w-[100px]">Title</TableHead>
               <TableHead>Description</TableHead>
-              <TableHead>Status</TableHead>
               <TableHead>Priority</TableHead>
-              <TableHead>Assigned To</TableHead>
+              <TableHead>Status</TableHead>
               <TableHead className="text-right">Due Date</TableHead>
+              <TableHead className="text-right">Edit</TableHead>
+              <TableHead className="text-right">Delete</TableHead>
             </TableRow>
           </TableHeader>
-          {tasks?.map((task, id) => (
+          {user.tasks?.map((task, id) => (
             <TableBody key={id}>
               <TableRow>
                 <TableCell className="font-medium">{task?.title}</TableCell>
                 <TableCell>{task?.description}</TableCell>
-                <TableCell>{task?.status}</TableCell>
                 <TableCell>{task?.priority}</TableCell>
-                <TableCell>{task?.assignedTo?.map((user) => (user.name))}</TableCell>
+                <TableCell>{task?.status}</TableCell>
                 <TableCell className="text-right">{formatDate(task?.dueDate)}</TableCell>
+                <TableLink href={task?.title} >
+                  Edit
+                </TableLink>
+                <TableCell className="text-right">
+                  <button className="bg-blue-600 cursor-pointer font-semibold text-white px-3 py-2 my-2 rounded-lg text-xl">
+                    Delete
+                  </button>
+                </TableCell>
               </TableRow>
             </TableBody>
           ))}
         </Table>
 
       </div>
+
     </div>
   )
 }
 
 export default page
-
 function formatDate(dateString) {
   const date = new Date(dateString);
   return date.toLocaleDateString('en-US', {

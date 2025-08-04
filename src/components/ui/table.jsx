@@ -3,7 +3,7 @@
 import * as React from "react"
 
 import { cn } from "@/lib/utils"
-
+import Link from "next/link";
 function Table({
   className,
   ...props
@@ -110,6 +110,19 @@ function TableCaption({
       {...props} />
   );
 }
+function TableLink({
+  href,
+  className,
+  ...props
+}) {
+  return (
+    <Link
+    href={`/dashboard/admin/manage-tasks/update/${href}`}
+      data-slot="table-caption"
+      className={cn("bg-blue-600 m-5 cursor-pointer font-semibold text-white px-3 py-2 my-2 rounded-lg text-xl", className)}
+      {...props} >Edit </Link>
+  );
+}
 
 export {
   Table,
@@ -120,4 +133,5 @@ export {
   TableRow,
   TableCell,
   TableCaption,
+  TableLink
 }
