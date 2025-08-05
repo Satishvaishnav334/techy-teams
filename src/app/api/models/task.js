@@ -9,7 +9,7 @@ const TaskSchema = new mongoose.Schema(
     priority: { type: String, enum: ["low", "medium", "high"], default: "medium" },
     status: { type: String, required: true, enum: ["pending", "in-progress", "completed"], default: "pending" },
     assignedTo: [{ type: Schema.Types.ObjectId, ref: 'Member', required: true }],
-    dueDate: { type: Date, },
+    dueDate: { type: Date,default: Date.now  },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }
   },

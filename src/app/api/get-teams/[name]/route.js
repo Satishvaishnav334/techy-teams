@@ -14,13 +14,28 @@ export async function GET(req, { params }) {
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
 }
+
+export async function DELETE(req, { params }) {
+    try {
+        await connectToDatabase();
+        const { name } = await params;
+        const data = await teamModel.deleteMany();
+        console.log(data)
+        return NextResponse.json(data, { status: 200 });
+    }
+    catch (error) {
+        console.log(error);
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    }
+}
+
 export async function PUT(req, { params }) {
     try {
         await connectToDatabase();
         const { name } = await params;
         const data = await req.formData();
         const teamName = data.get("teamName");
-        const slug = formData.get('slug');
+        const slug = data.get('slug');
         const description = data.get("description");
         console.log(slug)
         const level = data.get("level");
@@ -30,7 +45,7 @@ export async function PUT(req, { params }) {
             .flatMap(item => item.split(','))
             .map(id => id.trim())
             .filter(Boolean);
-        // console.log(assignedTo,rowassignTo)
+        
         const task = await teamModel.updateOne(
             { slug: name }, 
             {

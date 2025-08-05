@@ -11,9 +11,23 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import axios from 'axios';
+
 import { useUserDataContext } from '@/components/context/UserContext'
 function page() {
-  const { teams } = useUserDataContext()
+  const { teams,refresh } = useUserDataContext()
+    async function handleDelete(slug){
+      try{
+        const res = await axios.delete(`/api/get-teams/${slug}`)
+        console.log(res)
+      }
+      catch(error){
+        console.log(error)
+      }
+      finally{
+        refresh()
+      }
+    }
   return (
     <div>
       Manage Teams
@@ -45,6 +59,11 @@ function page() {
                                   Edit
                                 </TableLink>
                 <TableCell>
+                    <TableCell className="text-right">
+                  <button onClick={(e)=>handleDelete(team?.slug)} className="bg-blue-600 cursor-pointer font-semibold text-white px-3 py-2 my-2 rounded-lg text-xl">
+                    Delete
+                  </button>
+                </TableCell>
                   {team?.members?.map((user, id) => (
                     <TableCell key={id}>{user?.name}</TableCell>
                   ))}

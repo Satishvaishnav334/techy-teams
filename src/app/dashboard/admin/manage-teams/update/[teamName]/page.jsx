@@ -3,16 +3,16 @@ import React from 'react'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useUserDataContext } from '@/components/context/UserContext'
-import { useParams } from 'next/navigation'
+import { useParams,useRouter } from 'next/navigation'
 function page() {
     const { teamName } = useParams()
     const { users, refresh, user } = useUserDataContext()
     const [team, setTeam] = useState({})
     const [newteamName, setTeamName] = useState()
     const [desc, setDesc] = useState()
-    const [slug, setSlug] = useState()
-    const [level, setLevel] = useState( )
+    const [level, setLevel] = useState()
     const [members, setMembers] = useState([])
+    const router = useRouter()
     async function fetchteam() {
         try {
             const team = await axios.get(`/api/get-teams/${teamName}`)
@@ -26,16 +26,15 @@ function page() {
     useEffect(() => {
         fetchteam()
     }, [])
-    
+
     const handleCreate = async (e) => {
         e.preventDefault();
         try {
+            const slug = teamName?.split(' ').join('-').toLowerCase();
             const formData = new FormData();
-            
-        //    newslug ? slug.spilt(' ').join('-').toLowerCase() : team?.slug)
             formData.append('teamName', newteamName ? newteamName : team?.teamName);
             formData.append('description', desc ? desc : team?.description);
-            formData.append('slug', slug ? slug : team?.slug);  
+            formData.append('slug', slug);
             formData.append('level', level ? level : team?.level);
             formData.append('members', members ? members : team?.members);
             const create = await axios.put(`/api/get-teams/${teamName}`, formData)
@@ -44,6 +43,7 @@ function page() {
             console.error('Error creating team:', error);
         }
         finally {
+            router.push('/dashboard/admin')
             setMembers([])
             setTeamName('')
             setDesc('')
@@ -53,20 +53,12 @@ function page() {
     const handleCheckboxChange = (id) => {
         if (members?.includes(id)) {
             setMembers(Array.isArray(members) && members?.filter((cid) => cid !== id))
-       
-    }
-    else {
-            console.log("objecthb")
+        }
+        else {
             setMembers([...members, id]);
-
         }
     };
-   const handleChange = (e) =>{
-    e.preventDefault();
-    setLevel(e.target.value)
-           
-      
-   }
+  
 
     return (
         <div className="  flex flex-col items-center justify-center min-h-screen text-black bg-gray-100">
@@ -78,36 +70,27 @@ function page() {
                     className="border border-gray-600 text-xl rounded-2xl w-full p-2"
                     defaultValue={team?.teamName}
                     value={newteamName}
-                    onChange={(e) => {setTeamName(e.target.value )}}
+                    onChange={(e) => { setTeamName(e.target.value) }}
                 />
-                <label className="block font-semibold text-2xl  my-1">Team Slug</label>
-                <input
-                    type="text"
-                    className="border border-gray-600 text-xl rounded-2xl w-full p-2"
-                    defaultValue={team?.slug}
-                    value={slug}
-                    onChange={(e) => {setSlug(e.target.value )}}
-                />
-            
+               
+                <div>
+                    <label className="block font-semibold text-xl  my-1"> Level</label>
 
-               <div>
-            <label className="block font-semibold text-xl  my-1"> Level</label>
+                    <select className="border border-gray-600 text-xl rounded-2xl  p-2" value={level} onChange={(e)=> setLevel(e.target.value)}>
+                        <option value="level 2">{level ? level : 'Choose an Level'}</option>
+                        <option value="level 1">Level 1</option>
+                        <option value="level 2">Level 2</option>
+                        <option value="level 3">Level 3 </option>
+                    </select>
 
-            <select className="border border-gray-600 text-xl rounded-2xl  p-2" value={level} onChange={handleChange}>
-              <option value="level 2">{level ? level : 'Choose an Level'}</option>
-              <option value="level 1">Level 1</option>
-              <option value="level 2">Level 2</option>
-              <option value="level 3">Level 3 </option>
-            </select>
-
-          </div>
+                </div>
                 <label className="block font-semibold text-2xl  my-1">Description</label>
                 <input
                     type="text"
                     className="border border-gray-600 text-xl rounded-2xl w-full p-2"
                     defaultValue={team?.description}
                     value={desc}
-                    onChange={(e) => {setDesc(e.target.value)}}
+                    onChange={(e) => { setDesc(e.target.value) }}
                 />
                 <label className="block font-semibold text-2xl  my-1">Date</label>
 
@@ -123,7 +106,7 @@ function page() {
                                             && members?.includes(member?._id)}
                                         onChange={() => handleCheckboxChange(member?._id)} />
 
-                           
+
                                     <span>{member.name}</span>
                                 </label>
                             );

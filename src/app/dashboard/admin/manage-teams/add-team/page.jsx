@@ -2,6 +2,7 @@
 import React from 'react'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { useUserDataContext } from '@/components/context/UserContext'
 function page() {
   const { users, user } = useUserDataContext()
@@ -9,11 +10,11 @@ function page() {
   const [level, setLevel] = useState('level 3')
   const [desc, setDesc] = useState([])
   const [addmemebers, setAddMembers] = useState([])
-  const [slug,setSlug] = useState()
- 
+  const router = useRouter();
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
+      const slug = teamName?.split(' ').join('-').toLowerCase();
       const formData = new FormData()
       formData.append('teamName', teamName)
       formData.append('slug', slug)
@@ -21,31 +22,21 @@ function page() {
       formData.append('createdBy', user._id)
       formData.append('description', desc)
       formData.append('members', addmemebers)
-   
+  
       const create = await axios.post('/api/get-teams', formData)
-
+      console.log(create)
     } catch (error) {
       console.error('Error creating team:', error);
     }
     finally {
-
+      router.push('/dashboard/admin')
     }
   };
   const handleCheckboxChange = (id) => {
-
     setAddMembers((prev) => [...prev, id]);
-
   };
-  const handleChange = (e) => {
-    e.preventDefault()
-    setLevel(e.target.value)
-   
-  }
-  const onchange = (e)=>{
-    e.preventDefault();
-    setTeamName(e.target.value);
-    setSlug(teamName?.split(' ').join('-').toLowerCase())
-  }
+
+ 
   return (
     <div className="  flex flex-col   bg-gray-200 m-20  rounded shadow-md text-black">
       <h1 className="text-3xl m-5 text-center font-bold">Create Team</h1>
@@ -60,21 +51,14 @@ function page() {
               className="border border-gray-600 text-xl rounded-2xl  p-2"
               placeholder="Enter Team Name or Title"
               value={teamName}
-              onChange={onchange}
+              onChange={(e)=>setTeamName(e.target.value)}
             />
-            <label className="block font-semibold text-xl  my-1"> Slug</label>
-             <input
-                    type="text"
-                    className="border border-gray-600 text-xl rounded-2xl w-full p-2"
-                    defaultValue={slug}
-                    value={slug}
-                    onChange={(e) => {setSlug(e.target.value )}}
-                />
+        
           </div>
           <div>
             <label className="block font-semibold text-xl  my-1"> Level</label>
 
-            <select className="border border-gray-600 text-xl rounded-2xl  p-2" value={level} onChange={handleChange}>
+            <select className="border border-gray-600 text-xl rounded-2xl  p-2" value={level} onChange={(e)=>setLevel(e.target.value)}>
               <option value="level 2">Choose an Level</option>
               <option value="level 1">Level 1</option>
               <option value="level 2">Level 2</option>

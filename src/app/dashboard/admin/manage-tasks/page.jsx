@@ -12,16 +12,35 @@ import {
   TableHeader,
   TableRow,TableLink
 } from "@/components/ui/table"
-import { Link } from 'lucide-react';
+import axios from 'axios';
+import Link from 'next/link';
 
 function page() {
-  const { user,tasks } = useUserDataContext()
+  const { user,tasks,refresh } = useUserDataContext()
   const router = useRouter()
 
-
+  async function handleDelete(slug){
+    try{
+      const res = await axios.delete(`/api/get-tasks/${slug}`)
+      console.log(res)
+    }
+    catch(error){
+      console.log(error)
+    }
+    finally{
+      refresh()
+    }
+  }
   return (
     <div className='flex flex-col items-center justify-start h-screen w-full'>
       <h1 className='text-2xl font-bold my-4'>Welcome Back {user?.name}</h1>
+      <div className='flex flex-col items-center justify-between p-4 bg-gray-200 rounded-lg shadow'>
+          <div className='flex items-center justify-center gap-4'>
+            <Link href='/dashboard/admin/manage-tasks/add-task'>
+              <h1 className='text-lg text-center w-full font-semibold'>Add New Team</h1>
+            </Link>
+          </div>
+        </div>
       <div>
         <Table>
           <TableCaption>Your Task</TableCaption>
@@ -48,7 +67,7 @@ function page() {
                   Edit
                 </TableLink>
                 <TableCell className="text-right">
-                  <button className="bg-blue-600 cursor-pointer font-semibold text-white px-3 py-2 my-2 rounded-lg text-xl">
+                  <button onClick={(e)=>handleDelete(task?.slug)} className="bg-blue-600 cursor-pointer font-semibold text-white px-3 py-2 my-2 rounded-lg text-xl">
                     Delete
                   </button>
                 </TableCell>

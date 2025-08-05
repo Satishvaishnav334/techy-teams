@@ -16,6 +16,19 @@ export async function GET(req, { params }) {
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
 }
+export async function DELETE(req, { params }) {
+    try {
+        await connectToDatabase();
+        const { name } = await params;
+        const data = await taskModel.deleteOne({ slug: name });
+        console.log(data)
+        return NextResponse.json(data, { status: 200 });
+    }
+    catch (error) {
+        console.log(error);
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    }
+}
 export async function PUT(req, { params }) {
     try {
         await connectToDatabase();
