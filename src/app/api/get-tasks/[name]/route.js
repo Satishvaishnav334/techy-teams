@@ -1,7 +1,7 @@
 'use server'
 import { NextResponse } from 'next/server';
 import connectToDatabase from '../../lib/connect.js';
-// import Member from '../../models/users.js';
+import Member from '../../models/users.js';
 import taskModel from '../../models/task.js';
 export async function GET(req, { params }) {
     try {
@@ -23,6 +23,7 @@ export async function PUT(req, { params }) {
         const data = await req.formData();
         const title = data.get("title");
         const description = data.get("description");
+ 
         const priority = data.get("priority");
         const status = data.get("status");
         const dueDate = data.get("dueDate");

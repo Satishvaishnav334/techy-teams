@@ -22,17 +22,19 @@ export async function POST(req) {
     try {
         await connectToDatabase();
         const formData = await req.formData();
-        const title = formData.get('title');
+        const teamName = formData.get('teamName');
+        const slug = formData.get('slug');
         const level = formData.get('level');
         const description = formData.get('description');
         const createdBy = formData.get('createdBy');
         const rowmembers = formData.getAll('members');
+  
         const members = rowmembers
             .flatMap(item => item.split(','))
             .map(id => id.trim())
             .filter(Boolean);
         const team = await Team.create({
-            teamName: title, description, createdBy,level , members
+            teamName, description, createdBy,level , members,slug
         })
         const users = await Member.updateMany(
             {

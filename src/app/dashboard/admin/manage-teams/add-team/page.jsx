@@ -4,22 +4,24 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useUserDataContext } from '@/components/context/UserContext'
 function page() {
-  const { users, admin } = useUserDataContext()
-  const [title, setTitle] = useState('')
+  const { users, user } = useUserDataContext()
+  const [teamName, setTeamName] = useState('')
   const [level, setLevel] = useState()
   const [desc, setDesc] = useState([])
   const [addmemebers, setAddMembers] = useState([])
-
-
+  const [slug,setSlug] = useState()
+ 
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
       const formData = new FormData()
-      formData.append('title', title)
+      formData.append('teamName', teamName)
+      formData.append('slug', slug)
       formData.append('level', level)
-      formData.append('createdBy', admin._id)
+      formData.append('createdBy', user._id)
       formData.append('description', desc)
       formData.append('members', addmemebers)
+      console.log(teamName.level,slug)
 
       const create = await axios.post('/api/get-teams', formData)
 
@@ -35,7 +37,11 @@ function page() {
     setAddMembers((prev) => [...prev, id]);
 
   };
-
+  const handleChange = (e) => {
+    e.preventDefault()
+    setLevel(e.target.value)
+   
+  }
   return (
     <div className="  flex flex-col   bg-gray-200 m-20  rounded shadow-md text-black">
       <h1 className="text-3xl m-5 text-center font-bold">Create Team</h1>
@@ -43,32 +49,34 @@ function page() {
         <div className='flex gap-10 my-5'>
           <div>
 
-            <label className="block font-semibold text-xl  my-1"> Title</label>
+            <label className="block font-semibold text-xl  my-1"> Team Name</label>
             <input
+              required={true}
               type="text"
               className="border border-gray-600 text-xl rounded-2xl  p-2"
               placeholder="Enter Team Name or Title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              value={teamName}
+              onChange={(e) => {setTeamName(e.target.value);setSlug(teamName?.split(' ').join('-').toLowerCase())}}
             />
+            <label className="block font-semibold text-xl  my-1"> Slug</label>
+             <input
+                    type="text"
+                    className="border border-gray-600 text-xl rounded-2xl w-full p-2"
+                    defaultValue={slug}
+                    value={slug}
+                    onChange={(e) => {setSlug(e.target.value )}}
+                />
           </div>
           <div>
             <label className="block font-semibold text-xl  my-1"> Level</label>
 
-            <select  className="border border-gray-600 text-xl rounded-2xl  p-2">
-              <option value="">Choose an Level</option>
-          
-              <option value="parrot">Level 1</option>
-              <option value="spider">Level 2</option>
-              <option value="goldfish">Level 3 </option>
+            <select className="border border-gray-600 text-xl rounded-2xl  p-2" value={level} onChange={handleChange}>
+              <option value="level 2">Choose an Level</option>
+              <option value="level 1">Level 1</option>
+              <option value="level 2">Level 2</option>
+              <option value="level 3">Level 3 </option>
             </select>
-            {/* <input
-              type="text"
-              className="border border-gray-600 text-xl rounded-2xl  p-2"
-              placeholder="Enter Team Level : "
-              value={level}
-              onChange={(e) => setLevel(e.target.value)}
-            /> */}
+
           </div>
         </div>
 

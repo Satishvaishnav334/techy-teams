@@ -48,6 +48,7 @@ function page() {
         <label className="block font-semibold text-2xl  my-1">Team Title</label>
         <input
           type="text"
+          required={true}
           className="border border-gray-600 text-xl rounded-2xl w-full p-2"
           placeholder="Enter Task Name or Title"
           value={title}
@@ -57,7 +58,7 @@ function page() {
         <input
           type="text"
           className="border border-gray-600 text-xl rounded-2xl w-full p-2"
-          placeholder="Enter Task Name or Title"
+          placeholder="Enter Priority"
           value={priority}
           onChange={(e) => setPriority(e.target.value)}
         />
@@ -70,14 +71,16 @@ function page() {
           value={desc}
           onChange={(e) => setDesc(e.target.value)}
         />
-        
-       
-        <Calendar
-          mode="single"
-          selected={date}
-          onSelect={setDate}
-          className="rounded-lg border"
+        <label className="block font-semibold text-2xl  my-1">Date</label>
+        <input
+          type="text"
+          className="border border-gray-600 text-xl rounded-2xl w-full p-2"
+          placeholder="Enter Task Due Date"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
         />
+        
+     
        
         <div className="p-5 text-2xl rounded-lg border my-4 w-full">
           <h2 className="text-lg font-semibold mb-3">Select User you Want to Assign Task</h2>

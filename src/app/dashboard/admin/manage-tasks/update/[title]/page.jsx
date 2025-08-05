@@ -6,20 +6,21 @@ import { Calendar } from "@/components/ui/calendar.jsx"
 import { useUserDataContext } from '@/components/context/UserContext'
 import { useParams } from 'next/navigation'
 function page() {
-    const {title} = useParams()
+    const { title } = useParams()
     const { users, refresh, user } = useUserDataContext()
     const [task, setTask] = useState({})
     const [newtitle, setTitle] = useState()
     const [desc, setDesc] = useState()
     const [status, setStatus] = useState("pending")
     const [priority, setPriority] = useState("medium")
-    const [assignTo, setAssignTo] = useState([])
+    const [assignedTo, setAssignedTo] = useState([])
     const [date, setDate] = useState()
     async function fetchTask() {
         try {
             const task = await axios.get(`/api/get-tasks/${title}`)
-            console.log(task,"on")
             setTask(task.data)
+            setAssignedTo(task.data.assignedTo)
+
         }
         catch (error) {
             console.log(error)
@@ -28,31 +29,42 @@ function page() {
     useEffect(() => {
         fetchTask()
     }, [])
-    console.log(task)
     const handleCreate = async (e) => {
         e.preventDefault();
         try {
             const formData = new FormData();
-            formData.append('title', newtitle);
-            formData.append('description', desc);
-            formData.append('priority', priority);
-            formData.append('status', status);
-            formData.append('assignedTo', assignTo);
-            formData.append('dueDate', date);
+            
+            setTitle(newtitle ? newtitle : task?.title)
+            console.log(newtitle ? newtitle : task?.title,newtitle)
+            formData.append('title', newtitle ? newtitle : task?.title);
+            formData.append('description', desc ? desc : task?.description);
+            formData.append('priority', priority ? priority : task?.priority);
+            formData.append('status', status ? status : task?.status);
+            formData.append('assignedTo', assignedTo ? assignedTo : task?.assignedTo);
+            formData.append('dueDate', date ? date : task?.dueDate);
+            // console.log(task?.title,"title=")
             const create = await axios.put(`/api/get-tasks/${title}`, formData)
             console.log(create)
         } catch (error) {
             console.error('Error creating team:', error);
         }
         finally {
-            setAssignTo([])
+            setAssignedTo([])
             setTitle('')
             setDesc('')
             setDate('')
         }
     };
     const handleCheckboxChange = (id) => {
-        setAssignTo((prev) => [...prev, id]);
+        if (assignedTo?.includes(id)) {
+            setAssignedTo(Array.isArray(assignedTo) && assignedTo?.filter((cid) => cid !== id))
+       
+    }
+    else {
+            console.log("objecthb")
+            setAssignedTo([...assignedTo, id]);
+
+        }
     };
     // console.log(assignTo)
 
@@ -64,35 +76,43 @@ function page() {
                 <input
                     type="text"
                     className="border border-gray-600 text-xl rounded-2xl w-full p-2"
-                    placeholder={task?.title}
+                    defaultValue={task?.title}
                     value={newtitle}
-                    onChange={(e) => setTitle(e.target.value)}
+                    onChange={(e) => {setTitle(e.target.value ? e.target.value : task.title)}}
                 />
                 <label className="block font-semibold text-2xl  my-1">Task Priority</label>
                 <input
                     type="text"
                     className="border border-gray-600 text-xl rounded-2xl w-full p-2"
-                    placeholder={task?.priority}
+                    defaultValue={task?.priority}
                     value={priority}
-                    onChange={(e) => setPriority(e.target.value)}
+                    onChange={(e) => setPriority(e.target.value ? e.target.value :  task.priority)}
                 />
 
                 <label className="block font-semibold text-2xl  my-1">Description</label>
                 <input
                     type="text"
                     className="border border-gray-600 text-xl rounded-2xl w-full p-2"
-                    placeholder={task?.description}
+                    defaultValue={task?.description}
                     value={desc}
-                    onChange={(e) => setDesc(e.target.value)}
+                    onChange={(e) => {setDesc(e.target.value)}}
+                />
+                <label className="block font-semibold text-2xl  my-1">Date</label>
+                <input
+                    type="text"
+                    className="border border-gray-600 text-xl rounded-2xl w-full p-2"
+                    defaultValue={formatDate(task?.dueDate)}
+                    value={date}
+                    onChange={(e) => setDate(e.target.value ? e.target.value :  task.dueDate)}
                 />
 
 
-                            <Calendar
-                                mode="single"
-                                selected={date}
-                                onSelect={setDate}
-                                className="rounded-lg border"
-                            />
+                {/* <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={setDate}
+                    className="rounded-lg border"
+                /> */}
 
                 <div className="p-5 text-2xl rounded-lg border my-4 w-full">
                     <h2 className="text-lg font-semibold mb-3">Select User you Want to Assign Task</h2>
@@ -100,12 +120,13 @@ function page() {
                         {users?.map((member, index) => {
                             return (
                                 <label key={index} className="flex items-center space-x-2">
-                                    <input
-                                        type="checkbox"
-                                        // checked={}
-                                        value={member.name}
-                                        onChange={() => handleCheckboxChange(member._id)}
-                                    />
+
+                                    <input type="checkbox"
+                                        checked={Array.isArray(assignedTo)
+                                            && assignedTo?.includes(member?._id)}
+                                        onChange={() => handleCheckboxChange(member?._id)} />
+
+                           
                                     <span>{member.name}</span>
                                 </label>
                             );
@@ -120,3 +141,15 @@ function page() {
 }
 
 export default page
+
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    // hour: 'numeric',
+    // minute: '2-digit',
+    hour12: true
+  });
+}

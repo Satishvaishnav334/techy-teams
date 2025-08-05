@@ -44,7 +44,7 @@ function page() {
                 <TableCell>{task?.priority}</TableCell>
                 <TableCell>{task?.status}</TableCell>
                 <TableCell className="text-right">{formatDate(task?.dueDate)}</TableCell>
-                <TableLink href={task?.title} >
+                <TableLink href={`/dashboard/admin/manage-tasks/update/${task?.title}`}>
                   Edit
                 </TableLink>
                 <TableCell className="text-right">
@@ -64,6 +64,7 @@ function page() {
 }
 
 export default page
+
 function formatDate(dateString) {
   const date = new Date(dateString);
   return date.toLocaleDateString('en-US', {

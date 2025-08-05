@@ -1,3 +1,4 @@
+'use client'
 import { Icons } from "./icons.jsx"
 import { Button } from "./button.jsx"
 import { Input } from "./Input.jsx"

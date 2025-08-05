@@ -1,6 +1,7 @@
 'use client'
 import React from 'react'
 import Link from 'next/link'
+import {TableLink} from '@/components/ui/table'
 import {
   Table,
   TableBody,
@@ -40,6 +41,9 @@ function page() {
                 <TableCell className="font-medium">{team?.teamName}</TableCell>
                 <TableCell>{team?.description}</TableCell>
                 <TableCell>{team?.level}</TableCell>
+                 <TableLink href={`/dashboard/admin/manage-teams/update/${team?.teamName}`} >
+                                  Edit
+                                </TableLink>
                 <TableCell>
                   {team?.members?.map((user, id) => (
                     <TableCell key={id}>{user?.name}</TableCell>

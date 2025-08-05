@@ -21,7 +21,9 @@ export async function PUT(req, { params }) {
         const data = await req.formData();
         const teamName = data.get("teamName");
         const description = data.get("description");
+        console.log(teamName)
         const level = data.get("level");
+        console.log(level)
         const rowmembers = data.getAll("members");
         const members = rowmembers
             .flatMap(item => item.split(','))

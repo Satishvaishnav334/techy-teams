@@ -117,7 +117,7 @@ function TableLink({
 }) {
   return (
     <Link
-    href={`/dashboard/admin/manage-tasks/update/${href}`}
+    href={href}
       data-slot="table-caption"
       className={cn("bg-blue-600 m-5 cursor-pointer font-semibold text-white px-3 py-2 my-2 rounded-lg text-xl", className)}
       {...props} >Edit </Link>
