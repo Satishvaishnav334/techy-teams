@@ -5,19 +5,20 @@ import { useEffect, useState } from 'react'
 import { Calendar } from "@/components/ui/calendar.jsx"
 import { useUserDataContext } from '@/components/context/UserContext'
 function page() {
-  const { users, refresh,user } = useUserDataContext
+  const { users, refresh,user } = useUserDataContext()
   const [title, setTitle] = useState()
+  const [slug, setSlug] = useState()
   const [desc, setDesc] = useState()
   const [status, setStatus] = useState("pending")
   const [priority, setPriority] = useState("medium")
   const [assignTo, setAssignTo] = useState([])
   const [date,setDate] = useState()
-  
-  const handleCreate = async (e) => {
+    const handleCreate = async (e) => {
     e.preventDefault();
     try {
       const formData = new FormData();
       formData.append('title', title);
+      formData.append('slug', slug);
       formData.append('status', status);
       formData.append('priority', priority);
       formData.append('createdBy', user._id);
@@ -40,7 +41,13 @@ function page() {
     setAssignTo((prev) => [...prev, id]);
   };
   // console.log(assignTo)
-
+const onchange = (e)=>{
+    e.preventDefault();
+    setTitle(e.target.value);
+    setSlug(title?.split(' ').join('-').toLowerCase())
+ 
+  }
+  
   return (
       <div className="  flex flex-col items-center justify-center min-h-screen text-black bg-gray-100">
       <h1 className="text-3xl font-bold mb-6">Create Task</h1>
@@ -52,7 +59,15 @@ function page() {
           className="border border-gray-600 text-xl rounded-2xl w-full p-2"
           placeholder="Enter Task Name or Title"
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={onchange}
+        />
+        <label className="block font-semibold text-2xl  my-1">Task Slug</label>
+        <input
+          type="text"
+          className="border border-gray-600 text-xl rounded-2xl w-full p-2"
+          placeholder="Enter Priority"
+          value={slug}
+          onChange={(e) => setSlug(e.target.value)}
         />
         <label className="block font-semibold text-2xl  my-1">Task Priority</label>
         <input

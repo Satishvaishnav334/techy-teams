@@ -10,6 +10,7 @@ function page() {
     const { users, refresh, user } = useUserDataContext()
     const [task, setTask] = useState({})
     const [newtitle, setTitle] = useState()
+    const [slug, setSlug] = useState()
     const [desc, setDesc] = useState()
     const [status, setStatus] = useState("pending")
     const [priority, setPriority] = useState("medium")
@@ -34,9 +35,9 @@ function page() {
         try {
             const formData = new FormData();
             
-            setTitle(newtitle ? newtitle : task?.title)
             console.log(newtitle ? newtitle : task?.title,newtitle)
             formData.append('title', newtitle ? newtitle : task?.title);
+            formData.append('slug', slug ? slug : task?.slug);
             formData.append('description', desc ? desc : task?.description);
             formData.append('priority', priority ? priority : task?.priority);
             formData.append('status', status ? status : task?.status);
@@ -79,6 +80,14 @@ function page() {
                     defaultValue={task?.title}
                     value={newtitle}
                     onChange={(e) => {setTitle(e.target.value ? e.target.value : task.title)}}
+                />
+                <label className="block font-semibold text-2xl  my-1">Team Slug</label>
+                <input
+                    type="text"
+                    className="border border-gray-600 text-xl rounded-2xl w-full p-2"
+                    defaultValue={slug}
+                    value={slug}
+                    onChange={(e) => {setSlug(e.target.value ? e.target.value : task.slug)}}
                 />
                 <label className="block font-semibold text-2xl  my-1">Task Priority</label>
                 <input

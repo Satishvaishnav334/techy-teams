@@ -35,6 +35,7 @@ function page() {
         //    newslug ? slug.spilt(' ').join('-').toLowerCase() : team?.slug)
             formData.append('teamName', newteamName ? newteamName : team?.teamName);
             formData.append('description', desc ? desc : team?.description);
+            formData.append('slug', slug ? slug : team?.slug);  
             formData.append('level', level ? level : team?.level);
             formData.append('members', members ? members : team?.members);
             const create = await axios.put(`/api/get-teams/${teamName}`, formData)

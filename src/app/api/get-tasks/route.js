@@ -21,7 +21,7 @@ export async function POST(request) {
         await connectToDatabase();
         const data = await request.formData();
         const title = data.get("title");
-        const slug = formData.get('slug');
+        const slug = data.get('slug');
         const description = data.get("description");
         const priority = data.get("priority");
         const status = data.get("status");

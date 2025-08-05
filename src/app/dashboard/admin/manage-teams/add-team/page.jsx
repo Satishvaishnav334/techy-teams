@@ -41,6 +41,11 @@ function page() {
     setLevel(e.target.value)
    
   }
+  const onchange = (e)=>{
+    e.preventDefault();
+    setTeamName(e.target.value);
+    setSlug(teamName?.split(' ').join('-').toLowerCase())
+  }
   return (
     <div className="  flex flex-col   bg-gray-200 m-20  rounded shadow-md text-black">
       <h1 className="text-3xl m-5 text-center font-bold">Create Team</h1>
@@ -55,7 +60,7 @@ function page() {
               className="border border-gray-600 text-xl rounded-2xl  p-2"
               placeholder="Enter Team Name or Title"
               value={teamName}
-              onChange={(e) => {setTeamName(e.target.value);setSlug(teamName?.split(' ').join('-').toLowerCase())}}
+              onChange={onchange}
             />
             <label className="block font-semibold text-xl  my-1"> Slug</label>
              <input

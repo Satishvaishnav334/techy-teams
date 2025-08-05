@@ -15,7 +15,7 @@ import {
 import { Link } from 'lucide-react';
 
 function page() {
-  const { user } = useUserDataContext()
+  const { user,tasks } = useUserDataContext()
   const router = useRouter()
 
 
@@ -36,7 +36,7 @@ function page() {
               <TableHead className="text-right">Delete</TableHead>
             </TableRow>
           </TableHeader>
-          {user.tasks?.map((task, id) => (
+          {tasks?.map((task, id) => (
             <TableBody key={id}>
               <TableRow>
                 <TableCell className="font-medium">{task?.title}</TableCell>
@@ -44,7 +44,7 @@ function page() {
                 <TableCell>{task?.priority}</TableCell>
                 <TableCell>{task?.status}</TableCell>
                 <TableCell className="text-right">{formatDate(task?.dueDate)}</TableCell>
-                <TableLink href={`/dashboard/admin/manage-tasks/update/${task?.title}`}>
+                <TableLink href={`/dashboard/admin/manage-tasks/update/${task?.slug}`}>
                   Edit
                 </TableLink>
                 <TableCell className="text-right">

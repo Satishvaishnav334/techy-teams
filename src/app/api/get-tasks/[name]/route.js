@@ -7,7 +7,7 @@ export async function GET(req, { params }) {
     try {
         await connectToDatabase();
         const { name } = await params;
-        const data = await taskModel.findOne({ title: name });
+        const data = await taskModel.findOne({ slug: name });
         console.log(data)
         return NextResponse.json(data, { status: 200 });
     }
@@ -23,7 +23,7 @@ export async function PUT(req, { params }) {
         const data = await req.formData();
         const title = data.get("title");
         const description = data.get("description");
-        const slug = formData.get('slug');
+        const slug = data.get('slug');
         const priority = data.get("priority");
         const status = data.get("status");
         const dueDate = data.get("dueDate");
@@ -34,7 +34,7 @@ export async function PUT(req, { params }) {
             .filter(Boolean);
       
         const task = await taskModel.updateOne(
-            { title: name },
+            { slug: name },
             {
                 $set: {
                     title,

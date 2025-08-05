@@ -6,7 +6,7 @@ export async function GET(req, { params }) {
     try {
         await connectToDatabase();
         const { name } = await params;
-        const data = await teamModel.findOne({ teamName: name });
+        const data = await teamModel.findOne({ slug: name });
         return NextResponse.json(data, { status: 200 });
     }
     catch (error) {
@@ -32,11 +32,11 @@ export async function PUT(req, { params }) {
             .filter(Boolean);
         // console.log(assignedTo,rowassignTo)
         const task = await teamModel.updateOne(
-            { teamName: name },
+            { slug: name }, 
             {
                 $set: {
                     teamName, slug,
-                    description, level, members
+                    description, level, members,slug
                 }
             });
 
