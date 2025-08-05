@@ -1,140 +1,149 @@
 'use client';
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useState } from 'react';
+import {
+  DndContext,
+  useDraggable,
+  useDroppable,
+  closestCenter,
+} from '@dnd-kit/core';
 import { useUserDataContext } from '@/components/context/UserContext';
-import Draggable from 'react-draggable';
 
-function page() {
-  const nodeRef = useRef(null)
+const TaskCard = ({ task }) => {
+  const { attributes, listeners, setNodeRef, transform, isDragging } =
+    useDraggable({ id: task._id });
 
-  const { user, refresh } = useUserDataContext()
-   const [pending, setPending] = useState({ x: 0, y: 0 });
-   const [process, setProcess] = useState({ x: 0, y: 0 });
-   const [complate, setComplate] = useState({ x: 0, y: 0 });
-    const [currentArea, setCurrentArea] = useState('Area A'); // Initial area
+  const style = {
+    transform: transform
+      ? `translate(${transform.x}px, ${transform.y}px)`
+      : undefined,
+    opacity: isDragging ? 0.5 : 1,
+  };
 
-    const handleStop = (e, data) => {
-        const { x, y } = data;
-        if (x < 100) {
-            setCurrentArea('Area A');
-            console.log(pending)
-        } else if (x >= 100 && x < 500) {
-            setCurrentArea('Area B');
-            console.log(process)
-        } else {
-            setCurrentArea('Area C');
-            console.log(complate)
-        }
-    };
-
-  const pendingTask = user?.tasks?.filter(task => task?.status == "pending");
-  const progressTask = user?.tasks?.filter(task => task?.status == "in-progress");
-  const complateTask = user?.tasks?.filter(task => task?.status == "completed");
-
-  console.log(pendingTask)
   return (
-    <div className='flex flex-col w-full p-5 items-start '>
-      <div className='bg-gray-200 flex flex-col justify-start  m-4 rounded-2xl shadow-md  p-10'>
-        <h1 className='text-2xl text-center lg:text-5xl font-extrabold md:m-2'> Hello <span className='text-orange-600 '>{user?.name}</span></h1>
+    <div
+      ref={setNodeRef}
+      {...listeners}
+      {...attributes}
+      style={style}
+      className='flex my-3 items-center justify-between p-4 bg-white rounded-lg shadow-md cursor-move'
+    >
+      <div className='flex flex-col items-center gap-2'>
+        <h1 className='text-lg font-semibold'>{task.title}</h1>
+        <p className='text-sm text-gray-500'>{task.status}</p>
       </div>
-      <div className='flex flex-col w-full justify-between gap-5 my-5'>
+    </div>
+  );
+};
 
+const Column = ({ id, title, tasks }) => {
+  const { setNodeRef, isOver } = useDroppable({ id });
 
-        <div className='w-full  bg-gray-200   rounded-xl shadow-md p-5'>
-          <h1 className='text-xl text-center lg:text-3xl font-bold md:m-2'>My  Task</h1>
-          <div className='grid grid-cols-3 gap-5 mt-5'>
-            <div className='gap-5 mt-5 ' > {currentArea}
-              <h1 className='text-xl text-center lg:text-3xl font-bold md:m-2'> Panding Task</h1>
+  return (
+    <div
+      ref={setNodeRef}
+      className={`p-4 bg-gray-200 rounded-xl min-h-[200px] shadow-md transition-all duration-300 ${
+        isOver ? 'ring-2 ring-orange-400' : ''
+      }`}
+    >
+      <h2 className='text-xl font-bold text-center mb-2'>{title}</h2>
+      {tasks.length > 0 ? (
+        tasks.map((task) => <TaskCard key={task._id} task={task} />)
+      ) : (
+        <p className='text-center text-gray-500'>No Tasks</p>
+      )}
+    </div>
+  );
+};
 
-              {!pendingTask?.length > 0 ? <div>No Task</div> :
-                pendingTask?.map((task, id) => (
-                  <Draggable nodeRef={nodeRef}    position={pending} // Control position with state
-                onStop={handleStop}>
-                    <div key={id} ref={nodeRef} className='flex my-5 items-center justify-between p-4 bg-gray-100 rounded-lg shadow'>
-                      <div className='flex flex-col items-center gap-4'>
-                        <h1 className='text-lg font-semibold'>{task?.title}</h1>
-                        <h1 className='text-lg font-semibold'>{task?.status}</h1>
-                      </div>
-                    </div>
-                  </Draggable>
-                )
-                )}
-            </div>
-            <div className='gap-5  mt-5 '>
+export default function Page() {
+  const { user } = useUserDataContext();
+  const [trigger, setTrigger] = useState(false); // trigger re-render
 
-              <h1 className='text-xl text-center lg:text-3xl font-bold md:m-2'> In Progress Task</h1>
+  const handleDragEnd = async ({ active, over }) => {
+    if (!over) return;
 
-              {progressTask?.length > 0 ? progressTask?.map((task, id) => (
-                <Draggable nodeRef={nodeRef}   position={process} // Control position with state
-                onStop={handleStop}>
-                  <div key={id} ref={nodeRef} className='flex my-5 items-center justify-between p-4 bg-gray-100 rounded-lg shadow'>
-                    <div className='flex flex-col items-center gap-4'>
-                      <h1 className='text-lg font-semibold'>{task?.title}</h1>
-                      <h1 className='text-lg font-semibold'>{task?.status}</h1>
-                    </div>
-                  </div>
-                </Draggable>
-              )
-              ) : <div>
-                No Complated Task
-              </div>}
-            </div>
-            <div className='gap-5 mt-5 '>
+    const taskId = active.id;
+    const newStatus = over.id;
 
-              <h1 className='text-xl text-center lg:text-3xl font-bold md:m-2'> Complated Task</h1>
+    const task = user?.tasks?.find((t) => t._id === taskId);
+    if (!task || task.status === newStatus) return;
 
-              {complateTask?.length > 0 ? complateTask?.map((task, id) => (
-                <Draggable nodeRef={nodeRef}   
-                position={complate} // Control position with state
-                onStop={handleStop}>
-                  <div key={id} ref={nodeRef} className='flex my-5 items-center justify-between p-4 bg-gray-100 rounded-lg shadow'>
-                    <div className='flex flex-col items-center gap-4'>
-                      <h1 className='text-lg font-semibold'>{task?.title}</h1>
-                      <h1 className='text-lg font-semibold'>{task?.status}</h1>
-                    </div>
-                  </div>
-                </Draggable>
-              )
-              )
-                : <div>
-                  No Complated Task
-                </div>
-              }
-            </div>
+    // update task status temporarily
+    task.status = newStatus;
+    setTrigger((prev) => !prev);
 
+    try {
+      await fetch('/api/tasks/update', {
+        method: 'POST',
+        body: JSON.stringify({ taskId, newStatus }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      console.log(`Updated task ${taskId} to ${newStatus}`);
+    } catch (err) {
+      console.error('API failed:', err);
+    }
+  };
+
+  const getTasksByStatus = (status) =>
+    user?.tasks?.filter((task) => task.status === status) || [];
+
+  if (!user?.tasks) {
+    return (
+      <div className='p-10 text-xl font-bold text-center'>Loading tasks...</div>
+    );
+  }
+
+  return (
+    <div className='flex flex-col w-full p-5'>
+      <div className='bg-gray-200 m-4 rounded-2xl shadow-md p-10'>
+        <h1 className='text-2xl text-center lg:text-5xl font-extrabold'>
+          Hello <span className='text-orange-600'>{user?.name}</span>
+        </h1>
+      </div>
+
+      <div className='w-full bg-gray-200 rounded-xl shadow-md p-5 mb-10'>
+        <h1 className='text-xl text-center lg:text-3xl font-bold mb-5'>My Task</h1>
+
+        <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+          <div className='grid grid-cols-1 sm:grid-cols-3 gap-5'>
+            <Column
+              id='pending'
+              title='Pending Tasks'
+              tasks={getTasksByStatus('pending')}
+            />
+            <Column
+              id='in-progress'
+              title='In Progress Tasks'
+              tasks={getTasksByStatus('in-progress')}
+            />
+            <Column
+              id='completed'
+              title='Completed Tasks'
+              tasks={getTasksByStatus('completed')}
+            />
           </div>
-        </div>
+        </DndContext>
+      </div>
 
-
-        <div className='w-full  bg-gray-200 rounded-xl shadow-md p-5'>
-          <h1 className='text-xl text-center lg:text-3xl font-bold md:m-2'>My Team</h1>
-          <div className='flex flex-col gap-5 mt-5'>
-            {user?.team?.length > 0 ? user?.team?.map((team, id) => (
-              <div key={id} className='flex items-center justify-between p-4 bg-gray-100 rounded-lg shadow'>
-                <div className='flex items-center gap-4'>
-                  <h1 className='text-lg font-semibold'>{team.teamName}</h1>
-                </div>
+      <div className='w-full bg-gray-200 rounded-xl shadow-md p-5'>
+        <h1 className='text-xl text-center lg:text-3xl font-bold mb-5'>My Team</h1>
+        <div className='flex flex-col gap-5'>
+          {user?.team?.length > 0 ? (
+            user.team.map((team, id) => (
+              <div
+                key={id}
+                className='flex items-center justify-between p-4 bg-white rounded-lg shadow'
+              >
+                <h1 className='text-lg font-semibold'>{team.teamName}</h1>
               </div>
-            )
-            ) : <div>
-              You have No Teams
-            </div>}
-          </div>
+            ))
+          ) : (
+            <p className='text-center'>You have no teams</p>
+          )}
         </div>
       </div>
-    </div >
-  )
-}
-
-export default page
-
-function formatDate(dateString) {
-  const date = new Date(dateString);
-  return date.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: '2-digit',
-    hour12: true
-  });
+    </div>
+  );
 }
