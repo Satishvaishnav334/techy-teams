@@ -10,6 +10,7 @@ function page() {
     const [team, setTeam] = useState({})
     const [newteamName, setTeamName] = useState()
     const [desc, setDesc] = useState()
+    const [slug, setSlug] = useState()
     const [level, setLevel] = useState( )
     const [members, setMembers] = useState([])
     async function fetchteam() {
@@ -31,7 +32,7 @@ function page() {
         try {
             const formData = new FormData();
             
-            setTeamName(newteamName ? newteamName : team?.teamName)
+        //    newslug ? slug.spilt(' ').join('-').toLowerCase() : team?.slug)
             formData.append('teamName', newteamName ? newteamName : team?.teamName);
             formData.append('description', desc ? desc : team?.description);
             formData.append('level', level ? level : team?.level);
@@ -77,6 +78,14 @@ function page() {
                     defaultValue={team?.teamName}
                     value={newteamName}
                     onChange={(e) => {setTeamName(e.target.value )}}
+                />
+                <label className="block font-semibold text-2xl  my-1">Team Slug</label>
+                <input
+                    type="text"
+                    className="border border-gray-600 text-xl rounded-2xl w-full p-2"
+                    defaultValue={team?.slug}
+                    value={slug}
+                    onChange={(e) => {setSlug(e.target.value )}}
                 />
             
 

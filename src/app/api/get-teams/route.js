@@ -28,7 +28,7 @@ export async function POST(req) {
         const description = formData.get('description');
         const createdBy = formData.get('createdBy');
         const rowmembers = formData.getAll('members');
-  
+       console.log("object",slug)
         const members = rowmembers
             .flatMap(item => item.split(','))
             .map(id => id.trim())
@@ -44,6 +44,7 @@ export async function POST(req) {
                 $addToSet: { team: team._id }
             }
         )
+        console.log(team)
         return NextResponse.json(team, { status: 200 });
     }
     catch (error) {

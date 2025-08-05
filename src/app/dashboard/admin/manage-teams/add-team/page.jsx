@@ -6,7 +6,7 @@ import { useUserDataContext } from '@/components/context/UserContext'
 function page() {
   const { users, user } = useUserDataContext()
   const [teamName, setTeamName] = useState('')
-  const [level, setLevel] = useState()
+  const [level, setLevel] = useState('level 3')
   const [desc, setDesc] = useState([])
   const [addmemebers, setAddMembers] = useState([])
   const [slug,setSlug] = useState()
@@ -21,8 +21,7 @@ function page() {
       formData.append('createdBy', user._id)
       formData.append('description', desc)
       formData.append('members', addmemebers)
-      console.log(teamName.level,slug)
-
+   
       const create = await axios.post('/api/get-teams', formData)
 
     } catch (error) {

@@ -41,7 +41,7 @@ function page() {
                 <TableCell className="font-medium">{team?.teamName}</TableCell>
                 <TableCell>{team?.description}</TableCell>
                 <TableCell>{team?.level}</TableCell>
-                 <TableLink href={`/dashboard/admin/manage-teams/update/${team?.teamName}`} >
+                 <TableLink href={`/dashboard/admin/manage-teams/update/${team?.slug}`} >
                                   Edit
                                 </TableLink>
                 <TableCell>

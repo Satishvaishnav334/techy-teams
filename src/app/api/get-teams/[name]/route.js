@@ -1,15 +1,15 @@
 import { NextResponse } from 'next/server';
 import connectToDatabase from '../../lib/connect.js';
-import Member from '../../models/users.js'; 
+import Member from '../../models/users.js';
 import teamModel from '../../models/teams.js';
-export async function GET(req,{params}) {
-    try{
+export async function GET(req, { params }) {
+    try {
         await connectToDatabase();
-       const {name} = await params;
-        const data = await teamModel.findOne({teamName:name});
+        const { name } = await params;
+        const data = await teamModel.findOne({ teamName: name });
         return NextResponse.json(data, { status: 200 });
     }
-    catch(error){
+    catch (error) {
         console.log(error);
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
@@ -20,8 +20,9 @@ export async function PUT(req, { params }) {
         const { name } = await params;
         const data = await req.formData();
         const teamName = data.get("teamName");
+        const slug = formData.get('slug');
         const description = data.get("description");
-        console.log(teamName)
+        console.log(slug)
         const level = data.get("level");
         console.log(level)
         const rowmembers = data.getAll("members");
@@ -29,13 +30,15 @@ export async function PUT(req, { params }) {
             .flatMap(item => item.split(','))
             .map(id => id.trim())
             .filter(Boolean);
-            // console.log(assignedTo,rowassignTo)
+        // console.log(assignedTo,rowassignTo)
         const task = await teamModel.updateOne(
-            { teamName:name },
-            {$set:{teamName:teamName,
-                description:description,level:level,members:members,
-            }
-        });
+            { teamName: name },
+            {
+                $set: {
+                    teamName, slug,
+                    description, level, members
+                }
+            });
 
         return NextResponse.json(task, { status: 200 });
     }

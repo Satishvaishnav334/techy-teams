@@ -21,6 +21,7 @@ export async function POST(request) {
         await connectToDatabase();
         const data = await request.formData();
         const title = data.get("title");
+        const slug = formData.get('slug');
         const description = data.get("description");
         const priority = data.get("priority");
         const status = data.get("status");
@@ -33,7 +34,7 @@ export async function POST(request) {
             .filter(Boolean);
         console.log(assignedTo)
         const task = await Task.create({
-            title, description, createdBy, assignedTo, dueDate, status,priority
+            title,slug, description, createdBy, assignedTo, dueDate, status,priority
         })
         console.log(task)
         const users = await Member.updateMany(

@@ -6,8 +6,8 @@ import taskModel from '../../models/task.js';
 export async function GET(req, { params }) {
     try {
         await connectToDatabase();
-        const { name  } = await params;
-        const data = await taskModel.findOne({title:name});
+        const { name } = await params;
+        const data = await taskModel.findOne({ title: name });
         console.log(data)
         return NextResponse.json(data, { status: 200 });
     }
@@ -23,7 +23,7 @@ export async function PUT(req, { params }) {
         const data = await req.formData();
         const title = data.get("title");
         const description = data.get("description");
- 
+        const slug = formData.get('slug');
         const priority = data.get("priority");
         const status = data.get("status");
         const dueDate = data.get("dueDate");
@@ -32,13 +32,15 @@ export async function PUT(req, { params }) {
             .flatMap(item => item.split(','))
             .map(id => id.trim())
             .filter(Boolean);
-            // console.log(assignedTo,rowassignTo)
+      
         const task = await taskModel.updateOne(
-            { title:name },
-            {$set:{title:title,
-                description:description,priority:priority,status:status,assignedTo:assignedTo,dueDate:dueDate
-            }
-        });
+            { title: name },
+            {
+                $set: {
+                    title,
+                     description,slug,  priority,  status, assignedTo, dueDate
+                }
+            });
 
         return NextResponse.json(task, { status: 200 });
     }

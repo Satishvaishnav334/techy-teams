@@ -3,6 +3,7 @@ import mongoose, { Schema } from "mongoose";
 const TeamSchema = new mongoose.Schema(
   {
     teamName: { type: String, required: true, unique: true, trim: true },
+    slug: { type: String, required: true, unique: true, trim: true },
     description: { type: String, required: true, trim: true },
     level: { type: String, enum: ["level 1", "level 2", "level 3"], default: "level 3" },
     createdBy: { type: Schema.Types.ObjectId, ref: 'Member', required: true },

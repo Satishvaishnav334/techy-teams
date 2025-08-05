@@ -16,7 +16,7 @@ import {
 function page() {
   const { user} = useUserDataContext()
   const router = useRouter()
-
+  console.log(user)
 
   return (
     <div className='flex flex-col items-center justify-start h-screen w-full'>
