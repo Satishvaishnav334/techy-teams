@@ -6,7 +6,7 @@ const TaskSchema = new mongoose.Schema(
     slug: { type: String, required: true,unique:true, trim: true },
     description: { type: String, required: true, trim: true },
     createdBy: { type: Schema.Types.ObjectId, ref: 'Member', required: true },
-    priority: { type: String, enum: ["low", "medium", "high"], default: "medium" },
+    priority: { type: String, enum: ["Low", "Medium", "Important"], default: "Medium" },
     status: { type: String, required: true, enum: ["pending", "in-progress", "completed"], default: "pending" },
     assignedTo: [{ type: Schema.Types.ObjectId, ref: 'Member', required: true }],
     dueDate: { type: Date,default: Date.now  },

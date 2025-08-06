@@ -69,7 +69,7 @@ function page() {
         </div>
 
         <label className="block font-semibold text-2xl  my-1">Description</label>
-        <input
+        <textarea
           type="text"
           className="border border-gray-600 text-xl rounded-2xl w-[70%] p-2"
           placeholder="Enter Team Description"

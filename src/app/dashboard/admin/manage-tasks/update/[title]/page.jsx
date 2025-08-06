@@ -10,7 +10,6 @@ function page() {
     const { users, refresh, user } = useUserDataContext()
     const [task, setTask] = useState({})
     const [newtitle, setTitle] = useState()
-    const [slug, setSlug] = useState()
     const [desc, setDesc] = useState()
     const [status, setStatus] = useState("pending")
     const [priority, setPriority] = useState("medium")
@@ -21,29 +20,29 @@ function page() {
             const task = await axios.get(`/api/get-tasks/${title}`)
             setTask(task.data)
             setAssignedTo(task.data.assignedTo)
-
         }
         catch (error) {
             console.log(error)
         }
     }
+
     useEffect(() => {
         fetchTask()
     }, [])
+
     const handleCreate = async (e) => {
         e.preventDefault();
         try {
+            const slug = newtitle?.split(' ').join('-').toLowerCase();
             const formData = new FormData();
-            
-            console.log(newtitle ? newtitle : task?.title,newtitle)
             formData.append('title', newtitle ? newtitle : task?.title);
-            formData.append('slug', slug ? slug : task?.slug);
+            formData.append('slug', slug ? slug : task?.slug );
             formData.append('description', desc ? desc : task?.description);
             formData.append('priority', priority ? priority : task?.priority);
             formData.append('status', status ? status : task?.status);
             formData.append('assignedTo', assignedTo ? assignedTo : task?.assignedTo);
             formData.append('dueDate', date ? date : task?.dueDate);
-            // console.log(task?.title,"title=")
+            
             const create = await axios.put(`/api/get-tasks/${title}`, formData)
             console.log(create)
         } catch (error) {
@@ -59,15 +58,13 @@ function page() {
     const handleCheckboxChange = (id) => {
         if (assignedTo?.includes(id)) {
             setAssignedTo(Array.isArray(assignedTo) && assignedTo?.filter((cid) => cid !== id))
-       
     }
     else {
             console.log("objecthb")
             setAssignedTo([...assignedTo, id]);
-
         }
     };
-    // console.log(assignTo)
+
 
     return (
         <div className="  flex flex-col items-center justify-center min-h-screen text-black bg-gray-100">
@@ -81,25 +78,18 @@ function page() {
                     value={newtitle}
                     onChange={(e) => {setTitle(e.target.value ? e.target.value : task.title)}}
                 />
-                <label className="block font-semibold text-2xl  my-1">Team Slug</label>
-                <input
-                    type="text"
-                    className="border border-gray-600 text-xl rounded-2xl w-full p-2"
-                    defaultValue={slug}
-                    value={slug}
-                    onChange={(e) => {setSlug(e.target.value ? e.target.value : task.slug)}}
-                />
+             
                 <label className="block font-semibold text-2xl  my-1">Task Priority</label>
-                <input
-                    type="text"
-                    className="border border-gray-600 text-xl rounded-2xl w-full p-2"
-                    defaultValue={task?.priority}
-                    value={priority}
-                    onChange={(e) => setPriority(e.target.value ? e.target.value :  task.priority)}
-                />
+                <select className="border border-gray-600 text-xl rounded-2xl  p-2" value={priority} onChange={(e) => setPriority(e.target.value)}>
+                       <option value="">{task?.priority}</option>
+                       <option value="Important">Important</option>
+                       <option value="Medium">Medium</option>
+                       <option value="Low">Low </option>
+                     </select>
+                   
 
                 <label className="block font-semibold text-2xl  my-1">Description</label>
-                <input
+                <textarea
                     type="text"
                     className="border border-gray-600 text-xl rounded-2xl w-full p-2"
                     defaultValue={task?.description}
@@ -116,12 +106,7 @@ function page() {
                 />
 
 
-                {/* <Calendar
-                    mode="single"
-                    selected={date}
-                    onSelect={setDate}
-                    className="rounded-lg border"
-                /> */}
+              
 
                 <div className="p-5 text-2xl rounded-lg border my-4 w-full">
                     <h2 className="text-lg font-semibold mb-3">Select User you Want to Assign Task</h2>
@@ -157,8 +142,6 @@ function formatDate(dateString) {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
-    // hour: 'numeric',
-    // minute: '2-digit',
     hour12: true
   });
 }
