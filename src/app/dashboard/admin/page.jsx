@@ -38,7 +38,7 @@ function page() {
                 <TableCell className="font-medium">{task?.title}</TableCell>
                 <TableCell>{task?.description}</TableCell>
                 <TableCell>{task?.status}</TableCell>
-                <TableCell>{task?.assignedTo?.map((user) => (user.name))}</TableCell>
+                <TableCell>{task?.assignedTo?.name}</TableCell>
                 <TableCell className="text-right">{formatDate(task?.dueDate)}</TableCell>
               </TableRow>
             </TableBody>

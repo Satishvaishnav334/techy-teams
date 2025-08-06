@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import axios from 'axios'
 import {
   DndContext,
   useDraggable,
@@ -41,11 +42,11 @@ const Column = ({ id, title, tasks }) => {
   return (
     <div
       ref={setNodeRef}
-      className={`p-4 bg-gray-200 rounded-xl min-h-[200px] shadow-md transition-all duration-300 ${
+      className={`p-4 bg-gray-200 rounded-xl min-h-[400px] shadow-md transition-all duration-300 ${
         isOver ? 'ring-2 ring-orange-400' : ''
       }`}
     >
-      <h2 className='text-xl font-bold text-center mb-2'>{title}</h2>
+      <h2 className=' text-center text-xl  lg:text-2xl font-bold mb-2 '>{title}</h2>
       {tasks.length > 0 ? (
         tasks.map((task) => <TaskCard key={task._id} task={task} />)
       ) : (
@@ -73,14 +74,12 @@ export default function Page() {
     setTrigger((prev) => !prev);
 
     try {
-      await fetch('/api/tasks/update', {
-        method: 'POST',
-        body: JSON.stringify({ taskId, newStatus }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      console.log(`Updated task ${taskId} to ${newStatus}`);
+      console.log(taskId,newStatus)
+      const formData = new FormData()
+      formData.append('taskId',taskId)
+      formData.append('newStatus',newStatus)
+      const res = await axios.put(`/api/get-tasks/update-status/`,formData);
+      console.log(`Updated task ${taskId} to ${newStatus}`,res);
     } catch (err) {
       console.error('API failed:', err);
     }
@@ -97,14 +96,14 @@ export default function Page() {
 
   return (
     <div className='flex flex-col w-full p-5'>
-      <div className='bg-gray-200 m-4 rounded-2xl shadow-md p-10'>
+      <div className='bg-gray-200 w-100 m-4 rounded-2xl shadow-md p-10'>
         <h1 className='text-2xl text-center lg:text-5xl font-extrabold'>
           Hello <span className='text-orange-600'>{user?.name}</span>
         </h1>
       </div>
 
-      <div className='w-full bg-gray-200 rounded-xl shadow-md p-5 mb-10'>
-        <h1 className='text-xl text-center lg:text-3xl font-bold mb-5'>My Task</h1>
+      <div className='w-full  p-5 mb-10'>
+        <h1 className='text-xl text-center lg:text-3xl font-bold mb-2'>My Task</h1>
 
         <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
           <div className='grid grid-cols-1 sm:grid-cols-3 gap-5'>

@@ -6,8 +6,9 @@ import taskModel from '../../models/task.js';
 export async function GET(req, { params }) {
     try {
         await connectToDatabase();
+        Member;
         const { name } = await params;
-        const data = await taskModel.findOne({ slug: name });
+        const data = await taskModel.findOne({ slug: name }).populate('assignedTo', 'name email role');
         console.log(data)
         return NextResponse.json(data, { status: 200 });
     }
@@ -40,11 +41,7 @@ export async function PUT(req, { params }) {
         const priority = data.get("priority");
         const status = data.get("status");
         const dueDate = data.get("dueDate");
-        const rowassignTo = data.getAll("assignedTo");
-        const assignedTo = rowassignTo
-            .flatMap(item => item.split(','))
-            .map(id => id.trim())
-            .filter(Boolean);
+        const assignedTo = data.get("assignedTo");
       
         const task = await taskModel.updateOne(
             { slug: name },

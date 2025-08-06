@@ -27,19 +27,16 @@ export async function POST(request) {
         const status = data.get("status");
         const dueDate = data.get("dueDate");
         const createdBy = data.get("createdBy");
-        const rowassignTo = data.getAll("assignTo");
-        const assignedTo = rowassignTo
-            .flatMap(item => item.split(','))
-            .map(id => id.trim())
-            .filter(Boolean);
+        const assignedTo = data.get("assignedTo");
+       
         console.log(assignedTo)
         const task = await Task.create({
             title,slug, description, createdBy, assignedTo, dueDate, status,priority
         })
         console.log(task)
-        const users = await Member.updateMany(
+        const user = await Member.updateOne(
             {
-                _id: {$in:assignedTo}
+                _id: assignedTo
             },
             {
                 $addToSet: { tasks: task._id }
