@@ -96,7 +96,7 @@ export default function Page() {
 
   return (
     <div className='flex flex-col w-full p-5'>
-      <div className='bg-gray-200 w-100 m-4 rounded-2xl shadow-md p-10'>
+      <div className='bg-gray-200  m-4 rounded-2xl shadow-md p-10'>
         <h1 className='text-2xl text-center lg:text-5xl font-extrabold'>
           Hello <span className='text-orange-600'>{user?.name}</span>
         </h1>

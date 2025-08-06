@@ -15,8 +15,7 @@ export async function GET(req, { params }) {
         const data = await Member.findOne({ name }).populate({
             path: 'team',
             populate: {
-                path: 'members', // Populates children of children
-                path: 'createdBy', // Populates children of children
+                path: 'members createdBy', // Populates children of children
             },
             
         }).populate('tasks')

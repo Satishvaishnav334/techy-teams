@@ -2,15 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useUserDataContext } from '@/components/context/UserContext';
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
+
 
 function page() {
   const { users, teams, user, tasks } = useUserDataContext()
@@ -21,54 +13,41 @@ function page() {
     <div className='flex flex-col items-center justify-start w-full'>
       <h1 className='text-2xl font-bold my-4'>Welcome Back {user?.name}</h1>
       <div>
-        <Table>
-          <TableCaption>Your Task</TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[100px]">Title</TableHead>
-              <TableHead>Description</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Assigned To</TableHead>
-              <TableHead className="text-right">Due Date</TableHead>
-            </TableRow>
-          </TableHeader>
-          {tasks?.map((task, id) => (
-            <TableBody key={id}>
-              <TableRow>
-                <TableCell className="font-medium">{task?.title}</TableCell>
-                <TableCell>{task?.description}</TableCell>
-                <TableCell>{task?.status}</TableCell>
-                <TableCell>{task?.assignedTo?.name}</TableCell>
-                <TableCell className="text-right">{formatDate(task?.dueDate)}</TableCell>
-              </TableRow>
-            </TableBody>
-          ))}
-        </Table>
-        <Table>
-          <TableCaption>All Teams</TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[100px]">Team Name</TableHead>
-              <TableHead>Description</TableHead>
-              <TableHead>Level</TableHead>
-              <TableHead>Members</TableHead>
-            </TableRow>
-          </TableHeader>
-          {teams?.map((team, id) => (
-            <TableBody key={id} >
-              <TableRow>
-                <TableCell className="font-medium">{team?.teamName}</TableCell>
-                <TableCell>{team?.description}</TableCell>
-                <TableCell>{team?.level}</TableCell>
-                <TableCell>
-                  {team?.members?.map((user,id) => (
-                    <TableCell key={id}>{user?.name}</TableCell>
+        <div className='w-full  p-5 mb-10'>
+          <h1 className='text-xl text-center lg:text-3xl font-bold mb-4'>All Tasks</h1>
+          <div className='grid grid-cols-1 sm:grid-cols-3 gap-5'>
+            {tasks?.map((task, id) => (
+              <div className='p-4 bg-gray-200 rounded-xl min-h-[400px] shadow-md transition-all duration-300' key={id}>
+                <h1 >{task?.title}</h1>
+                <p>{task?.description}</p>
+                <p>{task?.status}</p>
+                <span>{task?.assignedTo?.name}</span>
+                <p >{formatDate(task?.dueDate)}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className='w-full  p-5 mb-10'>
+          <h1 className='text-xl text-center lg:text-3xl font-bold mb-4'>All Teams</h1>
+          <div className='grid grid-cols-1 sm:grid-cols-3 gap-5'>
+
+            {teams?.map((team, id) => (
+              <div className='p-4 bg-gray-200 rounded-xl min-h-[400px] shadow-md transition-all duration-300' key={id} >
+
+                <h1 >{team?.teamName}</h1>
+                <p>{team?.description}</p>
+                <p>{team?.level}</p>
+                <span>
+                  {team?.members?.map((user, id) => (
+                    <span key={id}>{user?.name}</span>
                   ))}
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          ))}
-        </Table>
+                </span>
+
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
     </div>

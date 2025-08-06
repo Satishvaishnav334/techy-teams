@@ -26,9 +26,9 @@ export default function page() {
   }
   return (
     <div className='flex flex-col w-full p-5'>
-      <div className='bg-gray-200 w-100 m-4 rounded-2xl shadow-md p-10'>
+      <div className='bg-gray-200  m-4 rounded-2xl shadow-md p-10'>
         <h1 className='text-2xl  text-center lg:text-3xl font-extrabold'>
-          WellCome To  <span className='text-orange-600'>Teams</span>
+          WelCome To  <span className='text-orange-600'>Teams</span>
         </h1>
       </div>
       <div className='w-full  p-5 mb-10'>

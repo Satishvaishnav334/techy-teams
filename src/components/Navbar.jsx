@@ -9,31 +9,31 @@ import Link from 'next/link';
 import { useUserDataContext } from './context/UserContext';
 function Navbar() {
   const router = useRouter();
-  const { user  } = useUserDataContext()
+  const { user } = useUserDataContext()
   const [isOpen, setIsOpen] = useState(false);
   const items = [
     { label: 'Tasks', href: '/dashboard/tasks' },
     { label: 'Teams', href: '/dashboard/teams' },
-    { label: 'About', href: '/about' },
-    { label: 'Contact', href: '/contact' },
-    { label: 'Blogs', href: '/blogs' },
-    { label: 'Pricing', href: '/pricing' },
-  
+    { label: 'About', href: '/dashboard/about' },
+    { label: 'Contact', href: '/dashboard/contact' },
+    { label: 'Blogs', href: '/dashboard/blogs' },
+    { label: 'Pricing', href: '/dashboard/pricing' },
+
   ]
-  
- 
-useEffect(()=>{
-     const handleResize = () => {
-           if (window.innerWidth >= 768) {
-             setIsOpen(false);
-           }
-         } 
-         handleResize();
-         window.addEventListener('resize', handleResize);
-         return () => {
-           window.removeEventListener('resize', handleResize);
-         }
-},[])
+
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setIsOpen(false);
+      }
+    }
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    }
+  }, [])
 
 
 
@@ -54,7 +54,7 @@ useEffect(()=>{
           </div>
 
           <div className=' hidden md:flex justify-between items-center w-[45%]   font-semibold text-lg gap-4'>
-            
+
             {user?.role == 'admin' && (
               <Link href='/dashboard/admin' className='hover:text-[#111111d1]  font-semibold transition-colors duration-300'>
                 Admin Panel
@@ -97,11 +97,6 @@ useEffect(()=>{
                 options={[
 
                   {
-                    label: "Dashboard",
-                    onClick: () => router.push('/admin/dashboard'),
-                    Icon: <House className="h-6 w-6" />,
-                  },
-                  {
                     label: "Profile",
                     onClick: () => router.push('/admin/profile'),
                     Icon: <UserPen className="h-6 w-6" />,
@@ -113,10 +108,15 @@ useEffect(()=>{
                   },
                 ]}
               >
-                Options
+                Menu
               </DropdownMenu>
 
               <div className=' flex  flex-col justify-between items-start my-5   font-semibold text-lg gap-4'>
+                {user?.role == 'admin' && (
+                  <Link href='/dashboard/admin' className='hover:text-[#111111d1]  font-semibold transition-colors duration-300'>
+                    Admin Panel
+                  </Link>
+                )}
                 {items.map((item, index) => (
                   <Link key={index} href={item.href} className='hover:text-[#111111d1] transition-colors duration-300'>
                     {item.label}
