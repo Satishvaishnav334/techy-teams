@@ -4,8 +4,8 @@ import { useUserDataContext } from '@/components/context/UserContext';
 import axios from 'axios';
 function page() {
   const { user, refresh } = useUserDataContext()
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [name, setName] = useState();
+  const [email, setEmail] = useState();
   const [password, setPassword] = useState('');
   const [oldpassword, setOldPassword] = useState('');
   const handleLogIn = async (e) => {
@@ -30,7 +30,7 @@ function page() {
         <input
           type="text"
           className="border border-gray-600 text-xl rounded-2xl w-full p-2"
-          placeholder={user.name}
+          defaultValue={user.name}
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
@@ -38,7 +38,7 @@ function page() {
         <input
           type="text"
           className="border border-gray-600 text-xl rounded-2xl w-full p-2"
-          placeholder={user.email}
+          defaultValue={user.email}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -60,7 +60,7 @@ function page() {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <button className="bg-blue-600 font-semibold text-white px-3 py-2 my-2 rounded-lg text-xl" type="submit">Publish</button>
+        <button className="bg-blue-600 font-semibold text-white px-3 py-2 my-2 rounded-lg text-xl" type="submit">Update</button>
       </form>
     </div>
   )

@@ -1,6 +1,6 @@
 
 'use client'
-
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUserDataContext } from '@/components/context/UserContext';
 import {
@@ -13,50 +13,58 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
-function page() {
-  const { user} = useUserDataContext()
+export default function page() {
+
+  const { user } = useUserDataContext()
+  const [teams, setTeams] = useState([])
   const router = useRouter()
   console.log(user)
-
+  if (!user?.team) {
+    return (
+      <div className='p-10 text-xl font-bold text-center'>Loading teams...</div>
+    );
+  }
   return (
-    <div className='flex flex-col items-center justify-start h-screen w-full'>
-      <h1 className='text-2xl font-bold my-4'>Welcome Back {user?.name}</h1>
-      <div>
-        <Table>
-          <TableCaption>Your Task</TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[100px]">Title</TableHead>
-              <TableHead>Description</TableHead>
-              <TableHead>Level</TableHead>
-              <TableHead>createdAt</TableHead>
-              <TableHead >Team Members</TableHead>
-            </TableRow>
-          </TableHeader>
-          {user.team?.map((team, id) => (
-            <TableBody key={id}>
-              <TableRow>
-                <TableCell className="font-medium">{team?.teamName}</TableCell>
-                <TableCell>{team?.description}</TableCell>
-                <TableCell>{team?.level}</TableCell>
-                <TableCell className="text-right">{formatDate(team?.createdAt)}</TableCell>
-                <TableCell>{team?.members?.map((member,id)=>(
-                  <TableCell key={id}>
-                    {member.name}
-                  </TableCell>
-                ))}</TableCell>
-              </TableRow>
-            </TableBody>
-          ))}
-        </Table>
-      
+    <div className='flex flex-col w-full p-5'>
+      <div className='bg-gray-200 w-100 m-4 rounded-2xl shadow-md p-10'>
+        <h1 className='text-2xl  text-center lg:text-3xl font-extrabold'>
+          WellCome To  <span className='text-orange-600'>Teams</span>
+        </h1>
       </div>
+      <div className='w-full  p-5 mb-10'>
+        <h1 className='text-xl text-center lg:text-3xl font-bold mb-4'>My Teams</h1>
+        <div className='grid grid-cols-1 sm:grid-cols-3 gap-5'>
+          {
+            user?.team?.map((team, index) => (
+              <div key={index} className='p-4 bg-gray-200 rounded-xl min-h-[400px] shadow-md transition-all duration-300'>
+                <h2 className='text-2xl  text-center lg:text-3xl font-extrabold'>
+                  {team?.teamName}
+                </h2>
+                <h3 className='text-xl  text-center lg:text-2xl '>
+                  {team?.level}
+                </h3>
+                <p>{team?.description}</p>
+                <p>{team?.createdBy?.name}</p>
+                <p>{formatDate(team?.createdAt)}</p>
 
+                <span> Members :
+                  {
+                   team?.members?.map((member, index) => (
+                      <span key={index}> {member.name}</span>
+                    ))
+                  }
+                </span>
+              </div>
+            )
+
+            )
+
+          }
+        </div>
+      </div>
     </div>
   )
 }
-
-export default page
 
 function formatDate(dateString) {
   const date = new Date(dateString);

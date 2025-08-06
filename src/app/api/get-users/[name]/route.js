@@ -16,7 +16,9 @@ export async function GET(req, { params }) {
             path: 'team',
             populate: {
                 path: 'members', // Populates children of children
-            }
+                path: 'createdBy', // Populates children of children
+            },
+            
         }).populate('tasks')
         return NextResponse.json(data, { status: 200 });
     }
@@ -39,18 +41,18 @@ export async function PUT(req, { params }) {
         console.log(email)
         const user = await Member.findOne({ name })
 
-        if(!user){
-            return NextResponse.json({message:"Invalid User"}, { status: 403 });
+        if (!user) {
+            return NextResponse.json({ message: "Invalid User" }, { status: 403 });
         }
         const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
-         if(!isPasswordValid){
-            return NextResponse.json({message:"Invalid Old Password"}, { status: 403 });
+        if (!isPasswordValid) {
+            return NextResponse.json({ message: "Invalid Old Password" }, { status: 403 });
         }
         const userUpdate = await Member.updateOne(
             { name },
             {
                 $set: {
-                    name:username,email,password
+                    name: username, email, password
                 }
             });
 
@@ -62,12 +64,12 @@ export async function PUT(req, { params }) {
     }
 }
 async function hashPassword(password) {
-  const saltRounds = 10;
-  try {
-    const hash = await bcrypt.hash(password, saltRounds);
-    return hash;
-  } catch (error) {
-    console.error('Error hashing password:', error);
-    throw error;
-  }
+    const saltRounds = 10;
+    try {
+        const hash = await bcrypt.hash(password, saltRounds);
+        return hash;
+    } catch (error) {
+        console.error('Error hashing password:', error);
+        throw error;
+    }
 }

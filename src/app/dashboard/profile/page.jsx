@@ -12,8 +12,9 @@ function page() {
         <h1 className='text-2xl lg:text-3xl  md:m-2'> Email : {user.email}</h1>
         <h1 className='text-2xl lg:text-3xl  md:m-2'>Role : {user.role}</h1>
         <h1 className='text-2xl lg:text-3xl  md:m-2'>Joing Date : {formatDate(user.createdAt)}</h1>
+        <h1 className='text-2xl lg:text-3xl  md:m-2'>Last Update : {formatDate(user.updatedAt)}</h1>
         <Link href='/dashboard/profile/update'>
-          <button className='bg-blue-300 px-4 py-3 rounded-xl shadow-xl m-5'>Update Profile</button>
+          <button className='bg-blue-600 font-semibold text-white px-3 py-2 my-2 rounded-lg text-xl'>Update Profile</button>
         </Link>
       </div>
     </div>
