@@ -7,19 +7,20 @@ import { useUserDataContext } from '@/components/context/UserContext'
 import { useParams,useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 function page() {
-    const { title } = useParams()
+
+    const { slug } = useParams()
     const { users, refresh, user } = useUserDataContext()
     const [task, setTask] = useState({})
     const [newtitle, setTitle] = useState()
     const [desc, setDesc] = useState()
-    const [status, setStatus] = useState("pending")
-    const [priority, setPriority] = useState("medium")
+    const [status, setStatus] = useState()
+    const [priority, setPriority] = useState()
     const [assignedTo, setAssignedTo] = useState()
     const [date, setDate] = useState()
     const router = useRouter()
     async function fetchTask() {
         try {
-            const task = await axios.get(`/api/get-tasks/${title}`)
+            const task = await axios.get(`/api/get-tasks/${slug}`)
             setTask(task.data)
             setAssignedTo(task.data.assignedTo)
         }
@@ -32,27 +33,31 @@ function page() {
     useEffect(() => {
         fetchTask()
     }, [])
+    console.log(task)
     const handleCreate = async (e) => {
         e.preventDefault();
         try {
-            const slug = newtitle?.split(' ').join('-').toLowerCase();
+         
+            const newslug = newtitle?.split(' ').join('-').toLowerCase();
             const formData = new FormData();
             formData.append('title', newtitle ? newtitle : task?.title);
-            formData.append('slug', slug ? slug : task?.slug);
+            formData.append('slug', newslug ? newslug : task?.slug);
             formData.append('description', desc ? desc : task?.description);
             formData.append('priority', priority ? priority : task?.priority);
             formData.append('status', status ? status : task?.status);
-            formData.append('assignedTo', assignedTo ? assignedTo : task?.assignedTo);
+            formData.append('assignedTo', assignedTo?._id ? assignedTo?._id : task?.assignedTo?._id);
             formData.append('dueDate', date ? date : task?.dueDate);
 
-            const create = await axios.put(`/api/get-tasks/${title}`, formData)
+            const create = await axios.put(`/api/get-tasks/${slug}`, formData)
             console.log(create)
         } catch (error) {
             console.error('Error creating team:', error);
+            toast.error("Server Error", { closeButton: true })
         }
         finally {
             toast.success("Task Update Succesfully", { closeButton: true })
             router.push('/dashboard/admin/manage-tasks')
+            refresh()
             setAssignedTo([])
             setTitle('')
             setDesc('')
@@ -85,7 +90,7 @@ function page() {
 
                 <label className="block font-semibold text-2xl  my-1">Task Priority</label>
                 <select className="border border-gray-600 text-xl rounded-2xl  p-2" value={priority} onChange={(e) => setPriority(e.target.value)}>
-                    <option value="">{task?.priority}</option>
+                    <option value={task?.priority}>{task?.priority}</option>
                     <option value="Important">Important</option>
                     <option value="Medium">Medium</option>
                     <option value="Low">Low </option>
@@ -93,7 +98,7 @@ function page() {
 
                 <label className="block font-semibold text-2xl  my-1">Status</label>
                 <select className="border border-gray-600 text-xl rounded-2xl  p-2" onChange={(e) => setStatus(e.target.value)}>
-                    <option value=""> {task?.status}</option>
+                    <option value={task?.status}> {task?.status}</option>
                     <option value="pending">Pending</option>
                     <option value="in-progress">In-progress</option>
                     <option value="completed">completed </option>

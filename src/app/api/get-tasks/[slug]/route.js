@@ -42,7 +42,6 @@ export async function PUT(req, { params }) {
         const status = data.get("status");
         const dueDate = data.get("dueDate");
         const assignedTo = data.get("assignedTo");
-        console.log(assignedTo)
         const task = await taskModel.updateOne(
             { slug },
             {
