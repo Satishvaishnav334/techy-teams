@@ -1,97 +1,134 @@
-
-'use client'
-
-import { useRouter } from 'next/navigation';
-import { useUserDataContext } from '@/components/context/UserContext';
+'use client';
+import React, { useState } from 'react';
+import axios from 'axios'
+import { toast } from "sonner"
 import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,TableLink
-} from "@/components/ui/table"
-import axios from 'axios';
+  DndContext,
+  useDraggable,
+  useDroppable,
+  closestCenter,
+} from '@dnd-kit/core';
 import Link from 'next/link';
+import { useUserDataContext } from '@/components/context/UserContext';
 
-function page() {
-  const { user,tasks,refresh } = useUserDataContext()
-  const router = useRouter()
+const TaskCard = ({ task }) => {
+  const { attributes, listeners, setNodeRef, transform, isDragging } =
+    useDraggable({ id: task._id });
 
-  async function handleDelete(slug){
-    try{
-      const res = await axios.delete(`/api/get-tasks/${slug}`)
-      console.log(res)
-    }
-    catch(error){
-      console.log(error)
+  const style = {
+    transform: transform
+      ? `translate(${transform.x}px, ${transform.y}px)`
+      : undefined,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      {...listeners}
+      {...attributes}
+      style={style}
+      className='flex my-3 items-center justify-between p-4 bg-white rounded-lg shadow-md cursor-move'
+    >
+      <div className='flex flex-col items-start gap-2'>
+        <h1 className='text-xl font-semibold'>{task.title}</h1>
+        <p className='text-lg text-gray-500'>{task.status}</p>
+        <Link href={`/dashboard/admin/manage-tasks/update/${task.slug}`}>
+          <button className='bg-blue-600 cursor-pointer font-semibold text-white px-3 py-2 my-2 rounded-lg text-xl'>Update</button>
+        </Link>
+      </div>
+    </div>
+  );
+};
+
+const Column = ({ id, title, tasks }) => {
+  const { setNodeRef, isOver } = useDroppable({ id });
+
+  return (
+    <div
+      ref={setNodeRef}
+      className={`p-4 bg-gray-200 rounded-xl min-h-[400px] shadow-md transition-all duration-300 ${
+        isOver ? 'ring-2 ring-orange-400' : ''
+      }`}
+    >
+      <h2 className=' text-center text-xl  lg:text-2xl font-bold mb-2 '>{title}</h2>
+      {tasks.length > 0 ? (
+        tasks.map((task) => <TaskCard key={task._id} task={task} />)
+      ) : (
+        <p className='text-center text-gray-500'>No Tasks</p>
+      )}
+    </div>
+  );
+};
+
+export default function Page() {
+  const { tasks } = useUserDataContext();
+  const [trigger, setTrigger] = useState(false); // trigger re-render
+
+  const handleDragEnd = async ({ active, over }) => {
+    if (!over) return;
+
+    const taskId = active.id;
+    const newStatus = over.id;
+
+    const task = tasks?.find((t) => t._id === taskId);
+    if (!task || task.status === newStatus) return;
+
+    // update task status temporarily
+    task.status = newStatus;
+    setTrigger((prev) => !prev);
+
+    try {
+      console.log(taskId,newStatus)
+      const formData = new FormData()
+      formData.append('taskId',taskId)
+      formData.append('newStatus',newStatus)
+      const res = await axios.put(`/api/get-tasks/update-status/`,formData);
+      console.log(`Updated task ${taskId} to ${newStatus}`,res);
+    } catch (err) {
+      console.error('API failed:', err);
     }
     finally{
-      refresh()
+      toast.success("Status Update Succesfully",{description:`Current Status is ${newStatus}`,closeButton:true})
     }
+  };
+
+  const getTasksByStatus = (status) =>
+    tasks?.filter((task) => task.status === status) || [];
+
+  if (!tasks) {
+    return (
+      <div className='p-10 text-xl font-bold text-center'>Loading tasks...</div>
+    );
   }
+
   return (
-    <div className='flex flex-col items-center justify-start h-screen w-full'>
-      <h1 className='text-2xl font-bold my-4'>Welcome Back {user?.name}</h1>
-      <div className='flex flex-col items-center justify-between p-4 bg-gray-200 rounded-lg shadow'>
-          <div className='flex items-center justify-center gap-4'>
-            <Link href='/dashboard/admin/manage-tasks/add-task'>
-              <h1 className='text-lg text-center w-full font-semibold'>Add New Team</h1>
-            </Link>
+    <div className='flex flex-col w-full p-5'>
+     
+
+      <div className='w-full  p-5 mb-10'>
+        <h1 className='text-xl text-center lg:text-3xl font-bold mb-4'>All Task</h1>
+
+        <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+          <div className='grid grid-cols-1 sm:grid-cols-3 gap-5'>
+            <Column
+              id='pending'
+              title='Pending Tasks'
+              tasks={getTasksByStatus('pending')}
+            />
+            <Column
+              id='in-progress'
+              title='In Progress Tasks'
+              tasks={getTasksByStatus('in-progress')}
+            />
+            <Column
+              id='completed'
+              title='Completed Tasks'
+              tasks={getTasksByStatus('completed')}
+            />
           </div>
-        </div>
-      <div>
-        <Table>
-          <TableCaption>Your Task</TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[100px]">Title</TableHead>
-              <TableHead>Description</TableHead>
-              <TableHead>Priority</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="text-right">Due Date</TableHead>
-              <TableHead className="text-right">Edit</TableHead>
-              <TableHead className="text-right">Delete</TableHead>
-            </TableRow>
-          </TableHeader>
-          {tasks?.map((task, id) => (
-            <TableBody key={id}>
-              <TableRow>
-                <TableCell className="font-medium">{task?.title}</TableCell>
-                <TableCell>{task?.description}</TableCell>
-                <TableCell>{task?.priority}</TableCell>
-                <TableCell>{task?.status}</TableCell>
-                <TableCell className="text-right">{formatDate(task?.dueDate)}</TableCell>
-                <TableLink href={`/dashboard/admin/manage-tasks/update/${task?.slug}`}>
-                  Edit
-                </TableLink>
-                <TableCell className="text-right">
-                  <button onClick={(e)=>handleDelete(task?.slug)} className="bg-blue-600 cursor-pointer font-semibold text-white px-3 py-2 my-2 rounded-lg text-xl">
-                    Delete
-                  </button>
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          ))}
-        </Table>
-
+        </DndContext>
       </div>
-
     </div>
-  )
-}
-
-export default page
-
-function formatDate(dateString) {
-  const date = new Date(dateString);
-  return date.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: 'numeric',
-    // minute: '2-digit',
-    hour12: true
-  });
+  );
 }

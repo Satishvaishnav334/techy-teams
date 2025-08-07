@@ -1,11 +1,9 @@
 'use client';
 import React from 'react'
-
+import { redirect } from 'next/navigation';
 function page() {
   return (
-    <div className='w-full h-screen text-5xl font-bold flex justify-center items-center'>
-      Landing Page
-    </div>
+    redirect('/dashboard')
   )
 }
 

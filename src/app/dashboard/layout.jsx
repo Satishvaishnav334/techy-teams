@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { useRouter } from "next/navigation";
 export default function RootLayout({ children }) {
     const links = [
         {
@@ -34,6 +35,7 @@ export default function RootLayout({ children }) {
 
     ];
     const [open, setOpen] = useState(false);
+    const router = useRouter()
     useEffect(() => {
         const checkSession = () => {
             const token = getCookie('token');

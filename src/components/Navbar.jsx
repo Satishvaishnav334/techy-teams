@@ -7,6 +7,7 @@ import { deleteCookie, getCookie } from 'cookies-next'
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useUserDataContext } from './context/UserContext';
+import { toast } from 'sonner';
 function Navbar() {
   const router = useRouter();
   const { user } = useUserDataContext()
@@ -42,6 +43,8 @@ function Navbar() {
     deleteCookie('token');
     deleteCookie('name');
     router.push('/login')
+    toast.info("Logout Succesfully", { closeButton: true })
+
   }
   return (
     <div className='w-full bg-white justify-end  flex border-b-black border-1 shadow-lg  '>

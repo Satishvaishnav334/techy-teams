@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import axios from 'axios'
+import { toast } from "sonner"
 import {
   DndContext,
   useDraggable,
@@ -82,6 +83,9 @@ export default function Page() {
       console.log(`Updated task ${taskId} to ${newStatus}`,res);
     } catch (err) {
       console.error('API failed:', err);
+    }
+    finally{
+      toast.success("Status Update Succesfully",{description:`Current Status is ${newStatus}`,closeButton:true})
     }
   };
 

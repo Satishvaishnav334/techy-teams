@@ -4,7 +4,8 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 // import { Calendar } from "@/components/ui/calendar.jsx"
 import { useUserDataContext } from '@/components/context/UserContext'
-import { useParams } from 'next/navigation'
+import { useParams,useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 function page() {
     const { title } = useParams()
     const { users, refresh, user } = useUserDataContext()
@@ -15,6 +16,7 @@ function page() {
     const [priority, setPriority] = useState("medium")
     const [assignedTo, setAssignedTo] = useState()
     const [date, setDate] = useState()
+    const router = useRouter()
     async function fetchTask() {
         try {
             const task = await axios.get(`/api/get-tasks/${title}`)
@@ -24,6 +26,7 @@ function page() {
         catch (error) {
             console.log(error)
         }
+
     }
 
     useEffect(() => {
@@ -48,6 +51,8 @@ function page() {
             console.error('Error creating team:', error);
         }
         finally {
+            toast.success("Task Update Succesfully", { closeButton: true })
+            router.push('/dashboard/admin/manage-tasks')
             setAssignedTo([])
             setTitle('')
             setDesc('')
@@ -110,7 +115,7 @@ function page() {
                     <div className="grid grid-cols-2 gap-3 ">
                         <label className="flex items-center space-x-2">
                             <select className="border border-gray-600 text-xl rounded-2xl  p-2" value={assignedTo} onChange={(e) => setAssignedTo(e.target.value)}>
-                                <option  value={task?.assignedTo}>{task?.assignedTo?.name}</option>
+                                <option value={task?.assignedTo}>{task?.assignedTo?.name}</option>
 
                                 {
                                     users?.map((member, index) => {

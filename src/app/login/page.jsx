@@ -3,6 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getCookie } from "cookies-next/client";
+import { toast } from 'sonner'
 export default function Page() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -17,9 +18,9 @@ export default function Page() {
       }
     }
     checkSession()
-    setTimeout(()=>{
+    setTimeout(() => {
       checkSession()
-    },2000)
+    }, 2000)
   }, [])
 
   const handleLogIn = async (e) => {
@@ -33,8 +34,11 @@ export default function Page() {
     } catch (error) {
       console.error("Error fetching users:", error);
     }
+    finally {
+      toast.success("Login Succesfully", { closeButton: true })
+    }
   };
-  
+
   return (
     <div className="  flex flex-col items-center justify-center min-h-screen text-black bg-gray-100">
       <h1 className="text-3xl font-bold mb-6">Log In</h1>
@@ -55,7 +59,7 @@ export default function Page() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button className="bg-blue-600 font-semibold text-white px-3 py-2 my-2 rounded-lg text-xl" type="submit">Publish</button>
+        <button className="bg-blue-600 font-semibold text-white px-3 py-2 my-2 rounded-lg text-xl" type="submit">Login</button>
       </form>
     </div>
   );
