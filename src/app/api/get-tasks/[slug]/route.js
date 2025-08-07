@@ -7,8 +7,8 @@ export async function GET(req, { params }) {
     try {
         await connectToDatabase();
         Member;
-        const { name } = await params;
-        const data = await taskModel.findOne({ slug: name }).populate('assignedTo', 'name email role');
+        const { slug } = await params;
+        const data = await taskModel.findOne({ slug }).populate('assignedTo', 'name email role');
         console.log(data)
         return NextResponse.json(data, { status: 200 });
     }
@@ -20,8 +20,8 @@ export async function GET(req, { params }) {
 export async function DELETE(req, { params }) {
     try {
         await connectToDatabase();
-        const { name } = await params;
-        const data = await taskModel.deleteOne({ slug: name });
+        const { slug } = await params;
+        const data = await taskModel.deleteOne({ slug });
         console.log(data)
         return NextResponse.json(data, { status: 200 });
     }
@@ -33,22 +33,22 @@ export async function DELETE(req, { params }) {
 export async function PUT(req, { params }) {
     try {
         await connectToDatabase();
-        const { name } = await params;
+        const { slug } = await params;
         const data = await req.formData();
         const title = data.get("title");
         const description = data.get("description");
-        const slug = data.get('slug');
+        const newslug = data.get('slug');
         const priority = data.get("priority");
         const status = data.get("status");
         const dueDate = data.get("dueDate");
         const assignedTo = data.get("assignedTo");
-      
+        console.log(assignedTo)
         const task = await taskModel.updateOne(
-            { slug: name },
+            { slug },
             {
                 $set: {
                     title,
-                     description,slug,  priority,  status, assignedTo, dueDate
+                     description,slug:newslug,  priority,  status, assignedTo, dueDate
                 }
             });
 

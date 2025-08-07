@@ -3,17 +3,10 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUserDataContext } from '@/components/context/UserContext';
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import { Edit, Plus } from 'lucide-react';
+import axios from 'axios';
+import { Delete, Edit, Plus,Trash,Pencil } from 'lucide-react';
 import Link from 'next/link';
+import { toast } from 'sonner';
 export default function page() {
 
   const { user, teams, refresh } = useUserDataContext()
@@ -25,6 +18,20 @@ export default function page() {
     return (
       <div className='p-10 text-xl font-bold text-center'>Loading teams...</div>
     );
+  }
+  const handleDelete = async (slug) =>{
+    try{
+      console.log("object")
+      const res = await axios.delete(`/api/get-teams/${slug}`)
+      console.log(res)
+      toast.success(res.data.message,{icon:<Trash />,closeButton:true,duration:2000})
+    }
+    catch(error){
+      console.log(error)
+    }
+    finally{
+      refresh()
+    }
   }
   return (
     <div className='flex flex-col w-full p-5'>
@@ -43,11 +50,11 @@ export default function page() {
       </div>
       {/* <h1 className='text-xl text-center lg:text-3xl font-bold mb-4'>All Teams</h1> */}
       <div className='w-full  p-5 mb-10'>
-        <div className='grid grid-cols-1 sm:grid-cols-3 gap-5'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full gap-5'>
 
           {
             teams?.map((team, index) => (
-              <div key={index} className=' bg-gray-200 flex-col flex justify-between rounded-xl min-h-[400px] shadow-md transition-all duration-300'>
+              <div key={index} className=' bg-gray-200 w-full flex-col flex justify-between rounded-xl min-h-[400px] shadow-md transition-all duration-300'>
                 <div className='flex justify-between w-full'>
                   <span
                     className={team?.level === 'level 1' ? 'bg-red-500 h-15 text-lg md:text-2xl font-extrabold md:px-6  p-4 rounded-br-xl rounded-tl-xl text-white' : 'bg-gray-500 h-15 text-lg md:text-2xl font-extrabold md:px-6  p-4 rounded-br-xl rounded-tl-xl text-white'
@@ -57,9 +64,7 @@ export default function page() {
                   <span className=' mx-auto py-5 w-[80%] text-lg md:text-2xl font-extrabold md:px-6 text-center  rounded-br-xl rounded-tl-xl '>
                     {team?.teamName}
                   </span>
-                  <Link href={`/dashboard/admin/manage-teams/update/${team?.slug}`} className='p-3'>
-                      <Edit/>
-                  </Link>
+
                 </div>
 
                 <div className='p-4 flex flex-col justify-around h-full'>
@@ -87,13 +92,25 @@ export default function page() {
                   <p className='text-center text-lg'>{team?.description}</p>
                   {/* <p className='text-center text-lg'>{team?.createdBy?.name}</p> */}
                 </div>
-                <span
-                  className='flex justify-end'>
-                  <p className='bg-gray-300 min-w-[40%] font-semibold  text-sm text-right    py-1 px-2 rounded-br-xl rounded-tl-xl'>
-                    Created {formatDate(team?.createdAt)}
-                  </p>
-                </span>
-
+                <div className='md:flex flex-col justify-between w-full ' >
+                  <div
+                    className='flex justify-around gap-4 my-2 mx-5 '>
+                    <Link href={`/dashboard/admin/manage-teams/update/${team?.slug}`}
+                      className='bg-black text-white font-semibold flex gap-2 text-xl text-right px-3 py-2 rounded-lg'>
+                      <Pencil />Edit
+                    </Link>
+                    <button onClick={(e)=>handleDelete(team?.slug)}
+                      className='bg-black text-white flex gap-2 font-semibold  text-xl text-right px-3 py-2 rounded-lg'>
+                      <Trash/> Delete 
+                    </button>
+                  </div>
+                  <div
+                    className='flex justify-end mt-5'>
+                    <p className='bg-gray-300 min-w-[40%] font-semibold  text-sm text-right    py-1 px-2 rounded-br-xl rounded-tl-xl'>
+                      Created {formatDate(team?.createdAt)}
+                    </p>
+                  </div>
+                </div>
               </div>
             )
 

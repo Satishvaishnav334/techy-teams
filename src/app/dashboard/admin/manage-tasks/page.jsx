@@ -28,10 +28,15 @@ const TaskCard = ({ task }) => {
       {...listeners}
       {...attributes}
       style={style}
-      className='flex my-3 items-center justify-between p-4 bg-white rounded-lg shadow-md cursor-move'
+      className='flex my-3 w-full items-center justify-between p-4 bg-white rounded-lg shadow-md cursor-move'
     >
-      <div className='flex flex-col items-start gap-2'>
-        <h1 className='text-xl font-semibold'>{task.title}</h1>
+      <div className='flex flex-col items-start gap-2 w-full'>
+        <span
+          className={task?.priority === 'Important' ? 'bg-red-500 h-15 text-lg md:text-2xl font-extrabold md:px-6  p-4 rounded-br-xl rounded-tl-xl text-white' : 'bg-gray-500 h-15 text-lg md:text-2xl font-extrabold md:px-6  p-4 rounded-br-xl rounded-tl-xl text-white'
+            && task?.priority === 'Meduim' ? 'bg-gray-700 h-15 text-lg md:text-2xl font-extrabold md:px-6  p-4 rounded-br-xl rounded-tl-xl text-white' : 'bg-gray-500 h-15  text-lg md:text-2xl font-extrabold md:px-6 p-4 rounded-br-xl rounded-tl-xl text-white'}>
+          {task?.priority}
+        </span>
+        <h1 className='text-xl text-center w-full  font-semibold'>{task.title}</h1>
         <p className='text-lg text-gray-500'>{task.status}</p>
         <Link href={`/dashboard/admin/manage-tasks/update/${task.slug}`}>
           <button className='bg-blue-600 cursor-pointer font-semibold text-white px-3 py-2 my-2 rounded-lg text-xl'>Update</button>
@@ -47,9 +52,8 @@ const Column = ({ id, title, tasks }) => {
   return (
     <div
       ref={setNodeRef}
-      className={`p-4 bg-gray-200 rounded-xl min-h-[400px] shadow-md transition-all duration-300 ${
-        isOver ? 'ring-2 ring-orange-400' : ''
-      }`}
+      className={`p-4 bg-gray-200 rounded-xl min-h-[400px] shadow-md transition-all duration-300 ${isOver ? 'ring-2 ring-orange-400' : ''
+        }`}
     >
       <h2 className=' text-center text-xl  lg:text-2xl font-bold mb-2 '>{title}</h2>
       {tasks.length > 0 ? (
@@ -63,6 +67,7 @@ const Column = ({ id, title, tasks }) => {
 
 export default function Page() {
   const { tasks } = useUserDataContext();
+  console.log(tasks)
   const [trigger, setTrigger] = useState(false); // trigger re-render
 
   const handleDragEnd = async ({ active, over }) => {
@@ -79,17 +84,17 @@ export default function Page() {
     setTrigger((prev) => !prev);
 
     try {
-      console.log(taskId,newStatus)
+      console.log(taskId, newStatus)
       const formData = new FormData()
-      formData.append('taskId',taskId)
-      formData.append('newStatus',newStatus)
-      const res = await axios.put(`/api/get-tasks/update-status/`,formData);
-      console.log(`Updated task ${taskId} to ${newStatus}`,res);
+      formData.append('taskId', taskId)
+      formData.append('newStatus', newStatus)
+      const res = await axios.put(`/api/get-tasks/update-status/`, formData);
+      console.log(`Updated task ${taskId} to ${newStatus}`, res);
     } catch (err) {
       console.error('API failed:', err);
     }
-    finally{
-      toast.success("Status Update Succesfully",{description:`Current Status is ${newStatus}`,closeButton:true})
+    finally {
+      toast.success("Status Update Succesfully", { description: `Current Status is ${newStatus}`, closeButton: true })
     }
   };
 
@@ -104,7 +109,7 @@ export default function Page() {
 
   return (
     <div className='flex flex-col w-full p-5'>
-     
+
 
       <div className='w-full  p-5 mb-10'>
         <h1 className='text-xl text-center lg:text-3xl font-bold mb-4'>All Task</h1>

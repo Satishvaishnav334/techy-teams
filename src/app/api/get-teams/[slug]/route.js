@@ -21,7 +21,7 @@ export async function DELETE(req, { params }) {
         const { slug } = await params;
         const data = await teamModel.deleteOne({slug});
         console.log(data)
-        return NextResponse.json(data, { status: 200 });
+        return NextResponse.json({message:"Team Deleted Successfully"} , { status: 200 });
     }
     catch (error) {
         console.log(error);
