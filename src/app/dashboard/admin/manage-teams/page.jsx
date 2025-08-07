@@ -1,7 +1,8 @@
+
 'use client'
-import React from 'react'
-import Link from 'next/link'
-import {TableLink} from '@/components/ui/table'
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useUserDataContext } from '@/components/context/UserContext';
 import {
   Table,
   TableBody,
@@ -11,73 +12,96 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import axios from 'axios';
+import { Plus } from 'lucide-react';
+import Link from 'next/link';
+export default function page() {
 
-import { useUserDataContext } from '@/components/context/UserContext'
-function page() {
-  const { teams,refresh } = useUserDataContext()
-    async function handleDelete(slug){
-      try{
-        const res = await axios.delete(`/api/get-teams/${slug}`)
-        console.log(res)
-      }
-      catch(error){
-        console.log(error)
-      }
-      finally{
-        refresh()
-      }
-    }
+  const { user, teams, refresh } = useUserDataContext()
+  const router = useRouter()
+
+
+
+  if (!user?.team) {
+    return (
+      <div className='p-10 text-xl font-bold text-center'>Loading teams...</div>
+    );
+  }
   return (
-    <div>
-      Manage Teams
-      <div className='flex flex-col  gap-5 mt-5  w-full '>
-        <div className='flex flex-col items-center justify-between p-4 bg-gray-200 rounded-lg shadow'>
-          <div className='flex items-center justify-center gap-4'>
-            <Link href='/dashboard/admin/manage-teams/add-team'>
-              <h1 className='text-lg text-center w-full font-semibold'>Add New Team</h1>
-            </Link>
-          </div>
+    <div className='flex flex-col w-full p-5'>
+      <div className='w-full flex justify-between'>
+        <div className='bg-gray-200  m-4 rounded-2xl shadow-md p-5 md:p-8'>
+          <h1 className='text-2xl  text-center lg:text-3xl font-extrabold'>
+            WelCome To  <span className='text-orange-600'>Teams</span>
+          </h1>
         </div>
-        <Table>
-          <TableCaption>All Teams</TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[100px]">Team Name</TableHead>
-              <TableHead>Description</TableHead>
-              <TableHead>Level</TableHead>
-              <TableHead>Members</TableHead>
-            </TableRow>
-          </TableHeader>
-          {teams?.map((team, id) => (
-            <TableBody key={id} >
-              <TableRow>
-                <TableCell className="font-medium">{team?.teamName}</TableCell>
-                <TableCell>{team?.description}</TableCell>
-                <TableCell>{team?.level}</TableCell>
-                 <TableLink href={`/dashboard/admin/manage-teams/update/${team?.slug}`} >
-                                  Edit
-                                </TableLink>
-                <TableCell>
-                    <TableCell className="text-right">
-                  <button onClick={(e)=>handleDelete(team?.slug)} className="bg-blue-600 cursor-pointer font-semibold text-white px-3 py-2 my-2 rounded-lg text-xl">
-                    Delete
-                  </button>
-                </TableCell>
-                  {team?.members?.map((user, id) => (
-                    <TableCell key={id}>{user?.name}</TableCell>
-                  ))}
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          ))}
-        </Table>
+        <div className='fixed right-5 bottom-5  flex flex-col p-2'>
+
+          <Link href='/dashboard/admin/manage-teams/add-team' className='bg-gray-700 text-white    rounded-2xl shadow-md p-4 flex justify-center my-2 '>
+            <Plus size={30} />
+          </Link>
+        </div>
+      </div>
+      {/* <h1 className='text-xl text-center lg:text-3xl font-bold mb-4'>All Teams</h1> */}
+      <div className='w-full  p-5 mb-10'>
+        <div className='grid grid-cols-1 sm:grid-cols-3 gap-5'>
+
+          {
+            teams?.map((team, index) => (
+              <div key={index} className=' bg-gray-200 flex-col flex justify-between rounded-xl min-h-[400px] shadow-md transition-all duration-300'>
+                <div className='flex justify-between w-full'>
+                  <span
+                    className={team?.level === 'level 1' ? 'bg-red-500 h-15 text-lg md:text-2xl font-extrabold md:px-6  p-4 rounded-br-xl rounded-tl-xl text-white' : 'bg-gray-500 h-15 text-lg md:text-2xl font-extrabold md:px-6  p-4 rounded-br-xl rounded-tl-xl text-white'
+                      && team?.level === 'level 2' ? 'bg-gray-700 h-15 text-lg md:text-2xl font-extrabold md:px-6  p-4 rounded-br-xl rounded-tl-xl text-white' : 'bg-gray-500 h-15  text-lg md:text-2xl font-extrabold md:px-6 p-4 rounded-br-xl rounded-tl-xl text-white'}>
+                    {team?.level?.split("level")}
+                  </span>
+                  <span className=' mx-auto py-5 w-[80%] text-lg md:text-2xl font-extrabold md:px-6 text-center  rounded-br-xl rounded-tl-xl '>
+                    {team?.teamName}
+                  </span>
+                </div>
+
+                <div className='p-4 flex flex-col justify-around h-full'>
+                  <span className='  font-bold  text-sm md:text-lg  py-2 px-1 '> Members :</span>
+                  <div className='grid grid-cols-2 justify-around gap-5'>
+                    {
+                      team?.members?.map((member, index) => (
+                        <div key={index}>
+
+                          <div className='bg-white  font-bold  text-sm md:text-lg  py-2 px-4 rounded-lg flex justify-center items-center ' > {member.name}</div>
+
+                        </div>
+                      ))
+                    }
+                    {team?.members?.length < 4 &&
+                      (
+                        <button className='bg-white/90  font-bold  text-sm md:text-lg  py-2 px-4 rounded-lg flex justify-center items-center ' >
+                          <Plus />
+                        </button>
+                      )
+                    }
+                  </div>
+                </div>
+                <div className='my-5'>
+                  <p className='text-center text-lg'>{team?.description}</p>
+                  {/* <p className='text-center text-lg'>{team?.createdBy?.name}</p> */}
+                </div>
+                <span
+                  className='flex justify-end'>
+                  <p className='bg-gray-300 min-w-[40%] font-bold  text-sm md:text-lg text-right    py-2 px-4 rounded-br-xl rounded-tl-xl'>
+                    Created {formatDate(team?.createdAt)}
+                  </p>
+                </span>
+
+              </div>
+            )
+
+            )
+
+          }
+        </div>
       </div>
     </div>
   )
 }
-
-export default page
 
 function formatDate(dateString) {
   const date = new Date(dateString);
@@ -85,8 +109,10 @@ function formatDate(dateString) {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
-    hour: 'numeric',
+    // hour: 'numeric',
     // minute: '2-digit',
     hour12: true
   });
 }
+
+

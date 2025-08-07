@@ -4,8 +4,9 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useUserDataContext } from '@/components/context/UserContext'
+import { toast } from 'sonner'
 function page() {
-  const { users, user } = useUserDataContext()
+  const { users, user,refresh } = useUserDataContext()
   const [teamName, setTeamName] = useState('')
   const [level, setLevel] = useState('level 3')
   const [desc, setDesc] = useState([])
@@ -29,7 +30,9 @@ function page() {
       console.error('Error creating team:', error);
     }
     finally {
-      router.push('/dashboard/admin')
+      toast("Team Created Successfully")
+      router.push('/dashboard/admin/manage-teams')
+      refresh()
     }
   };
   const handleCheckboxChange = (id) => {
