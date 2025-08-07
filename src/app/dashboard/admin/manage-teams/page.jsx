@@ -12,7 +12,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { Plus } from 'lucide-react';
+import { Edit, Plus } from 'lucide-react';
 import Link from 'next/link';
 export default function page() {
 
@@ -31,10 +31,10 @@ export default function page() {
       <div className='w-full flex justify-between'>
         <div className='bg-gray-200  m-4 rounded-2xl shadow-md p-5 md:p-8'>
           <h1 className='text-2xl  text-center lg:text-3xl font-extrabold'>
-            WelCome To  <span className='text-orange-600'>Teams</span>
+            Welcome To  <span className='text-orange-600'>Teams</span>
           </h1>
         </div>
-        <div className='fixed right-5 bottom-5  flex flex-col p-2'>
+        <div className='fixed right-5 bottom-2  flex flex-col p-2'>
 
           <Link href='/dashboard/admin/manage-teams/add-team' className='bg-gray-700 text-white    rounded-2xl shadow-md p-4 flex justify-center my-2 '>
             <Plus size={30} />
@@ -57,6 +57,9 @@ export default function page() {
                   <span className=' mx-auto py-5 w-[80%] text-lg md:text-2xl font-extrabold md:px-6 text-center  rounded-br-xl rounded-tl-xl '>
                     {team?.teamName}
                   </span>
+                  <Link href={`/dashboard/admin/manage-teams/update/${team?.slug}`} className='p-3'>
+                      <Edit/>
+                  </Link>
                 </div>
 
                 <div className='p-4 flex flex-col justify-around h-full'>
@@ -86,7 +89,7 @@ export default function page() {
                 </div>
                 <span
                   className='flex justify-end'>
-                  <p className='bg-gray-300 min-w-[40%] font-bold  text-sm md:text-lg text-right    py-2 px-4 rounded-br-xl rounded-tl-xl'>
+                  <p className='bg-gray-300 min-w-[40%] font-semibold  text-sm text-right    py-1 px-2 rounded-br-xl rounded-tl-xl'>
                     Created {formatDate(team?.createdAt)}
                   </p>
                 </span>

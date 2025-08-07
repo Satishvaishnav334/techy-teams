@@ -1,7 +1,7 @@
 'use client';
 import React from 'react'
 import { DropdownMenu } from "@/components/ui/dropdown-menu"
-import { UserPen, House, User, LogOut, AlignRight } from "lucide-react"
+import { UserPen, House, User, LogOut, AlignRight, BellRing } from "lucide-react"
 import { useEffect, useState } from "react";
 import { deleteCookie, getCookie } from 'cookies-next'
 import { useRouter } from 'next/navigation';
@@ -70,8 +70,11 @@ function Navbar() {
               </Link>
             ))}
           </div>
-
+         
           <div className='hidden md:flex  justify-end items-center w-[15%] gap-2'>
+             <div className='mx-5'>
+            <BellRing />
+          </div>
             <DropdownMenu role={user?.role}
               options={[
                 {
@@ -89,6 +92,7 @@ function Navbar() {
 
             </DropdownMenu>
           </div>
+
 
           <div className=' md:hidden flex justify-end items-center  gap-2 '>
             <AlignRight onClick={() => setIsOpen(!isOpen)} />

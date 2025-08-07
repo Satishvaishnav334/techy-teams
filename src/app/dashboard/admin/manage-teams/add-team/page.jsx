@@ -30,7 +30,7 @@ function page() {
       console.error('Error creating team:', error);
     }
     finally {
-      toast("Team Created Successfully")
+      toast.success("Login Succesfully", { closeButton: true ,duration:2000})
       router.push('/dashboard/admin/manage-teams')
       refresh()
     }

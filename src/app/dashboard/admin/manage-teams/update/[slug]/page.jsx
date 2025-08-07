@@ -4,8 +4,9 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useUserDataContext } from '@/components/context/UserContext'
 import { useParams,useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 function page() {
-    const { teamName } = useParams()
+    const { slug } = useParams()
     const { users, refresh, user } = useUserDataContext()
     const [team, setTeam] = useState({})
     const [newteamName, setTeamName] = useState()
@@ -15,7 +16,7 @@ function page() {
     const router = useRouter()
     async function fetchteam() {
         try {
-            const team = await axios.get(`/api/get-teams/${teamName}`)
+            const team = await axios.get(`/api/get-teams/${slug}`)
             setTeam(team?.data)
             setMembers(team?.data?.members)
         }
@@ -30,20 +31,22 @@ function page() {
     const handleCreate = async (e) => {
         e.preventDefault();
         try {
-            const slug = teamName?.split(' ').join('-').toLowerCase();
+            const newslug = newteamName?.split(' ').join('-').toLowerCase();
             const formData = new FormData();
             formData.append('teamName', newteamName ? newteamName : team?.teamName);
             formData.append('description', desc ? desc : team?.description);
-            formData.append('slug', slug);
+            formData.append('slug', newslug ? newslug :slug);
             formData.append('level', level ? level : team?.level);
             formData.append('members', members ? members : team?.members);
-            const create = await axios.put(`/api/get-teams/${teamName}`, formData)
+            const create = await axios.put(`/api/get-teams/${slug}`, formData)
             console.log(create)
         } catch (error) {
             console.error('Error creating team:', error);
         }
         finally {
-            router.push('/dashboard/admin')
+            toast.success("Team Update Successfully",{closeButton:true,duration:2000})
+            router.push('/dashboard/admin/manage-teams')
+            refresh()
             setMembers([])
             setTeamName('')
             setDesc('')
@@ -77,7 +80,7 @@ function page() {
                     <label className="block font-semibold text-xl  my-1"> Level</label>
 
                     <select className="border border-gray-600 text-xl rounded-2xl  p-2" value={level} onChange={(e)=> setLevel(e.target.value)}>
-                        <option value="level 2">{level ? level : 'Choose an Level'}</option>
+                        <option  value={team?.level}>{team?.level}</option>
                         <option value="level 1">Level 1</option>
                         <option value="level 2">Level 2</option>
                         <option value="level 3">Level 3 </option>

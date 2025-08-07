@@ -5,8 +5,8 @@ import teamModel from '../../models/teams.js';
 export async function GET(req, { params }) {
     try {
         await connectToDatabase();
-        const { name } = await params;
-        const data = await teamModel.findOne({ slug: name });
+        const { slug } = await params;
+        const data = await teamModel.findOne({ slug });
         return NextResponse.json(data, { status: 200 });
     }
     catch (error) {
@@ -18,8 +18,8 @@ export async function GET(req, { params }) {
 export async function DELETE(req, { params }) {
     try {
         await connectToDatabase();
-        const { name } = await params;
-        const data = await teamModel.deleteMany();
+        const { slug } = await params;
+        const data = await teamModel.deleteOne({slug});
         console.log(data)
         return NextResponse.json(data, { status: 200 });
     }
@@ -32,14 +32,13 @@ export async function DELETE(req, { params }) {
 export async function PUT(req, { params }) {
     try {
         await connectToDatabase();
-        const { name } = await params;
+        const { slug } = await params;
         const data = await req.formData();
         const teamName = data.get("teamName");
-        const slug = data.get('slug');
+        const newslug = data.get('slug');
         const description = data.get("description");
-        console.log(slug)
         const level = data.get("level");
-        console.log(level)
+
         const rowmembers = data.getAll("members");
         const members = rowmembers
             .flatMap(item => item.split(','))
@@ -47,10 +46,10 @@ export async function PUT(req, { params }) {
             .filter(Boolean);
         
         const task = await teamModel.updateOne(
-            { slug: name }, 
+            { slug }, 
             {
                 $set: {
-                    teamName, slug,
+                    teamName, slug:newslug,
                     description, level, members,slug
                 }
             });
