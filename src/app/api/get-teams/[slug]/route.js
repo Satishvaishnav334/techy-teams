@@ -19,9 +19,18 @@ export async function DELETE(req, { params }) {
     try {
         await connectToDatabase();
         const { slug } = await params;
+        const team = await teamModel.findOne({ slug })
+        console.log(team._id)
+        const olduser = await Member.updateMany({
+            _id: team.members
+        },
+            { $pull: { team: team._id } },
+            { new: true }
+        )
+        console.log(user)
         const data = await teamModel.deleteOne({slug});
         console.log(data)
-        return NextResponse.json({message:"Team Deleted Successfully"} , { status: 200 });
+        return NextResponse.json({ message: "Team Deleted Successfully" }, { status: 200 });
     }
     catch (error) {
         console.log(error);
@@ -44,17 +53,40 @@ export async function PUT(req, { params }) {
             .flatMap(item => item.split(','))
             .map(id => id.trim())
             .filter(Boolean);
-        
-        const task = await teamModel.updateOne(
-            { slug }, 
+
+        const team = await teamModel.findOne({ slug })
+        console.log(team._id, "team Id")
+
+        const olduser = await Member.updateMany({
+            _id: team.members
+        },
+            { $pull: { team: team._id } },
+            { new: true }
+        )
+
+
+        const teamupdate = await teamModel.updateOne(
+            { slug },
             {
                 $set: {
-                    teamName, slug:newslug,
-                    description, level, members,slug
+                    teamName, slug: newslug,
+                    description, level, members, slug
                 }
             });
 
-        return NextResponse.json(task, { status: 200 });
+        const user = await Member.updateMany({
+            _id: members
+        },
+            {
+                $addToSet:
+                {
+                    team: { _id: team._id }
+                }
+            }
+        )
+        console.log(user)
+
+        return NextResponse.json(team, { status: 200 });
     }
     catch (error) {
         console.log(error);

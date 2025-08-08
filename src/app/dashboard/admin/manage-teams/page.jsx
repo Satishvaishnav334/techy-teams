@@ -4,11 +4,11 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUserDataContext } from '@/components/context/UserContext';
 import axios from 'axios';
-import { Delete, Edit, Plus,Trash,Pencil } from 'lucide-react';
+import { Delete, Edit, Plus, Trash, Pencil } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
-export default function page() {
 
+export default function page() {
   const { user, teams, refresh } = useUserDataContext()
   const router = useRouter()
 
@@ -19,17 +19,17 @@ export default function page() {
       <div className='p-10 text-xl font-bold text-center'>Loading teams...</div>
     );
   }
-  const handleDelete = async (slug) =>{
-    try{
+  const handleDelete = async (slug, teamId) => {
+    try {
       console.log("object")
-      const res = await axios.delete(`/api/get-teams/${slug}`)
+      const res = await axios.delete(`/api/get-teams/${slug}`, { teamId })
       console.log(res)
-      toast.success(res.data.message,{icon:<Trash />,closeButton:true,duration:2000})
+      toast.success(res.data.message, { icon: <Trash />, closeButton: true, duration: 2000 })
     }
-    catch(error){
+    catch (error) {
       console.log(error)
     }
-    finally{
+    finally {
       refresh()
     }
   }
@@ -42,11 +42,10 @@ export default function page() {
           </h1>
         </div>
         <div className='fixed right-5 bottom-2  flex flex-col p-2'>
-
-          <Link href='/dashboard/admin/manage-teams/add-team' className='bg-gray-700 text-white    rounded-2xl shadow-md p-4 flex justify-center my-2 '>
-            <Plus size={30} />
-          </Link>
-        </div>
+        <Link href='/dashboard/admin/manage-teams/add-team' className='bg-black  text-white    rounded-2xl shadow-md p-4 flex justify-center my-2 '>
+          <Plus size={30} />
+        </Link>
+      </div>
       </div>
       {/* <h1 className='text-xl text-center lg:text-3xl font-bold mb-4'>All Teams</h1> */}
       <div className='w-full  p-5 mb-10'>
@@ -99,9 +98,9 @@ export default function page() {
                       className='bg-black text-white font-semibold flex gap-2 text-xl text-right px-3 py-2 rounded-lg'>
                       <Pencil />Edit
                     </Link>
-                    <button onClick={(e)=>handleDelete(team?.slug)}
+                    <button onClick={(e) => handleDelete(team?.slug, team?._id)}
                       className='bg-black text-white flex gap-2 font-semibold  text-xl text-right px-3 py-2 rounded-lg'>
-                      <Trash/> Delete 
+                      <Trash /> Delete
                     </button>
                   </div>
                   <div

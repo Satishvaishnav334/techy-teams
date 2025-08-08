@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import axios from 'axios'
-import { Pencil, Trash } from 'lucide-react';
+import { Pencil, Trash, Plus } from 'lucide-react';
 import { toast } from "sonner"
 import {
   DndContext,
@@ -49,8 +49,8 @@ const TaskCard = ({ task }) => {
     >
       <div className='flex flex-col items-between     gap-3 w-full'>
         <span
-          className={task?.priority === 'Important' ? 'bg-red-500 text-lg md:text-2xl font-bold rounded-t-lg  px-3 py-2  text-white' : 'bg-gray-500 rounded-t-lg h-15 text-lg md:text-2xl font-bold  px-3 py-2   text-white'
-            && task?.priority === 'Medium' ? 'bg-gray-700  text-lg md:text-2xl font-bold  px-3 py-2 rounded-t-lg  text-white' : 'bg-gray-500 h-15 rounded-t-lg  text-lg md:text-2xl font-bold px-3 py-2  text-white'}>
+          className={task?.priority === 'Important' ? 'bg-red-500 text-lg md:text-2xl font-bold rounded-t-lg  px-3 py-2  text-white' : 'bg-gray-500 rounded-t-lg  text-lg md:text-2xl font-bold  px-3 py-2   text-white'
+            && task?.priority === 'Medium' ? 'bg-gray-700  text-lg md:text-2xl font-bold  px-3 py-2 rounded-t-lg  text-white' : 'bg-gray-500  rounded-t-lg  text-lg md:text-2xl font-bold px-3 py-2  text-white'}>
           {task?.priority}
         </span>
         <span className=' mx-auto  w-[80%] text-lg md:text-2xl font-extrabold text-center   '>
@@ -62,6 +62,7 @@ const TaskCard = ({ task }) => {
           <div className='px-3'>
             Assigned To :  {task?.assignedTo?.name}
           </div>
+
           <div className='flex justify-between  w-full'>
             <div className='flex justify-between gap-2 my-2 mx-3  '>
               <Link href={`/dashboard/admin/manage-tasks/update/${task?.slug}`}
@@ -69,13 +70,12 @@ const TaskCard = ({ task }) => {
                 <Pencil size={18} />Edit
               </Link>
               <button onClick={(e) => handleDelete(team?.slug)}
-                className='bg-black text-white cursor-pointer flex gap-2 font-semibold  text-sm text-right px-3 py-2 rounded-lg'>
+                className='bg-black text-white z-50 cursor-pointer flex gap-2 font-semibold  text-sm text-right px-3 py-2 rounded-lg'>
                 <Trash size={18} /> Delete
               </button>
             </div>
 
             <div className='flex items-end  '>
-
               <p className={date1 < date ? 'bg-gray-300   font-semibold  text-sm text-right    py-1 px-2 rounded-br-xl w-full  rounded-tl-xl' : 'bg-red-500 text-white w-full font-semibold  text-sm text-right    py-1 px-2 rounded-br-xl rounded-tl-xl'} >
                 Due {formatDate(task.dueDate)}
               </p>
@@ -150,7 +150,11 @@ export default function Page() {
 
   return (
     <div className='flex flex-col w-full p-5'>
-
+      <div className='fixed right-5 bottom-2  flex flex-col p-2'>
+        <Link href='/dashboard/admin/manage-tasks/add-task' className='bg-black  text-white    rounded-2xl shadow-md p-4 flex justify-center my-2 '>
+          <Plus size={30} />
+        </Link>
+      </div>
 
       <div className='w-full  p-5 mb-10'>
         <h1 className='text-xl text-center lg:text-3xl font-bold mb-4'>All Task</h1>

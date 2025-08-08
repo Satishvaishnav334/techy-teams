@@ -1,11 +1,12 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { getCookie } from "cookies-next/client";
-import { LayoutDashboard, Users, ListTodo } from "lucide-react";
+import { LayoutDashboard, Users, ListTodo, Plus } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar";
+
 export default function RootLayout({ children }) {
     const links = [
         {
@@ -15,11 +16,20 @@ export default function RootLayout({ children }) {
                 <LayoutDashboard className=" font-bold dark:text-neutral-200 h-6 w-6 flex-shrink-0 text-[#111111d1] transition-colors duration-300 " />
             ),
         },
+
         {
-            label: "Manage Teams",
-            href: "/dashboard/admin/manage-teams",
+            label: "Add New Task",
+            href: "/dashboard/admin/manage-tasks/add-task",
             icon: (
-                <Users className=" font-bold dark:text-neutral-200 h-6 w-6 flex-shrink-0 text-[#111111d1] transition-colors duration-300 ]" />
+                <Plus className=" font-bold dark:text-neutral-200 h-6 w-6 flex-shrink-0 text-[#111111d1] transition-colors duration-300 " />
+            ),
+        },
+
+        {
+            label: "Add New Team",
+            href: "/dashboard/admin/manage-teams/add-team",
+            icon: (
+                <Plus className=" font-bold dark:text-neutral-200 h-6 w-6 flex-shrink-0 text-[#111111d1] transition-colors duration-300 " />
             ),
         },
         {
@@ -27,6 +37,13 @@ export default function RootLayout({ children }) {
             href: "/dashboard/admin/manage-tasks",
             icon: (
                 <ListTodo className=" font-bold dark:text-neutral-200 h-6 w-6 flex-shrink-0 text-[#111111d1] transition-colors duration-300 ]" />
+            ),
+        },
+        {
+            label: "Manage Teams",
+            href: "/dashboard/admin/manage-teams",
+            icon: (
+                <Users className=" font-bold dark:text-neutral-200 h-6 w-6 flex-shrink-0 text-[#111111d1] transition-colors duration-300 ]" />
             ),
         },
 
@@ -51,7 +68,7 @@ export default function RootLayout({ children }) {
             <Sidebar open={open} setOpen={setOpen} >
                 <SidebarBody className="justify-between gap-10">
                     <div className="flex   flex-col flex-1 overflow-y-auto overflow-x-hidden">
-                       
+
                         <div className="mt-8 flex fixed flex-col gap-2">
                             {links.map((link, idx) => (
                                 <SidebarLink key={idx} link={link} />
