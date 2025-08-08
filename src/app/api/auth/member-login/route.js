@@ -12,7 +12,7 @@ export async function POST(request) {
     const password = data.get("password");
     const user = await userModel.findOne({ $or: [{ email: email }, { name: email }] });
     if (!user) {
-      return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
+      return NextResponse.json({ error: "Invalid email  " }, { status: 401 });
     }
     const isPasswordValid = await brecrypt.compare(password, user.password);
     console.log(isPasswordValid)
@@ -23,10 +23,10 @@ export async function POST(request) {
       process.env.JWT_SECRET,
       { expiresIn: process.env.JWT_EXPIRATION },
     )
-     const cookiesStore = await cookies();
-    const passtoken = cookiesStore.set('token', token);
-    const passname = cookiesStore.set('name', name);;
-    return NextResponse.json({  token }, { status: 200 })
+    const cookiesStore = await cookies();
+    cookiesStore.set('token', token);
+    cookiesStore.set('name', name);
+    return NextResponse.json({message:"Login Successfully"} ,{ status: 200 })
   } catch (error) {
     console.error("Error fetching users:", error);
     return NextResponse.json({ error: "Failed to fetch users" }, { status: 500 });

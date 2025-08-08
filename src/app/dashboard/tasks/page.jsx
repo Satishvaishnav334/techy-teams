@@ -13,7 +13,8 @@ import { useUserDataContext } from '@/components/context/UserContext';
 const TaskCard = ({ task }) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({ id: task._id });
-
+  const date = new Date(task.dueDate)
+  const date1 = new Date()
   const style = {
     transform: transform
       ? `translate(${transform.x}px, ${transform.y}px)`
@@ -27,11 +28,32 @@ const TaskCard = ({ task }) => {
       {...listeners}
       {...attributes}
       style={style}
-      className='flex my-3 items-center justify-between p-4 bg-white rounded-lg shadow-md cursor-move'
+      className='flex my-3 w-full border-1 border-black items-center justify-between  bg-white rounded-lg shadow-md cursor-move'
     >
-      <div className='flex flex-col items-center gap-2'>
-        <h1 className='text-lg font-semibold'>{task.title}</h1>
-        <p className='text-sm text-gray-500'>{task.status}</p>
+      <div className='flex flex-col items-between     gap-3 w-full'>
+        <span
+          className={task?.priority === 'Important' ? 'bg-red-500 text-lg md:text-2xl font-bold rounded-t-lg  px-3 py-2  text-white' : 'bg-gray-500 rounded-t-lg h-15 text-lg md:text-2xl font-bold  px-3 py-2   text-white'
+            && task?.priority === 'Medium' ? 'bg-gray-700  text-lg md:text-2xl font-bold  px-3 py-2 rounded-t-lg  text-white' : 'bg-gray-500 h-15 rounded-t-lg  text-lg md:text-2xl font-bold px-3 py-2  text-white'}>
+          {task?.priority}
+        </span>
+        <span className=' mx-auto  w-[80%] text-lg md:text-2xl font-extrabold text-center   '>
+          {task.title}
+        </span>
+        <div className='flex flex-col items-between justify-between  w-full'>
+          <p className='text-lg  px-3'>{task.description}</p>
+          <p className='px-3'>Status : {task.status}</p>
+          
+          <div className='flex justify-end w-full'>
+           
+
+            <div className='flex items-end  '>
+
+              <p className={date1 < date ? 'bg-gray-300   font-semibold  text-sm text-right    py-1 px-2 rounded-br-xl w-full  rounded-tl-xl' : 'bg-red-500 text-white w-full font-semibold  text-sm text-right    py-1 px-2 rounded-br-xl rounded-tl-xl'} >
+                Due {formatDate(task.dueDate)}
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -43,9 +65,8 @@ const Column = ({ id, title, tasks }) => {
   return (
     <div
       ref={setNodeRef}
-      className={`p-4 bg-gray-200 rounded-xl min-h-[400px] shadow-md transition-all duration-300 ${
-        isOver ? 'ring-2 ring-orange-400' : ''
-      }`}
+      className={`p-4 bg-gray-200 rounded-xl min-h-[400px] shadow-md transition-all duration-300 ${isOver ? 'ring-2 ring-orange-400' : ''
+        }`}
     >
       <h2 className=' text-center text-xl  lg:text-2xl font-bold mb-2 '>{title}</h2>
       {tasks.length > 0 ? (
@@ -75,17 +96,17 @@ export default function Page() {
     setTrigger((prev) => !prev);
 
     try {
-      console.log(taskId,newStatus)
+      console.log(taskId, newStatus)
       const formData = new FormData()
-      formData.append('taskId',taskId)
-      formData.append('newStatus',newStatus)
-      const res = await axios.put(`/api/get-tasks/update-status/`,formData);
-      console.log(`Updated task ${taskId} to ${newStatus}`,res);
+      formData.append('taskId', taskId)
+      formData.append('newStatus', newStatus)
+      const res = await axios.put(`/api/get-tasks/update-status/`, formData);
+      console.log(`Updated task ${taskId} to ${newStatus}`, res);
     } catch (err) {
       console.error('API failed:', err);
     }
-    finally{
-      toast.success("Status Update Succesfully",{description:`Current Status is ${newStatus}`,closeButton:true})
+    finally {
+      toast.success("Status Update Succesfully", { description: `Current Status is ${newStatus}`, closeButton: true })
     }
   };
 
@@ -131,4 +152,16 @@ export default function Page() {
       </div>
     </div>
   );
+}
+
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    // hour: 'numeric',
+    // minute: '2-digit',
+    hour12: true
+  });
 }

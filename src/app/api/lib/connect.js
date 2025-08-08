@@ -20,16 +20,8 @@ async function connectToDatabase() {
 }
 
 
-mongoose.connection.on('connected', () => {
-  console.log('MongoDB connected');
-});
-mongoose.connection.on('error', (err) => {
-  console.error('MongoDB connection error:', err);  
-});
-mongoose.connection.on('disconnected', () => {
-  console.log('MongoDB disconnected');
-});
-connectToDatabase().catch(err => {
+
+connectToDatabase().then(()=>console.log("DB Coonect successfully")).catch(err => {
   console.error('Failed to connect to MongoDB:', err);
 });
 

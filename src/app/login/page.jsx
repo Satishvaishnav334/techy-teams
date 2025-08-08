@@ -30,12 +30,13 @@ export default function Page() {
       formData.append('email', email);
       formData.append('password', password);
       const res = await axios.post("/api/auth/member-login", formData)
+      toast.success("Login Successfully", { closeButton: true })
       router.push(`/dashboard`)
     } catch (error) {
-      console.error("Error fetching users:", error);
+      toast.error("Invalid email or password", { closeButton: true })
+      console.log(" users:", error.message);
     }
     finally {
-      toast.success("Login Succesfully", { closeButton: true })
     }
   };
 

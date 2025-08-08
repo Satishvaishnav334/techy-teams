@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import axios from 'axios'
-//import lucide icone
+import { Pencil, Trash } from 'lucide-react';
 import { toast } from "sonner"
 import {
   DndContext,
@@ -25,17 +25,17 @@ const TaskCard = ({ task }) => {
   const date = new Date(task.dueDate)
   const date1 = new Date()
 
-   const handleDelete = async (slug) =>{
-    try{
+  const handleDelete = async (slug) => {
+    try {
       console.log("object")
       const res = await axios.delete(`/api/get-tasks/${slug}`)
       console.log(res)
-      toast.success(res.data.message,{icon:<Trash />,closeButton:true,duration:2000})
+      toast.success(res.data.message, { icon: <Trash />, closeButton: true, duration: 2000 })
     }
-    catch(error){
+    catch (error) {
       console.log(error)
     }
-    finally{
+    finally {
       refresh()
     }
   }
@@ -45,39 +45,43 @@ const TaskCard = ({ task }) => {
       {...listeners}
       {...attributes}
       style={style}
-      className='flex my-3 w-full items-center justify-between  bg-white rounded-lg shadow-md cursor-move'
+      className='flex my-3 w-full border-1 border-black items-center justify-between  bg-white rounded-lg shadow-md cursor-move'
     >
-      <div className='flex flex-col items-end    gap-2 w-full'>
-        <h1 className='text-xl text-center w-full mt-3 font-semibold'>{task.title}</h1>
-        <div className='flex justify-between  w-full'>
-          <p className='text-lg  px-5'>{task.description}</p>
-          <span
-            className={task?.priority === 'Important' ? 'bg-red-500  text-sm md:text-lg font-extrabold p-2 rounded-l-xl text-white' : 'bg-gray-400text-sm md:text-lg font-extrabold p-2 rounded-l-xl text-white'
-              && task?.priority === 'Medium' ? 'bg-gray-700 text-sm md:text-lg font-extrabold p-2 rounded-l-xl text-white' : 'bg-gray-400 text-sm md:text-lg font-extrabold p-2 rounded-l-xl text-white'}>
-            {task?.priority}
-          </span>
-        </div>
-
-        {/* <p className='bg-black text-sm md:text-lg font-extrabold p-2 rounded-l-xl text-white'>{task.status}</p> */}
-        <div className='flex justify-end mt-5'>
-          <div className='flex justify-around gap-4 my-2 mx-5 '>
-            <Link href={`/dashboard/admin/manage-tasks/update/${task?.slug}`}
-              className='bg-black text-white font-semibold flex gap-2 text-xl text-right px-3 py-2 rounded-lg'>
-              <Pencil />Edit
-            </Link>
-            <button onClick={(e) => handleDelete(team?.slug)}
-              className='bg-black text-white flex gap-2 font-semibold  text-xl text-right px-3 py-2 rounded-lg'>
-              <Trash /> Delete
-            </button>
+      <div className='flex flex-col items-between     gap-3 w-full'>
+        <span
+          className={task?.priority === 'Important' ? 'bg-red-500 text-lg md:text-2xl font-bold rounded-t-lg  px-3 py-2  text-white' : 'bg-gray-500 rounded-t-lg h-15 text-lg md:text-2xl font-bold  px-3 py-2   text-white'
+            && task?.priority === 'Medium' ? 'bg-gray-700  text-lg md:text-2xl font-bold  px-3 py-2 rounded-t-lg  text-white' : 'bg-gray-500 h-15 rounded-t-lg  text-lg md:text-2xl font-bold px-3 py-2  text-white'}>
+          {task?.priority}
+        </span>
+        <span className=' mx-auto  w-[80%] text-lg md:text-2xl font-extrabold text-center   '>
+          {task.title}
+        </span>
+        <div className='flex flex-col items-between justify-between  w-full'>
+          <p className='text-lg  px-3'>{task.description}</p>
+          <p className='px-3'>Status : {task.status}</p>
+          <div className='px-3'>
+            Assigned To :  {task?.assignedTo?.name}
           </div>
-          <p className={date1 < date ? 'bg-gray-300 min-w-[40%] font-semibold  text-sm text-right    py-1 px-2 rounded-br-xl rounded-tl-xl' : 'bg-black/80 text-white min-w-[40%] font-semibold  text-sm text-right    py-1 px-2 rounded-br-xl rounded-tl-xl'} >
+          <div className='flex justify-between  w-full'>
+            <div className='flex justify-between gap-2 my-2 mx-3  '>
+              <Link href={`/dashboard/admin/manage-tasks/update/${task?.slug}`}
+                className='bg-black text-white font-semibold flex gap-2 text-sm text-right px-3 py-2  rounded-lg'>
+                <Pencil size={18} />Edit
+              </Link>
+              <button onClick={(e) => handleDelete(team?.slug)}
+                className='bg-black text-white cursor-pointer flex gap-2 font-semibold  text-sm text-right px-3 py-2 rounded-lg'>
+                <Trash size={18} /> Delete
+              </button>
+            </div>
 
-            Due Date {formatDate(task.dueDate)}
-          </p>
+            <div className='flex items-end  '>
+
+              <p className={date1 < date ? 'bg-gray-300   font-semibold  text-sm text-right    py-1 px-2 rounded-br-xl w-full  rounded-tl-xl' : 'bg-red-500 text-white w-full font-semibold  text-sm text-right    py-1 px-2 rounded-br-xl rounded-tl-xl'} >
+                Due {formatDate(task.dueDate)}
+              </p>
+            </div>
+          </div>
         </div>
-        {/* <Link href={`/dashboard/admin/manage-tasks/update/${task.slug}`}>
-          <button className='bg-blue-600 cursor-pointer font-semibold text-white px-3 py-2 my-2 rounded-lg text-xl'>Update</button>
-        </Link> */}
       </div>
     </div>
   );
