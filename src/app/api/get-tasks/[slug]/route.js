@@ -3,13 +3,13 @@ import { NextResponse } from 'next/server';
 import connectToDatabase from '../../lib/connect.js';
 import Member from '../../models/users.js';
 import taskModel from '../../models/task.js';
+
 export async function GET(req, { params }) {
     try {
         await connectToDatabase();
         Member;
         const { slug } = await params;
         const data = await taskModel.findOne({ slug }).populate('assignedTo', 'name email role');
-        console.log(data)
         return NextResponse.json(data, { status: 200 });
     }
     catch (error) {
@@ -17,6 +17,7 @@ export async function GET(req, { params }) {
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
 }
+
 export async function DELETE(req, { params }) {
     try {
         await connectToDatabase();

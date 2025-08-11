@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import axios from 'axios'
 import { Pencil, Trash, Plus } from 'lucide-react';
 import { toast } from "sonner"
@@ -22,23 +22,11 @@ const TaskCard = ({ task }) => {
       : undefined,
     opacity: isDragging ? 0.5 : 1,
   };
+
   const date = new Date(task.dueDate)
   const date1 = new Date()
 
-  const handleDelete = async (slug) => {
-    try {
-      console.log("object")
-      const res = await axios.delete(`/api/get-tasks/${slug}`)
-      console.log(res)
-      toast.success(res.data.message, { icon: <Trash />, closeButton: true, duration: 2000 })
-    }
-    catch (error) {
-      console.log(error)
-    }
-    finally {
-      refresh()
-    }
-  }
+
   return (
     <div
       ref={setNodeRef}
@@ -69,10 +57,10 @@ const TaskCard = ({ task }) => {
                 className='bg-black text-white font-semibold flex gap-2 text-sm text-right px-3 py-2  rounded-lg'>
                 <Pencil size={18} />Edit
               </Link>
-              <button onClick={(e) => handleDelete(team?.slug)}
+              <Link href={`/dashboard/admin/manage-tasks/delete/${task?.slug}`}
                 className='bg-black text-white z-50 cursor-pointer flex gap-2 font-semibold  text-sm text-right px-3 py-2 rounded-lg'>
                 <Trash size={18} /> Delete
-              </button>
+              </Link>
             </div>
 
             <div className='flex items-end  '>
@@ -87,7 +75,7 @@ const TaskCard = ({ task }) => {
   );
 };
 
-const Column = ({ id, title, tasks }) => {
+const Column = ({ id, title, tasks, searchItem, setSearchItem, filterSearch }) => {
   const { setNodeRef, isOver } = useDroppable({ id });
 
   return (
@@ -96,8 +84,17 @@ const Column = ({ id, title, tasks }) => {
       className={`p-4 bg-gray-200 rounded-xl min-h-[400px] shadow-md transition-all duration-300 ${isOver ? 'ring-2 ring-orange-400' : ''
         }`}
     >
+      {/* <div className="flex gap-4 w-full mb-4">
+        <input
+          type="text"
+          placeholder="Search products..."
+          className="border p-2 rounded w-full"
+          value={searchItem}
+          onChange={(e) => setSearchItem(e.target.value)}
+        />
+      </div> */}
       <h2 className=' text-center text-xl  lg:text-2xl font-bold mb-2 '>{title}</h2>
-      {tasks.length > 0 ? (
+      {tasks?.length > 0 ? (
         tasks?.map((task) => <TaskCard key={task._id} task={task} />)
       ) : (
         <p className='text-center text-gray-500'>No Tasks</p>
@@ -110,6 +107,7 @@ export default function Page() {
   const { tasks } = useUserDataContext();
   console.log(tasks)
   const [trigger, setTrigger] = useState(false); // trigger re-render
+  // const [searchItem, setSearchItem] = useState('')
 
   const handleDragEnd = async ({ active, over }) => {
     if (!over) return;
@@ -148,6 +146,23 @@ export default function Page() {
     );
   }
 
+
+    // const [sortBy, setSortBy] = useState('name'); // name | price | stock
+
+  // Filtering and sorting
+  // const filterSearch = useMemo(() => {
+  //   return tasks
+  //     ?.filter((p) =>
+  //       p?.name?.toLowerCase().includes(searchItem.toLowerCase())
+  //     )
+  //     ?.sort((a, b) => {
+  //       if (sortBy === 'price') return a.price - b.price;
+  //       if (sortBy === 'stock') return a.stock - b.stock;
+  //       return a.name.localeCompare(b.name);
+  //     });
+  // }, [tasks, searchItem, sortBy]);
+  // console.log(filterSearch, "data")
+
   return (
     <div className='flex flex-col w-full p-5'>
       <div className='fixed right-5 bottom-2  flex flex-col p-2'>
@@ -165,6 +180,9 @@ export default function Page() {
               id='pending'
               title='Pending Tasks'
               tasks={getTasksByStatus('pending')}
+              // filterSearch={filterSearch}
+              // searchItem={searchItem}
+              // setSearchItem={setSearchItem}
             />
             <Column
               id='in-progress'
