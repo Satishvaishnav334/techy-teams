@@ -57,7 +57,8 @@ const Column = ({ id, title, tasks }) => {
 };
 
 export default function Page() {
-  const { user } = useUserDataContext();
+  const { user,loading } = useUserDataContext();
+  console.log(user)
   const [trigger, setTrigger] = useState(false); // trigger re-render
 
   const handleDragEnd = async ({ active, over }) => {
@@ -88,11 +89,7 @@ export default function Page() {
   const getTasksByStatus = (status) =>
     user?.tasks?.filter((task) => task.status === status) || [];
 
-  if (!user?.tasks) {
-    return (
-      <div className='p-10 text-xl font-bold text-center'>Loading tasks...</div>
-    );
-  }
+ 
 
   return (
     <div className='flex flex-col w-full p-5'>

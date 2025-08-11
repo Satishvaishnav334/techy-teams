@@ -2,7 +2,7 @@
 import "./globals.css";
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
-import { UserDataProvider } from "@/components/context/UserContext";
+import { LoadingProvider } from "@/components/context/LoadingContext";
 import { Toaster } from "@/components/ui/sonner"
 
 export const metadata = {
@@ -15,7 +15,9 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <main>
+          <LoadingProvider>
           {children}
+          </LoadingProvider>
         </main>
         <Toaster position="top-right" richColors></Toaster>
       </body>

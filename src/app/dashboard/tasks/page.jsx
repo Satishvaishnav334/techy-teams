@@ -32,8 +32,8 @@ const TaskCard = ({ task }) => {
     >
       <div className='flex flex-col items-between     gap-3 w-full'>
         <span
-          className={task?.priority === 'Important' ? 'bg-red-500 text-lg md:text-2xl font-bold rounded-t-lg  px-3 py-2  text-white' : 'bg-gray-500 rounded-t-lg h-15 text-lg md:text-2xl font-bold  px-3 py-2   text-white'
-            && task?.priority === 'Medium' ? 'bg-gray-700  text-lg md:text-2xl font-bold  px-3 py-2 rounded-t-lg  text-white' : 'bg-gray-500 h-15 rounded-t-lg  text-lg md:text-2xl font-bold px-3 py-2  text-white'}>
+          className={task?.priority === 'Important' ? 'bg-red-500 text-lg md:text-2xl font-bold rounded-t-lg  px-3 py-2  text-white' : 'bg-gray-500 rounded-t-lg  text-lg md:text-2xl font-bold  px-3 py-2   text-white'
+            && task?.priority === 'Medium' ? 'bg-gray-700  text-lg md:text-2xl font-bold  px-3 py-2 rounded-t-lg  text-white' : 'bg-gray-500 rounded-t-lg  text-lg md:text-2xl font-bold px-3 py-2  text-white'}>
           {task?.priority}
         </span>
         <span className=' mx-auto  w-[80%] text-lg md:text-2xl font-extrabold text-center   '>
@@ -109,11 +109,7 @@ export default function Page() {
   const getTasksByStatus = (status) =>
     user?.tasks?.filter((task) => task.status === status) || [];
 
-  if (!user?.tasks) {
-    return (
-      <div className='p-10 text-xl font-bold text-center'>Loading tasks...</div>
-    );
-  }
+ 
 
   return (
     <div className='flex flex-col w-full p-5'>

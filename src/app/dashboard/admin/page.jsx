@@ -15,6 +15,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Link from 'next/link';
+import { Plus } from 'lucide-react';
 
 function AdminDashboard() {
   const { tasks, teams, user, users } = useUserDataContext();
@@ -133,8 +134,8 @@ function AdminDashboard() {
       </Table>
       <div className='flex items-center justify-start gap-5 p-4 bg-gray-100 rounded-lg shadow my-5 w-full'>
       
-        <Link href='/dashboard/admin/manage-teams/add-categorie' className='px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700'>
-          Add New teams
+        <Link href='/dashboard/admin/manage-teams/add-categorie' className='px-4 py-2 bg-blue-600 text-white flex rounded hover:bg-blue-700'>
+         <Plus/> Add New teams
         </Link>
       </div>
 

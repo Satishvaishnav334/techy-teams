@@ -6,8 +6,9 @@ import { useEffect, useState } from 'react'
 import { useUserDataContext } from '@/components/context/UserContext'
 import { useParams,useRouter } from 'next/navigation'
 import { toast } from 'sonner'
+import { useLoadingContext } from '@/components/context/LoadingContext'
 function page() {
-
+    const {setLoading} = useLoadingContext()
     const { slug } = useParams()
     const { users, refresh, user } = useUserDataContext()
     const [task, setTask] = useState({})
@@ -18,26 +19,27 @@ function page() {
     const [assignedTo, setAssignedTo] = useState()
     const [date, setDate] = useState()
     const router = useRouter()
-    async function fetchTask() {
+
+  useEffect(()=>{
+        async function fetchTask() {
         try {
+           
             const task = await axios.get(`/api/get-tasks/${slug}`)
             setTask(task.data)
             setAssignedTo(task.data.assignedTo)
+            
         }
         catch (error) {
             console.log(error)
         }
-
     }
-
-    useEffect(() => {
-        fetchTask()
-    }, [])
+    fetchTask()
+  },[])
     console.log(task)
-    const handleCreate = async (e) => {
+    const handleUpdate = async (e) => {
         e.preventDefault();
         try {
-         
+                     setLoading(true)
             const newslug = newtitle?.split(' ').join('-').toLowerCase();
             const formData = new FormData();
             formData.append('title', newtitle ? newtitle : task?.title);
@@ -55,6 +57,7 @@ function page() {
             toast.error("Server Error", { closeButton: true })
         }
         finally {
+                        setLoading(false)
             toast.success("Task Update Succesfully", { closeButton: true })
             router.push('/dashboard/admin/manage-tasks')
             refresh()
@@ -70,7 +73,7 @@ function page() {
     return (
         <div className="  flex flex-col items-center justify-center min-h-screen text-black bg-gray-100">
             <h1 className="text-3xl font-bold mb-6">Update Task</h1>
-            <form onSubmit={handleCreate} className="p-4 m-2 bg-white rounded shadow-md">
+            <form onSubmit={handleUpdate} className="p-4 m-2 bg-white rounded shadow-md">
                 <label className="block font-semibold text-2xl  my-1">Team Title</label>
                 <input
                     type="text"

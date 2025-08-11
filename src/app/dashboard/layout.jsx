@@ -1,7 +1,7 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,createContext } from "react";
 import { getCookie } from "cookies-next/client";
-import { UserDataProvider } from "@/components/context/UserContext";
+import { UserDataProvider,useUserDataContext } from "@/components/context/UserContext";
 import { LayoutDashboard, Users, ListTodo } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -9,6 +9,10 @@ import { cn } from "@/lib/utils";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useRouter } from "next/navigation";
+import Loader from '@/components/ui/pulsating-loader'
+import { useLoadingContext } from "@/components/context/LoadingContext";
+// const DataContext = createContext();
+
 export default function RootLayout({ children }) {
     const links = [
         {
@@ -35,6 +39,7 @@ export default function RootLayout({ children }) {
 
     ];
     const [open, setOpen] = useState(false);
+    const {loading} = useLoadingContext()
     const router = useRouter()
     useEffect(() => {
         const checkSession = () => {
@@ -48,11 +53,19 @@ export default function RootLayout({ children }) {
     }, []);
     return (
         <UserDataProvider >
-                
+
 
             <Navbar />
-            {children}
-            <Footer />
+            {
+                loading ?
+                    <div className='h-[90vh] w-full flex  justify-center items-center'>
+                        <Loader />
+                    </div>
+                    :
+                    children
+            }
+
+            < Footer />
         </UserDataProvider>
 
     );
