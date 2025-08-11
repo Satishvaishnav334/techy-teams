@@ -4,11 +4,15 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 // import { Calendar } from "@/components/ui/calendar.jsx"
 import { useUserDataContext } from '@/components/context/UserContext'
-import { useParams,useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { useLoadingContext } from '@/components/context/LoadingContext'
+import { DatePicker } from "@/components/ui/date-picker"
+
 function page() {
-    const {setLoading} = useLoadingContext()
+
+    // const { setLoading } = useLoadingContext()
+    const [loading, setLoading] = useState(false)
     const { slug } = useParams()
     const { users, refresh, user } = useUserDataContext()
     const [task, setTask] = useState({})
@@ -20,26 +24,32 @@ function page() {
     const [date, setDate] = useState()
     const router = useRouter()
 
-  useEffect(()=>{
-        async function fetchTask() {
-        try {
-           
-            const task = await axios.get(`/api/get-tasks/${slug}`)
-            setTask(task.data)
-            setAssignedTo(task.data.assignedTo)
-            
+
+    useEffect(() => {
+        const fetchTask = async () => {
+            try {
+                setLoading(true)
+                const task = await axios.get(`/api/get-tasks/${slug}`)
+                setTask(task.data)
+                setAssignedTo(task.data.assignedTo)
+
+            }
+            catch (error) {
+                console.log(error)
+            }
+            finally {
+                setLoading(false)
+            }
+
         }
-        catch (error) {
-            console.log(error)
-        }
-    }
-    fetchTask()
-  },[])
+        fetchTask()
+    }, [])
+
     console.log(task)
     const handleUpdate = async (e) => {
         e.preventDefault();
         try {
-                     setLoading(true)
+            setLoading(true)
             const newslug = newtitle?.split(' ').join('-').toLowerCase();
             const formData = new FormData();
             formData.append('title', newtitle ? newtitle : task?.title);
@@ -57,7 +67,7 @@ function page() {
             toast.error("Server Error", { closeButton: true })
         }
         finally {
-                        setLoading(false)
+            setLoading(false)
             toast.success("Task Update Succesfully", { closeButton: true })
             router.push('/dashboard/admin/manage-tasks')
             refresh()
@@ -107,13 +117,11 @@ function page() {
                     <option value="completed">completed </option>
                 </select>
 
-                <label className="block font-semibold text-2xl  my-1">Date</label>
-                <input
-                    type="text"
-                    className="border border-gray-600 text-xl rounded-2xl w-full p-2"
-                    defaultValue={formatDate(task?.dueDate)}
-                    value={date}
-                    onChange={(e) => setDate(e.target.value ? e.target.value : task.dueDate)}
+                <label className="block font-semibold text-2xl  my-1"> Due Date  : {formatDate(task?.dueDate)}</label>
+               
+                <DatePicker
+                    date={date}
+                    onDateChange={setDate}
                 />
 
 

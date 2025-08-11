@@ -12,7 +12,7 @@
 "use client"
 
 import { toast } from "sonner"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button2.0"
 
 export default function page() {
   return (

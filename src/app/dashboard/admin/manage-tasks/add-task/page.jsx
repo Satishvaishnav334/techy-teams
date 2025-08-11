@@ -3,6 +3,8 @@ import React from 'react'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useUserDataContext } from '@/components/context/UserContext'
+import { DatePicker } from "@/components/ui/date-picker"
+import { toast } from 'sonner'
 function page() {
   const { users, refresh, user } = useUserDataContext()
   const [title, setTitle] = useState()
@@ -24,11 +26,13 @@ function page() {
       formData.append('description', desc);
       formData.append('assignedTo', assignedTo);
       formData.append('dueDate', date ? date : "15 july 2026");
-      console.log(priority, assignedTo)
+      console.log(date)
+      toast.success("Task Created SuccessFully",{closeButton:true})
       const create = await axios.post('/api/get-tasks', formData)
       console.log(create)
     } catch (error) {
-      console.error('Error creating team:', error);
+      toast.error("Error creating Task ",{closeButton:true})
+      console.error('Error creating Task :', error);
     }
     finally {
       setAssignedTo('')
@@ -40,7 +44,7 @@ function page() {
   };
 
 
-console.log(users.map((mem)=>mem._id))
+  console.log(users.map((mem) => mem._id))
   return (
     <div className="  flex flex-col items-center justify-center min-h-screen text-black bg-gray-100">
       <h1 className="text-3xl font-bold mb-6">Create Task</h1>
@@ -81,13 +85,9 @@ console.log(users.map((mem)=>mem._id))
 
 
         <label className="block font-semibold text-2xl  my-1">Due Date</label>
-        <input
-          
-          type="text"
-          className="border border-gray-600 text-xl rounded-2xl w-full p-2"
-          placeholder="Enter Task Due Date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
+        <DatePicker
+          date={date}
+          onDateChange={setDate}
         />
 
 
@@ -96,11 +96,11 @@ console.log(users.map((mem)=>mem._id))
           <h2 className="text-lg font-semibold mb-3">Select User you Want to Assign Task</h2>
           <div className="grid grid-cols-2 gap-3 ">
             <label className="flex items-center space-x-2">
-              <select className="border border-gray-600 text-xl rounded-2xl  p-2" value={assignedTo} onChange={(e) => setAssignedTo(e.target.value)}>
-                <option  value="">No User Selected</option>
+              <select className="border border-gray-600 text-xl rounded-2xl  p-2" required={true} value={assignedTo} onChange={(e) => setAssignedTo(e.target.value)}>
+                <option value="">No User Selected</option>
                 {users?.map((member, index) => {
                   return (
-                    <option key={index} value={member._id}>{member.name}</option>
+                    <option  key={index} value={member._id}>{member.name}</option>
                   );
                 })}
               </select>

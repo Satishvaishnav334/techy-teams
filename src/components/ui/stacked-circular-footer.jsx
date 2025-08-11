@@ -1,6 +1,6 @@
 'use client'
 import { Icons } from "./icons.jsx"
-import { Button } from "./button.jsx"
+import { Button } from "./button2.0.jsx"
 import { Input } from "./Input.jsx"
 import { Label } from "./label.jsx"
 import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react"
