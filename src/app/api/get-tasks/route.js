@@ -50,3 +50,24 @@ export async function POST(request) {
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
 }
+
+
+// import { NextResponse } from "next/server";
+
+// export async function POST(req) {
+// //   const body = await req.json();
+
+//   // Save to DB...
+//   console.log("Task Created:", );
+
+//   // Emit notification to all clients
+//   const io = globalThis.server?.io;
+//   if (io) {
+//     io.emit("notification", {
+//       message: `New Task Created: `,
+//       type: "success"
+//     });
+//   }
+
+//   return NextResponse.json({ success: true });
+// }

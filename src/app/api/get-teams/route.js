@@ -10,6 +10,10 @@ export async function GET() {
         Member;
         const team = await Team.find({}).populate('members', 'name email role')
         // console.log(team)
+        const io = globalThis.server?.io;
+        if (io) {
+            io.emit("notification", { message: `All Task fetched}` });
+        }
         return NextResponse.json(team, { status: 200 });
     }
     catch (error) {
@@ -22,19 +26,20 @@ export async function POST(req) {
     try {
         await connectToDatabase();
         const formData = await req.formData();
+
         const teamName = formData.get('teamName');
         const slug = formData.get('slug');
         const level = formData.get('level');
         const description = formData.get('description');
         const createdBy = formData.get('createdBy');
         const rowmembers = formData.getAll('members');
-       console.log("object",slug)
+        console.log("object", slug)
         const members = rowmembers
             .flatMap(item => item.split(','))
             .map(id => id.trim())
             .filter(Boolean);
         const team = await Team.create({
-            teamName, description, createdBy,level , members,slug
+            teamName, description, createdBy, level, members, slug
         })
         const users = await Member.updateMany(
             {
