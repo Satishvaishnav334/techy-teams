@@ -6,15 +6,16 @@ export default function Notifications() {
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
-    socket.on("notification", (data) => {
+    socket.on("hello", (data) => {
       setNotifications((prev) => [...prev, data.message]);
     });
+    socket.emit("hello","namste")
 
     return () => {
-      socket.off("notification");
+      socket.off("hello");
     };
   }, []);
-
+  // console.log(notifications,"note")
   return (
     <div className="fixed bottom-4 right-4 bg-white shadow p-4 rounded">
       {notifications.map((n, i) => (

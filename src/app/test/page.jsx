@@ -1,36 +1,44 @@
-// components/SocketClient.js (or directly in a page)
-'use client'
+"use client";
+
 import { useEffect, useState } from "react";
-import { io } from "socket.io-client";
-const socket = io('http://localhost:8080'); // Connects to the same origin by default
+import { socket } from "@/lib/socket.js";
 
-export default function App() {
-    const [notification, setNotification] = useState([]);
+export default function Home() {
+  const [isConnected, setIsConnected] = useState(false);
+  const [transport, setTransport] = useState("N/A");
 
-    useEffect(() => {
-        
-        socket.on('PushNotification', (data) => {
-            console.log("object", data);
-            setNotification((pre) => {
-                [...pre, data]
-            })
-        })
-        return () => {
-            socket.off('PushNotification')
-        }
-    }, [])
+  useEffect(() => {
+    if (socket.connected) {
+      onConnect();
+    }
 
+    function onConnect() {
+      setIsConnected(true);
+      setTransport(socket.io.engine.transport.name);
+      socket.emit("hello","hello")
+      socket.io.engine.on("upgrade", (transport) => {
+        setTransport(transport.name);
+      });
+    }
 
-    return (
-        <div>
-            <h1>Push Notification : </h1>
-            <div>
-                {notification?.map((item,index)=>(
-                    <div key={index}>
-                            {item?.message}
-                    </div>
-                ))}
-            </div>
-        </div>
-    )
+    function onDisconnect() {
+      setIsConnected(false);
+      setTransport("N/A");
+    }
+
+    socket.on("connect", onConnect);
+    socket.on("disconnect", onDisconnect);
+
+    return () => {
+      socket.off("connect", onConnect);
+      socket.off("disconnect", onDisconnect);
+    };
+  }, []);
+
+  return (
+    <div>
+      <p>Status: { isConnected ? "connected" : "disconnected" }</p>
+      <p>Transport: { transport }</p>
+    </div>
+  );
 }
