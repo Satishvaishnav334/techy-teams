@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { socket } from "@/lib/socket.js";
+import { socket } from '@/lib/socket.js'
 
 export default function Home() {
   const [isConnected, setIsConnected] = useState(false);
@@ -11,11 +11,12 @@ export default function Home() {
     if (socket.connected) {
       onConnect();
     }
-
+   socket.emit("hello", "world");
     function onConnect() {
       setIsConnected(true);
+      console.log(socket, "socket")
       setTransport(socket.io.engine.transport.name);
-      socket.emit("hello","hello")
+
       socket.io.engine.on("upgrade", (transport) => {
         setTransport(transport.name);
       });
@@ -37,8 +38,8 @@ export default function Home() {
 
   return (
     <div>
-      <p>Status: { isConnected ? "connected" : "disconnected" }</p>
-      <p>Transport: { transport }</p>
+      <p>Status: {isConnected ? "connected" : "disconnected"}</p>
+      <p>Transport: {transport}</p>
     </div>
   );
 }
