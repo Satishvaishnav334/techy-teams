@@ -18,26 +18,18 @@ export const UserDataProvider = ({ children }) => {
     const [teams, setTeams] = useState([])
     const { setLoading } = useLoadingContext()
 
-    const [messages, setMessages] = useState([]);
+    const [notifications, setNotifications] = useState([]);
 
-    useEffect(() => {
+
+
+    const createNotification = (notification) => {
         if (!socket) {
             socket = io('http://localhost:3000'); // Connect to your custom server
         }
-       
-
-        socket.on('notification', (msg) => {
-            setMessages((prevMessages) => [...prevMessages, msg]);
-            toast.success(msg, { closeButton: true })
-        });
-
-
+        socket.emit('notification', notification);
         return () => {
-            socket.off('chat message');
+            socket.off('notification');
         };
-    }, []);
-    const createSendMessage = (message) => {
-        socket.emit('notification', message); 
     };
 
     const fetchContaxtData = async () => {
@@ -66,11 +58,19 @@ export const UserDataProvider = ({ children }) => {
 
     useEffect(() => {
         fetchContaxtData();
-
-
+        if (!socket) {
+            socket = io('http://localhost:3000'); // Connect to your custom server
+        }
+        socket.on('notification', (notification) => {
+            setNotifications((prevNotifications) => [...prevNotifications, notification]);
+            toast.success(notification, { closeButton: true, duration: 2000 })
+        });
+        return () => {
+            socket.off('notification');
+        };
     }, []);
     return (
-        <UserDataContext.Provider value={{ createSendMessage, user, users, refresh: fetchContaxtData, teams, tasks }}>
+        <UserDataContext.Provider value={{ createNotification, notifications, user, users, refresh: fetchContaxtData, teams, tasks }}>
             {children}
         </UserDataContext.Provider>
     );

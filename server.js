@@ -16,12 +16,13 @@ app.prepare().then(() => {
 
   io.on("connection", (socket) => {
     console.log(" user connected", socket.id)
+    
     socket.on("notification", (value) => {
-      console.log(value, "message")
-      socket.emit('notification',value)
+      console.log(value, "message from client")
+      io.of("/").emit("notification", value);
     });
   });
-  
+
   httpServer
     .once("error", (err) => {
       console.error(err);

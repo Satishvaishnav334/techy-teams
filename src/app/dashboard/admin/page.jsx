@@ -18,7 +18,7 @@ import Link from 'next/link';
 import { Plus } from 'lucide-react';
 
 function AdminDashboard() {
-  const { tasks, teams, user, users } = useUserDataContext();
+  const { tasks, teams, user, users,createNotification,refresh } = useUserDataContext();
   const router = useRouter();
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -40,27 +40,30 @@ function AdminDashboard() {
   }, [teams, searchTeam]);
 
   // Delete task
-  const handleDelete = async (slug) => {
+  const handleDelete = async (slug,title) => {
     if (!confirm("Are you sure you want to delete this task?")) return;
     try {
       const res = await axios.delete(`/api/get-tasks/${slug}`);
-      if (res.ok) {
-        toast.success("task deleted successfully!");
-        window.location.reload();
-      } else {
+      if (res.status == '200') {
+        createNotification(`The Task ${title} is Deleted by ${user?.name}`)
+        router.push('/dashboard/admin/manage-tasks')
+      refresh();
+      }
+      else {
         toast.error("Failed to delete task.");
       }
     } catch (err) {
       console.error(err);
     }
   };
-  const handleTeamDelete = async (slug) => {
+  const handleTeamDelete = async (slug,teamName) => {
     if (!confirm("Are you sure you want to delete this task?")) return;
     try {
-      const res = await axios.delete(`/api/get-teams/${slug}`);
-      if (res.ok) {
-        toast.success("task deleted successfully!");
-        window.location.reload();
+      const res = await axios.delete(`/api/get-teams/${slug}`); 
+      if (res.status == '200') {
+        createNotification(`The Team ${teamName} is Deleted by ${user?.name}`)
+        router.push('/dashboard/admin/manage-tasks')
+        refresh();
       } else {
         toast.error("Failed to delete task.");
       }
@@ -116,7 +119,7 @@ function AdminDashboard() {
               <TableCell>{task?.assignedTo?.name}</TableCell>
               <TableCell className="text-right flex gap-2 justify-end">
                 <button
-                  onClick={() => handleDelete(task.slug)}
+                  onClick={() => handleDelete(task.slug,task?.title)}
                   className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
                 >
                   Delete
@@ -133,9 +136,9 @@ function AdminDashboard() {
         </TableBody>
       </Table>
       <div className='flex items-center justify-start gap-5 p-4 bg-gray-100 rounded-lg shadow my-5 w-full'>
-      
+
         <Link href='/dashboard/admin/manage-teams/add-categorie' className='px-4 py-2 bg-blue-600 text-white flex rounded hover:bg-blue-700'>
-         <Plus/> Add New teams
+          <Plus /> Add New teams
         </Link>
       </div>
 
@@ -170,7 +173,7 @@ function AdminDashboard() {
               </TableCell>
               <TableCell className="text-right flex gap-2 justify-end">
                 <button
-                  onClick={() => handleTeamDelete(team._id)}
+                  onClick={() => handleTeamDelete(team._id,team?.teamName)}
                   className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
                 >
                   Delete

@@ -2,11 +2,14 @@
 import React from 'react'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { useUserDataContext } from '@/components/context/UserContext'
 import { DatePicker } from "@/components/ui/date-picker"
 import { toast } from 'sonner'
 function page() {
-  const { users, refresh, user } = useUserDataContext()
+  
+  const { users, refresh, user,createNotification } = useUserDataContext()
+  const router = useRouter()
   const [title, setTitle] = useState()
   const [desc, setDesc] = useState()
   const [status, setStatus] = useState()
@@ -27,9 +30,14 @@ function page() {
       formData.append('assignedTo', assignedTo);
       formData.append('dueDate', date ? date : "15 july 2026");
       console.log(date)
-      toast.success("Task Created SuccessFully",{closeButton:true})
+
       const create = await axios.post('/api/get-tasks', formData)
-      console.log(create)
+      console.log(create) 
+      if(create.status=='200'){
+        createNotification(` New task ${title} Create by ${user.name}`)
+        refresh()
+        router.push('/dashboard/admin/manage-tasks')
+      } 
     } catch (error) {
       toast.error("Error creating Task ",{closeButton:true})
       console.error('Error creating Task :', error);
@@ -44,7 +52,6 @@ function page() {
   };
 
 
-  console.log(users.map((mem) => mem._id))
   return (
     <div className="  flex flex-col items-center justify-center min-h-screen text-black bg-gray-100">
       <h1 className="text-3xl font-bold mb-6">Create Task</h1>

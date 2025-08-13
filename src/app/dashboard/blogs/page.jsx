@@ -5,25 +5,24 @@ import { Button } from "@/components/ui/button2.0"
 import { useUserDataContext } from "@/components/context/UserContext";
 
 export default function page() {
-    const [message, setMessage] = useState('');
-    const [messages, setMessages] = useState([]);
-    const {createSendMessage} = useUserDataContext()
+    const [notification, setNotification] = useState('');
+    const {createNotification,notifications} = useUserDataContext()
     
   return (
      <div>
       <h1>Real-Time Chat</h1>
       <div>
-        {messages.map((msg, index) => (
-          <div key={index}>{msg}</div>
+        {notifications.map((notification, index) => (
+          <div key={index}>{notification}</div>
         ))}
       </div>
       <input
         type="text"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
+        value={notification}
+        onChange={(e) => setNotification(e.target.value)}
         placeholder="Type a message..."
       />
-      <button onClick={()=>createSendMessage(message)}>Send</button>
+      <button onClick={()=>createNotification(notification)}>Send</button>
     </div>
     // <Button
     //   variant="black"

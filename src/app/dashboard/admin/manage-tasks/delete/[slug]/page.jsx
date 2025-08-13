@@ -11,7 +11,7 @@ import { Pencil, Trash, Plus } from 'lucide-react';
 function page() {
 
     const { slug } = useParams()
-    const { users, refresh, user } = useUserDataContext()
+    const { users, refresh, user,createNotification } = useUserDataContext()
     const [task, setTask] = useState({})
 
 
@@ -21,6 +21,7 @@ function page() {
         try {
             const task = await axios.get(`/api/get-tasks/${slug}`)
             setTask(task.data)
+
         }
         catch (error) {
             console.log(error)
@@ -28,11 +29,13 @@ function page() {
 
     }
     const handleDelete = async (slug) => {
-         if (!confirm("Delete Task")) return;
+        if (!confirm("Delete Task")) return;
         try {
-            const res = await axios.delete(`/api/get-tasks/${slug}`)
-            console.log(res)
-            toast.success("Task Delete Successfully", { icon: <Trash />, closeButton: true, duration: 2000 })
+            const deletetask = await axios.delete(`/api/get-tasks/${slug}`)
+            if (deletetask.status == '200') {
+                createNotification(`The task ${task?.title} is Delete by ${user.name}`)
+                router.push('/dashboard/admin/manage-tasks')
+            }
         }
         catch (error) {
             console.log(error)
@@ -93,7 +96,7 @@ function page() {
             </div>
             <button onClick={(e) => handleDelete(task?.slug)}
                 className=' text-white px-4 py-3 cursor-pointer flex gap-2 font-semibold bg-red-500  text-xl rounded-lg'>
-                <Trash  /> Delete
+                <Trash /> Delete
             </button>
         </div>
     )

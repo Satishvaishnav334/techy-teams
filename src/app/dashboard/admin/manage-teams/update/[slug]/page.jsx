@@ -3,11 +3,11 @@ import React from 'react'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useUserDataContext } from '@/components/context/UserContext'
-import { useParams,useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 function page() {
     const { slug } = useParams()
-    const { users, refresh, user } = useUserDataContext()
+    const { users, refresh, user ,createNotification} = useUserDataContext()
     const [team, setTeam] = useState({})
     const [newteamName, setTeamName] = useState()
     const [desc, setDesc] = useState()
@@ -28,25 +28,30 @@ function page() {
         fetchteam()
     }, [])
 
-    const handleCreate = async (e) => {
+    const handleUpdate = async (e) => {
         e.preventDefault();
         try {
             const newslug = newteamName?.split(' ').join('-').toLowerCase();
             const formData = new FormData();
             formData.append('teamName', newteamName ? newteamName : team?.teamName);
             formData.append('description', desc ? desc : team?.description);
-            formData.append('slug', newslug ? newslug :slug);
+            formData.append('slug', newslug ? newslug : slug);
             formData.append('level', level ? level : team?.level);
             formData.append('members', members ? members : team?.members);
-            const create = await axios.put(`/api/get-teams/${slug}`, formData)
-            console.log(create)
-        } catch (error) {
+            const res = await axios.put(`/api/get-teams/${slug}`, formData)
+            if (res.status == '200') {
+                createNotification(`The Team ${newteamName ? newteamName : team?.teamName} is Upadted by ${user?.name}`)
+                router.push('/dashboard/admin/manage-teams')
+                refresh();
+            } else {
+                toast.error("Failed to Update task.");
+            }
+        }
+        catch (error) {
+            toast.error("Failed to Update task.");
             console.error('Error creating team:', error);
         }
         finally {
-            toast.success("Team Update Successfully",{closeButton:true,duration:2000})
-            router.push('/dashboard/admin/manage-teams')
-            refresh()
             setMembers([])
             setTeamName('')
             setDesc('')
@@ -61,12 +66,12 @@ function page() {
             setMembers([...members, id]);
         }
     };
-  
+
 
     return (
         <div className="  flex flex-col items-center justify-center min-h-screen text-black bg-gray-100">
             <h1 className="text-3xl font-bold mb-6">Create team</h1>
-            <form onSubmit={handleCreate} className="p-4 m-2 bg-white rounded shadow-md">
+            <form onSubmit={handleUpdate} className="p-4 m-2 bg-white rounded shadow-md">
                 <label className="block font-semibold text-2xl  my-1">Team Name</label>
                 <input
                     type="text"
@@ -75,12 +80,12 @@ function page() {
                     value={newteamName}
                     onChange={(e) => { setTeamName(e.target.value) }}
                 />
-               
+
                 <div>
                     <label className="block font-semibold text-xl  my-1"> Level</label>
 
-                    <select className="border border-gray-600 text-xl rounded-2xl  p-2" value={level} onChange={(e)=> setLevel(e.target.value)}>
-                        <option  value={team?.level}>{team?.level}</option>
+                    <select className="border border-gray-600 text-xl rounded-2xl  p-2" value={level} onChange={(e) => setLevel(e.target.value)}>
+                        <option value={team?.level}>{team?.level}</option>
                         <option value="level 1">Level 1</option>
                         <option value="level 2">Level 2</option>
                         <option value="level 3">Level 3 </option>

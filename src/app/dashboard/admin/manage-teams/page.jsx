@@ -9,24 +9,22 @@ import Link from 'next/link';
 import { toast } from 'sonner';
 
 export default function page() {
-  const { user, teams, refresh } = useUserDataContext()
+  const { user, teams, refresh, createNotification } = useUserDataContext()
   const router = useRouter()
 
-
-
-  if (!user?.team) {
-    return (
-      <div className='p-10 text-xl font-bold text-center'>Loading teams...</div>
-    );
-  }
-  const handleDelete = async (slug, teamId) => {
+  const handleDelete = async (slug, teamName) => {
     try {
-      console.log("object")
-      const res = await axios.delete(`/api/get-teams/${slug}`, { teamId })
-      console.log(res)
-      toast.success(res.data.message, { icon: <Trash />, closeButton: true, duration: 2000 })
+      const res = await axios.delete(`/api/get-teams/${slug}`)
+      if (res.status == '200') {
+        createNotification(`The Team ${teamName} is Deleted by ${user?.name}`)
+        router.push('/dashboard/admin/manage-teams')
+        refresh();
+      } else {
+        toast.error("Failed to delete task.");
+      }
     }
     catch (error) {
+      toast.error("Failed to delete task.");
       console.log(error)
     }
     finally {
@@ -42,15 +40,14 @@ export default function page() {
           </h1>
         </div>
         <div className='fixed right-5 bottom-2  flex flex-col p-2'>
-        <Link href='/dashboard/admin/manage-teams/add-team' className='bg-black  text-white    rounded-2xl shadow-md p-4 flex justify-center my-2 '>
-          <Plus size={30} />
-        </Link>
-      </div>
+          <Link href='/dashboard/admin/manage-teams/add-team' className='bg-black  text-white    rounded-2xl shadow-md p-4 flex justify-center my-2 '>
+            <Plus size={30} />
+          </Link>
+        </div>
       </div>
       {/* <h1 className='text-xl text-center lg:text-3xl font-bold mb-4'>All Teams</h1> */}
       <div className='w-full  p-5 mb-10'>
         <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full gap-5'>
-
           {
             teams?.map((team, index) => (
               <div key={index} className=' bg-gray-200 w-full flex-col flex justify-between rounded-xl min-h-[400px] shadow-md transition-all duration-300'>
@@ -63,18 +60,14 @@ export default function page() {
                   <span className=' mx-auto py-5 w-[80%] text-lg md:text-2xl font-extrabold md:px-6 text-center  rounded-br-xl rounded-tl-xl '>
                     {team?.teamName}
                   </span>
-
                 </div>
-
                 <div className='p-4 flex flex-col justify-around h-full'>
                   <span className='  font-bold  text-sm md:text-lg  py-2 px-1 '> Members :</span>
                   <div className='grid grid-cols-2 justify-around gap-5'>
                     {
                       team?.members?.map((member, index) => (
                         <div key={index}>
-
                           <div className='bg-white  font-bold  text-sm md:text-lg  py-2 px-4 rounded-lg flex justify-center items-center ' > {member.name}</div>
-
                         </div>
                       ))
                     }
@@ -98,7 +91,7 @@ export default function page() {
                       className='bg-black text-white font-semibold flex gap-2 text-xl text-right px-3 py-2 rounded-lg'>
                       <Pencil />Edit
                     </Link>
-                    <button onClick={(e) => handleDelete(team?.slug, team?._id)}
+                    <button onClick={(e) => handleDelete(team?.slug, team?.teamName)}
                       className='bg-black text-white flex gap-2 font-semibold  text-xl text-right px-3 py-2 rounded-lg'>
                       <Trash /> Delete
                     </button>
@@ -112,9 +105,7 @@ export default function page() {
                 </div>
               </div>
             )
-
             )
-
           }
         </div>
       </div>

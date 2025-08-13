@@ -45,7 +45,7 @@ const TaskCard = ({ task }) => {
           <div className='flex justify-end w-full'>
             <div className='flex items-end  '>
               <p className={date1 < date ? 'bg-gray-300   font-semibold  text-sm text-right    py-1 px-2 rounded-br-xl w-full  rounded-tl-xl' : 'bg-red-500 text-white w-full font-semibold  text-sm text-right    py-1 px-2 rounded-br-xl rounded-tl-xl'} >
-                {date1 < date ?` Due Date ${formatDate(task.dueDate)}`:`Over Due ${formatDate(task.dueDate)}`}
+                {date1 < date ? ` Due Date ${formatDate(task.dueDate)}` : `Over Due ${formatDate(task.dueDate)}`}
               </p>
             </div>
           </div>
@@ -75,7 +75,7 @@ const Column = ({ id, title, tasks }) => {
 };
 
 export default function Page() {
-  const { user } = useUserDataContext();
+  const { user,createNotification,refresh } = useUserDataContext();
   const [trigger, setTrigger] = useState(false); // trigger re-render
 
   const handleDragEnd = async ({ active, over }) => {
@@ -97,19 +97,20 @@ export default function Page() {
       formData.append('taskId', taskId)
       formData.append('newStatus', newStatus)
       const res = await axios.put(`/api/get-tasks/update-status/`, formData);
-      console.log(`Updated task ${taskId} to ${newStatus}`, res);
+      if (res.status == '200') {
+        createNotification(`Updated Status of ${task?.title} to ${newStatus} by ${user?.name}`)
+        
+      }
     } catch (err) {
       console.error('API failed:', err);
     }
-    finally {
-      toast.success("Status Update Succesfully", { description: `Current Status is ${newStatus}`, closeButton: true })
-    }
+    
   };
 
   const getTasksByStatus = (status) =>
     user?.tasks?.filter((task) => task.status === status) || [];
 
- 
+
 
   return (
     <div className='flex flex-col w-full p-5'>

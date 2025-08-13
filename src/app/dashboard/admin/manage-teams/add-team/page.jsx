@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import { useUserDataContext } from '@/components/context/UserContext'
 import { toast } from 'sonner'
 function page() {
-  const { users, user,refresh } = useUserDataContext()
+  const { users, user, refresh,createNotification } = useUserDataContext()
   const [teamName, setTeamName] = useState('')
   const [level, setLevel] = useState('level 3')
   const [desc, setDesc] = useState([])
@@ -23,23 +23,26 @@ function page() {
       formData.append('createdBy', user._id)
       formData.append('description', desc)
       formData.append('members', addmemebers)
-  
+
       const create = await axios.post('/api/get-teams', formData)
-      console.log(create)
+      if (create.status == '200') {
+        createNotification(`New Team ${teamName}  Created by ${user?.name}`)
+        router.push('/dashboard/admin/manage-teams')
+        refresh();
+      } else {
+        toast.error("Failed to Create  Team.");
+      }
     } catch (error) {
+      toast.error("Failed to Create  Team.");
       console.error('Error creating team:', error);
     }
-    finally {
-      toast.success("Login Succesfully", { closeButton: true ,duration:2000})
-      router.push('/dashboard/admin/manage-teams')
-      refresh()
-    }
+   
   };
   const handleCheckboxChange = (id) => {
     setAddMembers((prev) => [...prev, id]);
   };
 
- 
+
   return (
     <div className="  flex flex-col   bg-gray-200 m-20  rounded shadow-md text-black">
       <h1 className="text-3xl m-5 text-center font-bold">Create Team</h1>
@@ -54,14 +57,14 @@ function page() {
               className="border border-gray-600 text-xl rounded-2xl  p-2"
               placeholder="Enter Team Name or Title"
               value={teamName}
-              onChange={(e)=>setTeamName(e.target.value)}
+              onChange={(e) => setTeamName(e.target.value)}
             />
-        
+
           </div>
           <div>
             <label className="block font-semibold text-xl  my-1"> Level</label>
 
-            <select className="border border-gray-600 text-xl rounded-2xl  p-2" value={level} onChange={(e)=>setLevel(e.target.value)}>
+            <select className="border border-gray-600 text-xl rounded-2xl  p-2" value={level} onChange={(e) => setLevel(e.target.value)}>
               <option value="level 2">Choose an Level</option>
               <option value="level 1">Level 1</option>
               <option value="level 2">Level 2</option>

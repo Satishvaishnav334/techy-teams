@@ -104,7 +104,7 @@ const Column = ({ id, title, tasks, searchItem, setSearchItem, filterSearch }) =
 };
 
 export default function Page() {
-  const { tasks } = useUserDataContext();
+  const { tasks,createNotification ,user} = useUserDataContext();
   console.log(tasks)
   const [trigger, setTrigger] = useState(false); // trigger re-render
   // const [searchItem, setSearchItem] = useState('')
@@ -128,13 +128,14 @@ export default function Page() {
       formData.append('taskId', taskId)
       formData.append('newStatus', newStatus)
       const res = await axios.put(`/api/get-tasks/update-status/`, formData);
-      console.log(`Updated task ${taskId} to ${newStatus}`, res);
+     if (res.status == '200') {
+                createNotification(`Updated Status of ${task?.title} to ${newStatus} by ${user?.name}`)
+                router.push('/dashboard/admin/manage-tasks')
+            }
     } catch (err) {
       console.error('API failed:', err);
     }
-    finally {
-      toast.success("Status Update Succesfully", { description: `Current Status is ${newStatus}`, closeButton: true })
-    }
+    
   };
 
   const getTasksByStatus = (status) =>
@@ -147,21 +148,7 @@ export default function Page() {
   }
 
 
-    // const [sortBy, setSortBy] = useState('name'); // name | price | stock
-
-  // Filtering and sorting
-  // const filterSearch = useMemo(() => {
-  //   return tasks
-  //     ?.filter((p) =>
-  //       p?.name?.toLowerCase().includes(searchItem.toLowerCase())
-  //     )
-  //     ?.sort((a, b) => {
-  //       if (sortBy === 'price') return a.price - b.price;
-  //       if (sortBy === 'stock') return a.stock - b.stock;
-  //       return a.name.localeCompare(b.name);
-  //     });
-  // }, [tasks, searchItem, sortBy]);
-  // console.log(filterSearch, "data")
+    
 
   return (
     <div className='flex flex-col w-full p-5'>

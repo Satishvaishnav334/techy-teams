@@ -14,7 +14,7 @@ function page() {
     // const { setLoading } = useLoadingContext()
     const [loading, setLoading] = useState(false)
     const { slug } = useParams()
-    const { users, refresh, user } = useUserDataContext()
+    const { users, refresh, user ,createNotification} = useUserDataContext()
     const [task, setTask] = useState({})
     const [newtitle, setTitle] = useState()
     const [desc, setDesc] = useState()
@@ -60,15 +60,17 @@ function page() {
             formData.append('assignedTo', assignedTo?._id ? assignedTo?._id : task?.assignedTo?._id);
             formData.append('dueDate', date ? date : task?.dueDate);
 
-            const create = await axios.put(`/api/get-tasks/${slug}`, formData)
-            console.log(create)
+            const update = await axios.put(`/api/get-tasks/${slug}`, formData)
+            if (update.status == '200') {
+                createNotification(`The task ${newtitle ? newtitle : task?.title} is Updated by ${user.name}`)
+                router.push('/dashboard/admin/manage-tasks')    
+            }
         } catch (error) {
             console.error('Error creating team:', error);
             toast.error("Server Error", { closeButton: true })
         }
         finally {
             setLoading(false)
-            toast.success("Task Update Succesfully", { closeButton: true })
             router.push('/dashboard/admin/manage-tasks')
             refresh()
             setAssignedTo([])
@@ -77,9 +79,7 @@ function page() {
             setDate('')
         }
     };
-
-
-
+    
     return (
         <div className="  flex flex-col items-center justify-center min-h-screen text-black bg-gray-100">
             <h1 className="text-3xl font-bold mb-6">Update Task</h1>
