@@ -71,8 +71,6 @@ function page() {
         }
         finally {
             setLoading(false)
-            router.push('/dashboard/admin/manage-tasks')
-            refresh()
             setAssignedTo([])
             setTitle('')
             setDesc('')
