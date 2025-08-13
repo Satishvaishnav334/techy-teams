@@ -1,45 +1,58 @@
-"use client";
+// app/page.js or any client component
+'use client'; // Mark as client component
 
-import { useEffect, useState } from "react";
-import { socket } from '@/lib/socket.js'
+import { useEffect, useState } from 'react';
+import io from 'socket.io-client';
+import axios from 'axios';
+let socket; // Declare socket outside to prevent multiple instances
 
 export default function Home() {
-  const [isConnected, setIsConnected] = useState(false);
-  const [transport, setTransport] = useState("N/A");
+  const [message, setMessage] = useState('');
+  const [messages, setMessages] = useState([]);
+  
+  // useEffect(() => {
+  //   // Initialize socket connection only once
+  //   if (!socket) {
+  //     socket = io('http://localhost:3000'); // Connect to your custom server
+  //   }
+  //   const data = async()=>{
+  //     await axios.get('/api/get-tasks')
+  //   }
+  //   data()
+  //   // Listen for 'chat message' events
+  //   socket.on('noti', (msg) => {
+  //     setMessages((prevMessages) => [...prevMessages, msg]);
+  //     console.log(msg)
+  //   });
 
-  useEffect(() => {
-    if (socket.connected) {
-      onConnect();
-    }
-   socket.emit("hello", "world");
-    function onConnect() {
-      setIsConnected(true);
-      console.log(socket, "socket")
-      setTransport(socket.io.engine.transport.name);
+  //   // Cleanup on component unmount
+  //   return () => {
+  //     socket.off('chat message');
+  //   };
+  // }, []);
 
-      socket.io.engine.on("upgrade", (transport) => {
-        setTransport(transport.name);
-      });
-    }
-
-    function onDisconnect() {
-      setIsConnected(false);
-      setTransport("N/A");
-    }
-
-    socket.on("connect", onConnect);
-    socket.on("disconnect", onDisconnect);
-
-    return () => {
-      socket.off("connect", onConnect);
-      socket.off("disconnect", onDisconnect);
-    };
-  }, []);
+  // const sendMessage = () => {
+  //   if (message.trim()) {
+  //     socket.emit('hello', message); // Emit 'chat message' event
+  //     setMessage('');
+  //   }
+  // };
 
   return (
     <div>
-      <p>Status: {isConnected ? "connected" : "disconnected"}</p>
-      <p>Transport: {transport}</p>
+      <h1>Real-Time Chat</h1>
+      <div>
+        {messages.map((msg, index) => (
+          <div key={index}>{msg}</div>
+        ))}
+      </div>
+      <input
+        type="text"
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        placeholder="Type a message..."
+      />
+      <button onClick={sendMessage}>Send</button>
     </div>
   );
 }

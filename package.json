@@ -27,6 +27,7 @@
     "clsx": "^2.1.1",
     "cookies-next": "^6.1.0",
     "date-fns": "^4.1.0",
+    "express": "^5.1.0",
     "framer-motion": "^12.23.12",
     "iconsax-react": "^0.0.8",
     "jsonwebtoken": "^9.0.2",

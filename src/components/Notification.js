@@ -1,26 +1,40 @@
-"use client";
-import { useEffect, useState } from "react";
-import { socket } from "@/lib/socket";
+// app/page.js or any client component
+'use client'; // Mark as client component
 
-export default function Notifications() {
-  const [notifications, setNotifications] = useState([]);
+import { useEffect, useState } from 'react';
+import io from 'socket.io-client';
+import axios from 'axios';
+let socket; 
 
-  useEffect(() => {
-    socket.on("hello", (data) => {
-      setNotifications((prev) => [...prev, data.message]);
-    });
-    socket.emit("hello","namste")
+export default function Home() {
+  const [message, setMessage] = useState('');
+  const [messages, setMessages] = useState([]);
 
-    return () => {
-      socket.off("hello");
-    };
-  }, []);
-  // console.log(notifications,"note")
-  return (
-    <div className="fixed bottom-4 right-4 bg-white shadow p-4 rounded">
-      {notifications.map((n, i) => (
-        <div key={i} className="p-2 border-b">{n}</div>
-      ))}
-    </div>
-  );
-}
+  // useEffect(() => {
+  //   // Initialize socket connection only once
+  //   if (!socket) {
+  //     socket = io('http://localhost:3000'); // Connect to your custom server
+  //   }
+  //   const data = async () => {
+  //     await axios.get('/api/get-tasks')
+  //   }
+  //   data()
+  //   // Listen for 'chat message' events
+  //   socket.on('noti', (msg) => {
+  //     setMessages((prevMessages) => [...prevMessages, msg]);
+  //     console.log(msg)
+  //   });
+
+  //   // Cleanup on component unmount
+  //   return () => {
+  //     socket.off('chat message');
+  //   };
+  // }, []);
+
+  // const sendMessage = () => {
+  //   if (message.trim()) {
+  //     socket.emit('hello', message); // Emit 'chat message' event
+  //     setMessage('');
+  //   }
+  // };
+} 
