@@ -5,6 +5,7 @@ import io from 'socket.io-client';
 import axios from 'axios';
 import { getCookie } from 'cookies-next/client';
 import { toast } from 'sonner';
+import {decrypt} from '@/lib/auth.js'
 const LoadingContext = createContext();
 let socket = io();
 
@@ -13,7 +14,8 @@ export const LoadingProvider = ({ children }) => {
     const [user, setUser] = useState({})
     const [loading, setLoading] = useState(false)
     const [notifications, setNotifications] = useState([]);
-
+ 
+    
     const createNotification = (notification) => {
         if (!socket) {
             socket = io('http://localhost:3000'); // Connect to your custom server
@@ -25,7 +27,10 @@ export const LoadingProvider = ({ children }) => {
     };
     const fetchContaxtData = async () => {
         try {
-            const name = getCookie('name')
+            
+            const token = getCookie('token')
+            const user = await decrypt(token);
+            const name = user.username
             setLoading(true)
             const res2 = await axios.get(`/api/get-users/${name}`);
             setUser(res2.data)

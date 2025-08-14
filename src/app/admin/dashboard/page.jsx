@@ -84,22 +84,23 @@ function AdminDashboard() {
     <div className='flex flex-col items-center justify-start w-full p-4'>
       <h1 className='text-2xl font-bold my-4'>Welcome Back {user?.name}</h1>
 
-      {/* Add task Button */}
-      <div className='flex items-center justify-start gap-5 p-4  my-5 w-full'>
-        <Link href='/admin/dashboard/manage-tasks/add-task' className='px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700'>
-          Add New Tasks
-        </Link>
-        <div className="flex   bg-gray-100">
-          <input
-            type="text"
-            placeholder="Search tasks..."
-            className="border p-2 rounded w-full"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+      <div className='my-5 w-full h-full'>
+        <h1 className='text-2xl font-bold my-4'>Task Table</h1>
+        <div className='flex items-center justify-start gap-5 p-4   w-full'>
+          <Link href='/admin/dashboard/manage-tasks/add-task' className='px-4 py-2 bg-blue-600 text-white flex gap-1 rounded hover:bg-blue-700'>
+            <Plus />Add New Tasks
+          </Link>
+          <div className="flex w-[60%]  bg-gray-100">
+            <input
+              type="text"
+              placeholder="Search tasks..."
+              className="border p-2 rounded w-full"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
         </div>
       </div>
-      <h1 className='text-2xl font-bold my-4'>Task Table</h1>
 
       <Table>
         <TableCaption>My tasks</TableCaption>
@@ -110,25 +111,20 @@ function AdminDashboard() {
             <TableHead>Priority</TableHead>
             <TableHead>Due Date</TableHead>
             <TableHead>Assigned To</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
+            <TableHead >Edit</TableHead>
+            <TableHead >Delete</TableHead>
           </TableRow>
         </TableHeader>
 
         <TableBody>
           {filteredtasks?.map((task) => (
-            <TableRow key={task._id}>
+            <TableRow key={task._id} >
               <TableCell>{task.title}</TableCell>
               <TableCell>{task.status}</TableCell>
               <TableCell>{task.priority}</TableCell>
               <TableCell >{formatDate(task.dueDate)}</TableCell>
               <TableCell>{task?.assignedTo?.name}</TableCell>
-              <TableCell className="text-right flex gap-2 justify-end">
-                <button
-                  onClick={() => handleDelete(task.slug, task?.title)}
-                  className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
-                >
-                  Delete
-                </button>
+              <TableCell className="">
                 <button
                   onClick={() => router.push(`/admin/dashboard/manage-tasks/update/${task.slug}`)}
                   className="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
@@ -136,26 +132,37 @@ function AdminDashboard() {
                   Edit
                 </button>
               </TableCell>
+
+              <TableCell className="">
+                <button
+                  onClick={() => handleDelete(task.slug, task?.title)}
+                  className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+                >
+                  Delete
+                </button>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-      <div className='flex items-center justify-start gap-5 p-4 my-5 w-full'>
-
-        <Link href='/admin/dashboard/manage-teams/add-categorie' className='px-4 py-2 bg-blue-600 text-white flex rounded hover:bg-blue-700'>
-          <Plus /> Add New teams
-        </Link>
-        <div className="flex bg-gray-100">
-          <input
-            type="text"
-            placeholder="Search Teams..."
-            className="border p-2 rounded w-full"
-            value={searchTeam}
-            onChange={(e) => setSearchTeam(e.target.value)}
-          />
+      <hr />
+      <div className='my-5 w-full h-full'>
+        <h1 className='text-2xl font-bold my-4'>Team  Table</h1>
+        <div className='flex items-center justify-start gap-5 p-4 my-5 w-full'>
+          <Link href='/admin/dashboard/manage-teams/add-team' className='px-4 py-2 bg-blue-600 text-white flex gap-1 rounded hover:bg-blue-700'>
+            <Plus /> Add New teams
+          </Link>
+          <div className="flex md:w-[60%] bg-gray-100">
+            <input
+              type="text"
+              placeholder="Search Teams..."
+              className="border p-2 rounded w-full"
+              value={searchTeam}
+              onChange={(e) => setSearchTeam(e.target.value)}
+            />
+          </div>
         </div>
       </div>
-      <h1 className='text-2xl font-bold my-4'>Task Table</h1>
 
 
       <Table className="mt-8">
@@ -175,7 +182,6 @@ function AdminDashboard() {
               <TableCell>{team.description}</TableCell>
               <TableCell>
                 {team.members?.map((user) => <TableCell>{user?.name}</TableCell>)}
-
               </TableCell>
               <TableCell className="text-right flex gap-2 justify-end">
                 <button

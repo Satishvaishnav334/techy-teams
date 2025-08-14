@@ -9,14 +9,14 @@ export default function page() {
 
   return (
     <div className='flex flex-col w-full p-5'>
-      <div className='bg-gray-200  m-4 rounded-2xl shadow-md p-10'>
+      <div className='bg-gray-200 w-100 m-4 rounded-2xl shadow-md p-10'>
         <h1 className='text-2xl  text-center lg:text-3xl font-extrabold'>
-          WelCome To  <span className='text-orange-600'>Teams</span>
+          WelCome  To <span className='text-orange-600'>Teams</span>
         </h1>
       </div>
       <div className='w-full  p-5 mb-10'>
         <h1 className='text-xl text-center lg:text-3xl font-bold mb-4'>My Teams</h1>
-        <div className='grid grid-cols-1 sm:grid-cols-3 gap-5'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5'>
        
           {
             user?.team?.map((team, index) => (
@@ -32,7 +32,7 @@ export default function page() {
                   </span>
                 </div>
 
-                <div className='p-4 flex flex-col justify-around h-full'>
+                <div className='p-4 flex flex-col justify-start h-full'>
                   <span className='  font-bold  text-sm md:text-lg  py-2 px-1 '> Members :</span>
                   <div className='grid grid-cols-2 justify-around gap-5'>
                     {
@@ -46,17 +46,17 @@ export default function page() {
                     }
                     
                   </div>
+                   <div className='my-5'>
+                    <p className='text-center text-lg'>{team?.description}</p>
                 </div>
-                <div className='my-5'>
-                <p className='text-center text-lg'>{team?.description}</p>
-                {/* <p className='text-center text-lg'>{team?.createdBy?.name}</p> */}
                 </div>
-                <span
-                  className='flex justify-end'>
-                  <p className='bg-gray-300 min-w-[40%] font-bold  text-sm md:text-lg text-right    py-2 px-4 rounded-br-xl rounded-tl-xl'>
-                    Created {formatDate(team?.createdAt)}
-                  </p>
-                </span>
+               
+                 <div
+                    className='flex justify-end mt-5'>
+                    <p className='bg-gray-300 min-w-[40%] font-semibold  text-sm text-right    py-1 px-2 rounded-br-xl rounded-tl-xl'>
+                      Created {formatDate(team?.createdAt)}
+                    </p>
+                  </div>
 
               </div>
             )

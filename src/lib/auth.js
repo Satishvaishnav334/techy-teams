@@ -1,4 +1,5 @@
     // lib/session.ts
+    'use server'
     import { SignJWT, jwtVerify } from 'jose';
 
     const secret = new TextEncoder().encode(process.env.JWT_SECRET); // Use a strong secret from .env
@@ -7,7 +8,7 @@
       return new SignJWT(payload)
         .setProtectedHeader({ alg: 'HS256' }) // Or a more robust algorithm like 'A256CBC-HS512' for encryption
         .setIssuedAt()
-        .setExpirationTime('2h') // Example expiration
+        .setExpirationTime('2d') // Example expiration
         .sign(secret);
     }
 

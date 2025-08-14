@@ -16,14 +16,13 @@ export async function POST(request) {
     }
     const isPasswordValid = await brecrypt.compare(password, user.password);
     console.log(isPasswordValid)
-    const name = user.name
+   
     if (!isPasswordValid) { return NextResponse.json({ error: "Invalid  password" }, { status: 401 }); }
     const tokenuser =  { username: user.name, email: user.email ,role: user.role}
     const token = await encrypt(tokenuser)
    
     const cookiesStore = await cookies();
     cookiesStore.set('token', token);
-    cookiesStore.set('name', name);
     return NextResponse.json({message:"Login Successfully"} ,{ status: 200 })
   } catch (error) {
     console.error("Error fetching users:", error);

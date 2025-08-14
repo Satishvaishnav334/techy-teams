@@ -51,7 +51,7 @@ export default function page() {
       </div>
       {/* <h1 className='text-xl text-center lg:text-3xl font-bold mb-4'>All Teams</h1> */}
       <div className='w-full  p-5 mb-10'>
-        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full gap-5'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 w-full gap-5'>
           {
             teams?.map((team, index) => (
               <div key={index} className=' bg-gray-200 w-full flex-col flex justify-between rounded-xl min-h-[400px] shadow-md transition-all duration-300'>
@@ -65,7 +65,7 @@ export default function page() {
                     {team?.teamName}
                   </span>
                 </div>
-                <div className='p-4 flex flex-col justify-around h-full'>
+                <div className='p-4 flex flex-col justify-start h-full'>
                   <span className='  font-bold  text-sm md:text-lg  py-2 px-1 '> Members :</span>
                   <div className='grid grid-cols-2 justify-around gap-5'>
                     {
@@ -83,11 +83,12 @@ export default function page() {
                       )
                     }
                   </div>
-                </div>
-                <div className='my-5'>
+                    <div className='my-5'>
                   <p className='text-center text-lg'>{team?.description}</p>
-                  {/* <p className='text-center text-lg'>{team?.createdBy?.name}</p> */}
+                 
                 </div>
+                </div>
+              
                 <div className='md:flex flex-col justify-between w-full ' >
                   <div
                     className='flex justify-around gap-4 my-2 mx-5 '>

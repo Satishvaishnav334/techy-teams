@@ -41,7 +41,7 @@ const TaskCard = ({ task }) => {
         <div className='flex flex-col items-between justify-between  w-full'>
           <p className='text-lg  px-3'>{task.description}</p>
           <p className='px-3'>Status : {task.status}</p>
-          <div className='flex justify-end w-full'>
+          <div className='flex justify-end w-full mt-2'>
             <div className='flex items-end  '>
               <p className={date1 < date ? 'bg-gray-300   font-semibold  text-sm text-right    py-1 px-2 rounded-br-xl w-full  rounded-tl-xl' : 'bg-red-500 text-white w-full font-semibold  text-sm text-right    py-1 px-2 rounded-br-xl rounded-tl-xl'} >
                 {date1 < date ? ` Due Date ${formatDate(task.dueDate)}` : `Over Due ${formatDate(task.dueDate)}`}
@@ -123,7 +123,7 @@ export default function Page() {
         <h1 className='text-xl text-center lg:text-3xl font-bold mb-4'>My Task</h1>
 
         <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-          <div className='grid grid-cols-1 sm:grid-cols-3 gap-5'>
+          <div className='grid grid-cols-1  md:grid-cols-3 gap-5'>
             <Column
               id='pending'
               title='Pending Tasks'
