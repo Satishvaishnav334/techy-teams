@@ -2,7 +2,7 @@ import userModel from "../../models/users.js";
 import { NextResponse } from "next/server";
 import { cookies } from 'next/headers';
 import { setCookie } from "cookies-next";
-import jwt from "jsonwebtoken";
+import { encrypt } from "@/lib/auth.js";
 import brecrypt from "bcrypt";
 import connectToDatabase from "../../lib/connect.js";
 export async function POST(request) {
@@ -18,11 +18,9 @@ export async function POST(request) {
     console.log(isPasswordValid)
     const name = user.name
     if (!isPasswordValid) { return NextResponse.json({ error: "Invalid  password" }, { status: 401 }); }
-    const token = jwt.sign(
-      { username: user.name, email: user.email },
-      process.env.JWT_SECRET,
-      { expiresIn: process.env.JWT_EXPIRATION },
-    )
+    const tokenuser =  { username: user.name, email: user.email ,role: user.role}
+    const token = await encrypt(tokenuser)
+   
     const cookiesStore = await cookies();
     cookiesStore.set('token', token);
     cookiesStore.set('name', name);

@@ -1,43 +1,22 @@
-
-
-import { NextResponse } from 'next/server';
-import jwt from 'jsonwebtoken'
-    import { jwtVerify } from 'jose';
-export function middleware(request, res) {
-    const { pathname } = request.nextUrl;
-    try {
-        const protectedPaths = ['/dashboard'];
-        const protectedAdminPaths = ['/dashboard/admin'];
-        if (protectedPaths.some(path => pathname.startsWith(path))) {
-            const token = request.cookies.get('token');
-            const clearToken = token.value;
-            if (!clearToken) {
-                return NextResponse.redirect(new URL('/login', request.url));
-            }
-            const decode2 = jwt.decode(clearToken)
-            console.log(decode2)
-            // jwtVerify(token, process.env.JWT_SECRET);
-        
-            return NextResponse.next();
-        }
-
-    }
-    catch (error) {
-        console.log(error)
+    // middleware.ts
+    import { NextResponse } from 'next/server';
+    import { decrypt } from '@/lib/auth';
+    import Member from '@/app/api/models/users.js'
+    export async function middleware(request,res) {
+      const sessionCookie = request.cookies.get('token')?.value;
+      const pathname = request.nextUrl.pathname;
+      const user = sessionCookie && await decrypt(sessionCookie);
+        console.log(user)
+      if (!user && pathname.startsWith('/dashboard')) {
         return NextResponse.redirect(new URL('/login', request.url));
+      }
+      const isAdmin = user.role==='admin';
+      console.log(isAdmin)
+       if (pathname.startsWith("/dashboard/admin") && user?.role !== "admin") {
+      return NextResponse.redirect(new URL("/dashboard", request.url));
     }
-
-
-
-
-
-}
-export const config = {
-    matcher: [
-        '/dashboard/:path*', // Match any path under /dashboard
-        '/profile/:path*',   // Match any path under /profile
-        // Exclude static files, API routes, and the login page itself
-        '/((?!api|_next/static|_next/image|favicon.ico|login).*)',
-    ],
-};
-
+      return NextResponse.next();
+    }
+    export const config = {
+      matcher: ['/dashboard/:path*', '/api/protected/:path*'], // Protect specific paths
+    };
