@@ -2,11 +2,11 @@
 import React,{useEffect,useState} from 'react'
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button2.0"
-import { useUserDataContext } from "@/components/context/UserContext";
+import { useAdminContext } from "@/components/context/AdminContext";
 
 export default function page() {
     const [notification, setNotification] = useState('');
-    const {createNotification,notifications} = useUserDataContext()
+    const {createNotification,notifications} = useAdminContext()
     
   return (
      <div>

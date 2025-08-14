@@ -2,39 +2,45 @@
 import React from 'react'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { useUserDataContext } from '@/components/context/UserContext'
+import { useAdminContext } from '@/components/context/AdminContext'
 import { useParams, useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import Link from 'next/link'
 import { Pencil, Trash, Plus } from 'lucide-react';
+import { useLoadingContext } from '@/components/context/LoadingContext'
 
 function page() {
 
     const { slug } = useParams()
-    const { users, refresh, user,createNotification } = useUserDataContext()
+    const { refresh  } = useAdminContext()
+    const {createNotification,user,setLoading} = useLoadingContext()
     const [task, setTask] = useState({})
-
-
     const router = useRouter()
 
     async function fetchTask() {
         try {
+            setLoading(true)
             const task = await axios.get(`/api/get-tasks/${slug}`)
+            if (task.status == '200') {
+                setLoading(false)
+            }
             setTask(task.data)
 
         }
         catch (error) {
             console.log(error)
         }
-
     }
+
     const handleDelete = async (slug) => {
         if (!confirm("Delete Task")) return;
         try {
+            setLoading(true)
             const deletetask = await axios.delete(`/api/get-tasks/${slug}`)
             if (deletetask.status == '200') {
                 createNotification(`The task ${task?.title} is Delete by ${user.name}`)
-                router.push('/dashboard/admin/manage-tasks')
+                setLoading(false)
+                router.push('/admin/dashboard/manage-tasks')
             }
         }
         catch (error) {
@@ -42,9 +48,10 @@ function page() {
         }
         finally {
             refresh()
-            router.push('/dashboard/admin/manage-tasks')
+            router.push('/admin/dashboard/manage-tasks')
         }
     }
+
     useEffect(() => {
         fetchTask()
     }, [])
@@ -78,7 +85,7 @@ function page() {
 
                         <div className='flex justify-between  w-full'>
                             <div className='flex justify-between gap-2 my-2 mx-3  '>
-                                <Link href={`/dashboard/admin/manage-tasks/update/${task?.slug}`}
+                                <Link href={`/admin/dashboard/manage-tasks/update/${task?.slug}`}
                                     className='bg-black text-white font-semibold flex gap-2 text-sm text-right px-3 py-2  rounded-lg'>
                                     <Pencil size={18} />Edit
                                 </Link>

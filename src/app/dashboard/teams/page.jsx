@@ -2,31 +2,11 @@
 'use client'
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useUserDataContext } from '@/components/context/UserContext';
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import { Plus } from 'lucide-react';
-import Link from 'next/link';
+import { useLoadingContext } from '@/components/context/LoadingContext';
 export default function page() {
 
-  const { user } = useUserDataContext()
-  const [teams, setTeams] = useState([])
-  const router = useRouter()
+  const { user } = useLoadingContext()
 
-
-
-  if (!user?.team) {
-    return (
-      <div className='p-10 text-xl font-bold text-center'>Loading teams...</div>
-    );
-  }
   return (
     <div className='flex flex-col w-full p-5'>
       <div className='bg-gray-200  m-4 rounded-2xl shadow-md p-10'>

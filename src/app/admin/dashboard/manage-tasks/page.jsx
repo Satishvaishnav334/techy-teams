@@ -10,7 +10,7 @@ import {
   closestCenter,
 } from '@dnd-kit/core';
 import Link from 'next/link';
-import { useUserDataContext } from '@/components/context/UserContext';
+import { useAdminContext } from '@/components/context/AdminContext';
 
 const TaskCard = ({ task }) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
@@ -53,11 +53,11 @@ const TaskCard = ({ task }) => {
 
           <div className='flex justify-between  w-full'>
             <div className='flex justify-between gap-2 my-2 mx-3  '>
-              <Link href={`/dashboard/admin/manage-tasks/update/${task?.slug}`}
+              <Link href={`/admin/dashboard/manage-tasks/update/${task?.slug}`}
                 className='bg-black text-white font-semibold flex gap-2 text-sm text-right px-3 py-2  rounded-lg'>
                 <Pencil size={18} />Edit
               </Link>
-              <Link href={`/dashboard/admin/manage-tasks/delete/${task?.slug}`}
+              <Link href={`/admin/dashboard/manage-tasks/delete/${task?.slug}`}
                 className='bg-black text-white z-50 cursor-pointer flex gap-2 font-semibold  text-sm text-right px-3 py-2 rounded-lg'>
                 <Trash size={18} /> Delete
               </Link>
@@ -104,7 +104,7 @@ const Column = ({ id, title, tasks, searchItem, setSearchItem, filterSearch }) =
 };
 
 export default function Page() {
-  const { tasks,createNotification ,user} = useUserDataContext();
+  const { tasks,createNotification ,user} = useAdminContext();
   console.log(tasks)
   const [trigger, setTrigger] = useState(false); // trigger re-render
   // const [searchItem, setSearchItem] = useState('')
@@ -130,7 +130,7 @@ export default function Page() {
       const res = await axios.put(`/api/get-tasks/update-status/`, formData);
      if (res.status == '200') {
                 createNotification(`Updated Status of ${task?.title} to ${newStatus} by ${user?.name}`)
-                router.push('/dashboard/admin/manage-tasks')
+                router.push('/admin/dashboard/manage-tasks')
             }
     } catch (err) {
       console.error('API failed:', err);
@@ -141,11 +141,7 @@ export default function Page() {
   const getTasksByStatus = (status) =>
     tasks?.filter((task) => task.status === status) || [];
 
-  if (!tasks) {
-    return (
-      <div className='p-10 text-xl font-bold text-center'>Loading tasks...</div>
-    );
-  }
+
 
 
     
@@ -153,7 +149,7 @@ export default function Page() {
   return (
     <div className='flex flex-col w-full p-5'>
       <div className='fixed right-5 bottom-2  flex flex-col p-2'>
-        <Link href='/dashboard/admin/manage-tasks/add-task' className='bg-black  text-white    rounded-2xl shadow-md p-4 flex justify-center my-2 '>
+        <Link href='/admin/dashboard/manage-tasks/add-task' className='bg-black  text-white    rounded-2xl shadow-md p-4 flex justify-center my-2 '>
           <Plus size={30} />
         </Link>
       </div>

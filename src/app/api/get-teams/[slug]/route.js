@@ -27,7 +27,7 @@ export async function DELETE(req, { params }) {
             { $pull: { team: team._id } },
             { new: true }
         )
-        console.log(user)
+        
         const data = await teamModel.deleteOne({slug});
         console.log(data)
         return NextResponse.json({ message: "Team Deleted Successfully" }, { status: 200 });

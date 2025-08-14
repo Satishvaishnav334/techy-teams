@@ -12,7 +12,7 @@
       }
       const isAdmin = user.role==='admin';
       console.log(isAdmin)
-       if (pathname.startsWith("/dashboard/admin") && user?.role !== "admin") {
+       if (pathname.startsWith("/admin/dashboard") && user?.role !== "admin") {
       return NextResponse.redirect(new URL("/dashboard", request.url));
     }
       return NextResponse.next();

@@ -1,14 +1,13 @@
 'use client';
 import React, { useState } from 'react';
 import axios from 'axios'
-import { toast } from "sonner"
 import {
   DndContext,
   useDraggable,
   useDroppable,
   closestCenter,
 } from '@dnd-kit/core';
-import { useUserDataContext } from '@/components/context/UserContext';
+import { useLoadingContext } from '@/components/context/LoadingContext';
 
 const TaskCard = ({ task }) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
@@ -75,7 +74,7 @@ const Column = ({ id, title, tasks }) => {
 };
 
 export default function Page() {
-  const { user,createNotification,refresh } = useUserDataContext();
+  const { user,createNotification,refresh } = useLoadingContext();
   const [trigger, setTrigger] = useState(false); // trigger re-render
 
   const handleDragEnd = async ({ active, over }) => {

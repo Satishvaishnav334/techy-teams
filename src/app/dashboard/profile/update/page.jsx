@@ -1,9 +1,9 @@
 'use client';
 import React,{useState} from 'react'
-import { useUserDataContext } from '@/components/context/UserContext';
+import { useLoadingContext } from '@/components/context/LoadingContext';
 import axios from 'axios';
 function page() {
-  const { user, refresh } = useUserDataContext()
+  const { user, refresh } = useLoadingContext()
   const [name, setName] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState('');

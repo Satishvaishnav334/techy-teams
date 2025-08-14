@@ -7,7 +7,7 @@ import {
   useDroppable,
   closestCenter,
 } from '@dnd-kit/core';
-import { useUserDataContext } from '@/components/context/UserContext';
+import { useLoadingContext } from '@/components/context/LoadingContext';
 
 const TaskCard = ({ task }) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
@@ -57,7 +57,7 @@ const Column = ({ id, title, tasks }) => {
 };
 
 export default function Page() {
-  const { user,loading } = useUserDataContext();
+  const { user,loading } = useLoadingContext();
   console.log(user)
   const [trigger, setTrigger] = useState(false); // trigger re-render
 

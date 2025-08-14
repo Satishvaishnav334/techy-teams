@@ -6,12 +6,11 @@ import { useEffect, useState } from "react";
 import { deleteCookie, getCookie } from 'cookies-next'
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useUserDataContext } from './context/UserContext';
+import { useLoadingContext } from './context/LoadingContext';
 import { toast } from 'sonner';
-import Loader from '@/components/ui/pulsating-loader'
 function Navbar() {
   const router = useRouter();
-  const { user } = useUserDataContext()
+  const { user ,createNotification} = useLoadingContext()
   const [isOpen, setIsOpen] = useState(false);
   const items = [
     { label: 'Tasks', href: '/dashboard/tasks' },
@@ -61,7 +60,7 @@ function Navbar() {
               <div className=' hidden md:flex justify-between items-center w-[45%]   font-semibold text-lg gap-4'>
 
                 {user?.role == 'admin' && (
-                  <Link href='/dashboard/admin' className='hover:text-[#111111d1]  font-semibold transition-colors duration-300'>
+                  <Link href='/admin/dashboard' className='hover:text-[#111111d1]  font-semibold transition-colors duration-300'>
                     Admin Panel
                   </Link>
                 )}
@@ -107,7 +106,7 @@ function Navbar() {
 
                       {
                         label: "Profile",
-                        onClick: () => router.push('/admin/profile'),
+                        onClick: () => router.push('/dashboard/profile'),
                         Icon: <UserPen className="h-6 w-6" />,
                       },
                       {
@@ -122,7 +121,7 @@ function Navbar() {
 
                   <div className=' flex  flex-col justify-between items-start my-5   font-semibold text-lg gap-4'>
                     {user?.role == 'admin' && (
-                      <Link href='/dashboard/admin' className='hover:text-[#111111d1]  font-semibold transition-colors duration-300'>
+                      <Link href='/admin/dashboard' className='hover:text-[#111111d1]  font-semibold transition-colors duration-300'>
                         Admin Panel
                       </Link>
                     )}

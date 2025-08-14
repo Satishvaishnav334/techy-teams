@@ -1,7 +1,7 @@
 "use client";
-import React, { useState, useEffect,createContext } from "react";
+import React, { useState, useEffect, createContext } from "react";
 import { getCookie } from "cookies-next/client";
-import { UserDataProvider,useUserDataContext } from "@/components/context/UserContext";
+import { AdminDataProvider} from "@/components/context/AdminContext";
 import { LayoutDashboard, Users, ListTodo } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -17,29 +17,28 @@ export default function RootLayout({ children }) {
     const links = [
         {
             label: "Dashboard",
-            href: "/dashboard/admin",
+            href: "/admin/dashboard",
             icon: (
                 <LayoutDashboard className=" font-bold dark:text-neutral-200 h-6 w-6 flex-shrink-0 text-[#111111d1] transition-colors duration-300 " />
             ),
         },
         {
             label: "Manage Teams",
-            href: "/dashboard/admin/manage-teams",
+            href: "/admin/dashboard/manage-teams",
             icon: (
                 <Users className=" font-bold dark:text-neutral-200 h-6 w-6 flex-shrink-0 text-[#111111d1] transition-colors duration-300 ]" />
             ),
         },
         {
             label: "Manage Tasks",
-            href: "/dashboard/admin/manage-tasks",
+            href: "/admin/dashboard/manage-tasks",
             icon: (
                 <ListTodo className=" font-bold dark:text-neutral-200 h-6 w-6 flex-shrink-0 text-[#111111d1] transition-colors duration-300 ]" />
             ),
         },
 
     ];
-    const [open, setOpen] = useState(false);
-    const {loading} = useLoadingContext()
+    const { loading } = useLoadingContext()
     const router = useRouter()
     useEffect(() => {
         const checkSession = () => {
@@ -52,10 +51,7 @@ export default function RootLayout({ children }) {
 
     }, []);
     return (
-        <UserDataProvider >
-
-
-            <Navbar />
+        <>     
             {
                 loading ?
                     <div className='h-[90vh] w-full flex  justify-center items-center'>
@@ -64,10 +60,7 @@ export default function RootLayout({ children }) {
                     :
                     children
             }
-
-            < Footer />
-        </UserDataProvider>
-
+        </>
     );
 }
 

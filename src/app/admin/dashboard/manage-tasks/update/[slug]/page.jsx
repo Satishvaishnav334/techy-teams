@@ -3,7 +3,7 @@ import React from 'react'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 // import { Calendar } from "@/components/ui/calendar.jsx"
-import { useUserDataContext } from '@/components/context/UserContext'
+import { useAdminContext } from '@/components/context/AdminContext'
 import { useParams, useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { useLoadingContext } from '@/components/context/LoadingContext'
@@ -11,10 +11,10 @@ import { DatePicker } from "@/components/ui/date-picker"
 
 function page() {
 
-    // const { setLoading } = useLoadingContext()
-    const [loading, setLoading] = useState(false)
+
     const { slug } = useParams()
-    const { users, refresh, user ,createNotification} = useUserDataContext()
+    const { users, refresh} = useAdminContext()
+    const { user ,createNotification,setLoading} = useLoadingContext()
     const [task, setTask] = useState({})
     const [newtitle, setTitle] = useState()
     const [desc, setDesc] = useState()
@@ -28,7 +28,7 @@ function page() {
     useEffect(() => {
         const fetchTask = async () => {
             try {
-                setLoading(true)
+                
                 const task = await axios.get(`/api/get-tasks/${slug}`)
                 setTask(task.data)
                 setAssignedTo(task.data.assignedTo)
@@ -37,9 +37,7 @@ function page() {
             catch (error) {
                 console.log(error)
             }
-            finally {
-                setLoading(false)
-            }
+           
 
         }
         fetchTask()
@@ -63,7 +61,7 @@ function page() {
             const update = await axios.put(`/api/get-tasks/${slug}`, formData)
             if (update.status == '200') {
                 createNotification(`The task ${newtitle ? newtitle : task?.title} is Updated by ${user.name}`)
-                router.push('/dashboard/admin/manage-tasks')    
+                router.push('/admin/dashboard/manage-tasks')    
             }
         } catch (error) {
             console.error('Error creating team:', error);

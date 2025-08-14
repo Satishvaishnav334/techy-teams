@@ -3,10 +3,13 @@ import React from 'react'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useUserDataContext } from '@/components/context/UserContext'
+import { useAdminContext } from '@/components/context/AdminContext'
 import { toast } from 'sonner'
+import { useLoadingContext } from '@/components/context/LoadingContext'
 function page() {
-  const { users, user, refresh,createNotification } = useUserDataContext()
+  const { users, refresh } = useAdminContext()
+  const {user,setLoading,createNotification} = useLoadingContext()
+
   const [teamName, setTeamName] = useState('')
   const [level, setLevel] = useState('level 3')
   const [desc, setDesc] = useState([])
@@ -17,6 +20,7 @@ function page() {
     try {
       const slug = teamName?.split(' ').join('-').toLowerCase();
       const formData = new FormData()
+      setLoading(true)
       formData.append('teamName', teamName)
       formData.append('slug', slug)
       formData.append('level', level)
@@ -27,7 +31,7 @@ function page() {
       const create = await axios.post('/api/get-teams', formData)
       if (create.status == '200') {
         createNotification(`New Team ${teamName}  Created by ${user?.name}`)
-        router.push('/dashboard/admin/manage-teams')
+        router.push('/admin/dashboard/manage-teams')
         refresh();
       } else {
         toast.error("Failed to Create  Team.");
@@ -36,7 +40,9 @@ function page() {
       toast.error("Failed to Create  Team.");
       console.error('Error creating team:', error);
     }
-   
+    finally{
+            setLoading(false)
+    }
   };
   const handleCheckboxChange = (id) => {
     setAddMembers((prev) => [...prev, id]);

@@ -16,8 +16,9 @@ export default function RootLayout({ children }) {
       <body>
         <main>
           <LoadingProvider>
-            <Notifications></Notifications>
-          {children}
+            <Navbar />
+            {children}
+            < Footer />
           </LoadingProvider>
         </main>
         <Toaster position="top-right" richColors></Toaster>

@@ -2,7 +2,8 @@
 
 import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { useUserDataContext } from '@/components/context/UserContext';
+import { useAdminContext } from '@/components/context/AdminContext';
+import { useLoadingContext } from '@/components/context/LoadingContext';
 import axios from 'axios';
 import { toast } from 'sonner';
 import {
@@ -18,7 +19,8 @@ import Link from 'next/link';
 import { Plus } from 'lucide-react';
 
 function AdminDashboard() {
-  const { tasks, teams, user, users,createNotification,refresh } = useUserDataContext();
+  const { tasks, teams, users, refresh } = useAdminContext();
+  const { user, createNotification, setLoading } = useLoadingContext()
   const router = useRouter();
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -40,14 +42,14 @@ function AdminDashboard() {
   }, [teams, searchTeam]);
 
   // Delete task
-  const handleDelete = async (slug,title) => {
+  const handleDelete = async (slug, title) => {
     if (!confirm("Are you sure you want to delete this task?")) return;
     try {
+      setLoading(true)
       const res = await axios.delete(`/api/get-tasks/${slug}`);
       if (res.status == '200') {
         createNotification(`The Task ${title} is Deleted by ${user?.name}`)
-        router.push('/dashboard/admin/manage-tasks')
-      refresh();
+        refresh();
       }
       else {
         toast.error("Failed to delete task.");
@@ -55,14 +57,18 @@ function AdminDashboard() {
     } catch (err) {
       console.error(err);
     }
+    finally {
+      setLoading(false)
+    }
   };
-  const handleTeamDelete = async (slug,teamName) => {
+  const handleTeamDelete = async (slug, teamName) => {
     if (!confirm("Are you sure you want to delete this task?")) return;
     try {
-      const res = await axios.delete(`/api/get-teams/${slug}`); 
+      setLoading(true)
+      const res = await axios.delete(`/api/get-teams/${slug}`);
       if (res.status == '200') {
         createNotification(`The Team ${teamName} is Deleted by ${user?.name}`)
-        router.push('/dashboard/admin/manage-tasks')
+
         refresh();
       } else {
         toast.error("Failed to delete task.");
@@ -70,32 +76,31 @@ function AdminDashboard() {
     } catch (err) {
       console.error(err);
     }
+    finally {
+      setLoading(false)
+    }
   };
   return (
     <div className='flex flex-col items-center justify-start w-full p-4'>
       <h1 className='text-2xl font-bold my-4'>Welcome Back {user?.name}</h1>
 
       {/* Add task Button */}
-      <div className='flex items-center justify-start gap-5 p-4 bg-gray-100 rounded-lg shadow my-5 w-full'>
-        <Link href='/dashboard/admin/manage-tasks/add-task' className='px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700'>
+      <div className='flex items-center justify-start gap-5 p-4  my-5 w-full'>
+        <Link href='/admin/dashboard/manage-tasks/add-task' className='px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700'>
           Add New Tasks
         </Link>
-
+        <div className="flex   bg-gray-100">
+          <input
+            type="text"
+            placeholder="Search tasks..."
+            className="border p-2 rounded w-full"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
       </div>
+      <h1 className='text-2xl font-bold my-4'>Task Table</h1>
 
-      {/* Search and Sort Controls */}
-      <div className="flex gap-4 w-full mb-4">
-        <input
-          type="text"
-          placeholder="Search tasks..."
-          className="border p-2 rounded w-full"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-
-      </div>
-
-      {/* tasks Table */}
       <Table>
         <TableCaption>My tasks</TableCaption>
         <TableHeader>
@@ -119,13 +124,13 @@ function AdminDashboard() {
               <TableCell>{task?.assignedTo?.name}</TableCell>
               <TableCell className="text-right flex gap-2 justify-end">
                 <button
-                  onClick={() => handleDelete(task.slug,task?.title)}
+                  onClick={() => handleDelete(task.slug, task?.title)}
                   className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
                 >
                   Delete
                 </button>
                 <button
-                  onClick={() => router.push(`/dashboard/admin/manage-tasks/update/${task.slug}`)}
+                  onClick={() => router.push(`/admin/dashboard/manage-tasks/update/${task.slug}`)}
                   className="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
                 >
                   Edit
@@ -135,23 +140,24 @@ function AdminDashboard() {
           ))}
         </TableBody>
       </Table>
-      <div className='flex items-center justify-start gap-5 p-4 bg-gray-100 rounded-lg shadow my-5 w-full'>
+      <div className='flex items-center justify-start gap-5 p-4 my-5 w-full'>
 
-        <Link href='/dashboard/admin/manage-teams/add-categorie' className='px-4 py-2 bg-blue-600 text-white flex rounded hover:bg-blue-700'>
+        <Link href='/admin/dashboard/manage-teams/add-categorie' className='px-4 py-2 bg-blue-600 text-white flex rounded hover:bg-blue-700'>
           <Plus /> Add New teams
         </Link>
+        <div className="flex bg-gray-100">
+          <input
+            type="text"
+            placeholder="Search Teams..."
+            className="border p-2 rounded w-full"
+            value={searchTeam}
+            onChange={(e) => setSearchTeam(e.target.value)}
+          />
+        </div>
       </div>
+      <h1 className='text-2xl font-bold my-4'>Task Table</h1>
 
-      <div className="flex gap-4 w-full mb-4">
-        <input
-          type="text"
-          placeholder="Search Teams..."
-          className="border p-2 rounded w-full"
-          value={searchTeam}
-          onChange={(e) => setSearchTeam(e.target.value)}
-        />
 
-      </div>
       <Table className="mt-8">
         <TableCaption>All teams</TableCaption>
         <TableHeader>
@@ -173,13 +179,13 @@ function AdminDashboard() {
               </TableCell>
               <TableCell className="text-right flex gap-2 justify-end">
                 <button
-                  onClick={() => handleTeamDelete(team._id,team?.teamName)}
+                  onClick={() => handleTeamDelete(team?.slug, team?.teamName)}
                   className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
                 >
                   Delete
                 </button>
                 <button
-                  onClick={() => router.push(`/dashboard/admin/manage-teams/update/${team?.slug}`)}
+                  onClick={() => router.push(`/admin/dashboard/manage-teams/update/${team?.slug}`)}
                   className="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
                 >
                   Edit

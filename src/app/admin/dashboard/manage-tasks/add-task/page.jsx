@@ -3,12 +3,14 @@ import React from 'react'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useUserDataContext } from '@/components/context/UserContext'
+import { useAdminContext } from '@/components/context/AdminContext'
 import { DatePicker } from "@/components/ui/date-picker"
 import { toast } from 'sonner'
+import { useLoadingContext } from '@/components/context/LoadingContext'
 function page() {
   
-  const { users, refresh, user,createNotification } = useUserDataContext()
+  const { users, refresh, } = useAdminContext()
+  const {user,createNotification} = useLoadingContext()
   const router = useRouter()
   const [title, setTitle] = useState()
   const [desc, setDesc] = useState()
@@ -36,7 +38,7 @@ function page() {
       if(create.status=='200'){
         createNotification(` New task ${title} Create by ${user.name}`)
         refresh()
-        router.push('/dashboard/admin/manage-tasks')
+        router.push('/admin/dashboard/manage-tasks')
       } 
     } catch (error) {
       toast.error("Error creating Task ",{closeButton:true})

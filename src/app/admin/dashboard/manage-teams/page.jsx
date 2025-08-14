@@ -2,22 +2,25 @@
 'use client'
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useUserDataContext } from '@/components/context/UserContext';
+import { useAdminContext } from '@/components/context/AdminContext';
 import axios from 'axios';
 import { Delete, Edit, Plus, Trash, Pencil } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
+import { useLoadingContext } from '@/components/context/LoadingContext';
 
 export default function page() {
-  const { user, teams, refresh, createNotification } = useUserDataContext()
+  const {  teams, refresh,  } = useAdminContext()
+  const {user,setLoading,createNotification} = useLoadingContext()
   const router = useRouter()
 
   const handleDelete = async (slug, teamName) => {
     try {
+      setLoading(true)
       const res = await axios.delete(`/api/get-teams/${slug}`)
       if (res.status == '200') {
         createNotification(`The Team ${teamName} is Deleted by ${user?.name}`)
-        router.push('/dashboard/admin/manage-teams')
+        router.push('/admin/dashboard/manage-teams')
         refresh();
       } else {
         toast.error("Failed to delete task.");
@@ -28,6 +31,7 @@ export default function page() {
       console.log(error)
     }
     finally {
+      setLoading(false)
       refresh()
     }
   }
@@ -40,7 +44,7 @@ export default function page() {
           </h1>
         </div>
         <div className='fixed right-5 bottom-2  flex flex-col p-2'>
-          <Link href='/dashboard/admin/manage-teams/add-team' className='bg-black  text-white    rounded-2xl shadow-md p-4 flex justify-center my-2 '>
+          <Link href='/admin/dashboard/manage-teams/add-team' className='bg-black  text-white    rounded-2xl shadow-md p-4 flex justify-center my-2 '>
             <Plus size={30} />
           </Link>
         </div>
@@ -87,7 +91,7 @@ export default function page() {
                 <div className='md:flex flex-col justify-between w-full ' >
                   <div
                     className='flex justify-around gap-4 my-2 mx-5 '>
-                    <Link href={`/dashboard/admin/manage-teams/update/${team?.slug}`}
+                    <Link href={`/admin/dashboard/manage-teams/update/${team?.slug}`}
                       className='bg-black text-white font-semibold flex gap-2 text-xl text-right px-3 py-2 rounded-lg'>
                       <Pencil />Edit
                     </Link>

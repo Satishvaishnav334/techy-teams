@@ -2,12 +2,14 @@
 import React from 'react'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { useUserDataContext } from '@/components/context/UserContext'
+import { useAdminContext } from '@/components/context/AdminContext'
 import { useParams, useRouter } from 'next/navigation'
 import { toast } from 'sonner'
+import { useLoadingContext } from '@/components/context/LoadingContext'
 function page() {
     const { slug } = useParams()
-    const { users, refresh, user ,createNotification} = useUserDataContext()
+    const { users, refresh} = useAdminContext()
+    const {user,setLoading,createNotification} = useLoadingContext()
     const [team, setTeam] = useState({})
     const [newteamName, setTeamName] = useState()
     const [desc, setDesc] = useState()
@@ -31,6 +33,7 @@ function page() {
     const handleUpdate = async (e) => {
         e.preventDefault();
         try {
+            setLoading(true)
             const newslug = newteamName?.split(' ').join('-').toLowerCase();
             const formData = new FormData();
             formData.append('teamName', newteamName ? newteamName : team?.teamName);
@@ -41,7 +44,7 @@ function page() {
             const res = await axios.put(`/api/get-teams/${slug}`, formData)
             if (res.status == '200') {
                 createNotification(`The Team ${newteamName ? newteamName : team?.teamName} is Upadted by ${user?.name}`)
-                router.push('/dashboard/admin/manage-teams')
+                router.push('/admin/dashboard/manage-teams')
                 refresh();
             } else {
                 toast.error("Failed to Update task.");
@@ -52,6 +55,7 @@ function page() {
             console.error('Error creating team:', error);
         }
         finally {
+            setLoading(false)
             setMembers([])
             setTeamName('')
             setDesc('')
