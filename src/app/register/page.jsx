@@ -5,6 +5,7 @@ import { getCookie, setCookie } from "cookies-next/client";
 import { useRouter } from "next/navigation";
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { toast } from "sonner";
 export default function Home() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -17,8 +18,10 @@ export default function Home() {
       formData.append('email', email);
       formData.append('password', password);
       formData.append('name', name);
-      const response = await axios.post("/api/auth/member-register", formData)
+      const res = await axios.post("/api/auth/member-register", formData)
+      toast.success(res.data.message,{ closeButton: true })
     } catch (error) {
+      toast.error("Cannot Create Account ",{ closeButton: true })
       console.error("Error fetching users:", error);
     }
   };

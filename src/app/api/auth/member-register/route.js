@@ -1,19 +1,20 @@
 'use server'
-import userModel from "../../models/users";
+import Members from "../../models/users";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from 'bcrypt';
 import JsonWebToken from "jsonwebtoken";
 import { cookies } from 'next/headers';
+import connectToDatabase from "../../lib/connect";
 export async function POST(request) {
   try {
-
+    connectToDatabase()
     const data = await request.formData();
     const name = data.get("name");
     const email = data.get("email");
     const password = data.get("password");
     const hashedPassword = await hashPassword(password);
-    // console.log(name, email, hashedPassword);
-    const user = await userModel.create({ name, email, password: hashedPassword });
+    console.log(name, email, hashedPassword);
+    const user = await Members.create({ name, email, password: hashedPassword });
     // console.log(user);
     if (user) {
       const token = JsonWebToken.sign(
@@ -21,15 +22,14 @@ export async function POST(request) {
         process.env.JWT_SECRET,
         { expiresIn: process.env.JWT_EXPIRATION }
       );
-
       const cookiesStore = await cookies();
-     cookiesStore.set('token', token);
-      return NextResponse.json({ status: 201 });
+      cookiesStore.set('token', token);
+      return NextResponse.json({ message: "Account Created Successfully " }, { status: 201 });
     }
-    return NextResponse.json({ error: "Failed to Create User" }, { status: 400 });
+    return NextResponse.json({ message: "Failed to Create Account" }, { status: 400 });
   } catch (error) {
     console.error("Error :", error);
-    return NextResponse.json({ error: "Failed to Created User" }, { status: 500 });
+    return NextResponse.json({ message: "Failed to Created User" }, { status: 500 });
   }
 }
 

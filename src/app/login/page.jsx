@@ -30,7 +30,7 @@ export default function Page() {
       formData.append('email', email);
       formData.append('password', password);
       const res = await axios.post("/api/auth/member-login", formData)
-      toast.success("Login Successfully", { closeButton: true })
+      toast.success(res.data.message, { closeButton: true })
       router.push(`/dashboard`)
     } catch (error) {
       toast.error("Invalid email or password", { closeButton: true })

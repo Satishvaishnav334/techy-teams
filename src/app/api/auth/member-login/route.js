@@ -26,6 +26,6 @@ export async function POST(request) {
     return NextResponse.json({message:"Login Successfully"} ,{ status: 200 })
   } catch (error) {
     console.error("Error fetching users:", error);
-    return NextResponse.json({ error: "Failed to fetch users" }, { status: 500 });
+    return NextResponse.json({ message: "Failed to fetch users" }, { status: 500 });
   }
 }
