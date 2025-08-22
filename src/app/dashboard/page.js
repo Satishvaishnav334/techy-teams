@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios'
 import {
   DndContext,
@@ -31,11 +31,11 @@ const TaskCard = ({ task }) => {
     >
       <div className='flex flex-col items-between     gap-3 w-full'>
         <span
-          className={task?.priority === 'Important' ? 'bg-red-500 text-lg md:text-2xl font-bold rounded-t-lg  px-3 py-2  text-white' : 'bg-gray-300 rounded-t-lg  text-lg md:text-2xl font-bold  px-3 py-2   text-white'
-            && task?.priority === 'Medium' ? 'bg-yellow-400 text-lg md:text-2xl font-bold  px-3 py-2 rounded-t-lg  text-white' : 'bg-gray-300 rounded-t-lg  text-lg md:text-2xl font-bold px-3 py-2  text-white'}>
+          className={task?.priority === 'Important' ? 'bg-gray-600 text-lg md:text-2xl font-bold rounded-t-lg  px-3 py-2  text-white' : 'bg-gray-300 rounded-t-lg  text-lg md:text-2xl font-bold  px-3 py-2   text-white'
+            && task?.priority === 'Medium' ? 'bg-gray-400 text-lg md:text-2xl font-bold  px-3 py-2 rounded-t-lg  text-white' : 'bg-gray-300 rounded-t-lg  text-lg md:text-2xl font-bold px-3 py-2  text-white'}>
           {task?.priority}
         </span>
-        <span className=' mx-auto  w-[80%] text-lg md:text-2xl font-extrabold text-center   '>
+        <span className=' mx-auto  w-[80%] text-lg md:text-2xl font-extrabold text-center'>
           {task.title}
         </span>
         <div className='flex flex-col items-between justify-between  w-full'>
@@ -75,6 +75,7 @@ const Column = ({ id, title, tasks }) => {
 
 export default function Page() {
   const { user, createNotification, refresh } = useLoadingContext();
+
   const [trigger, setTrigger] = useState(false); // trigger re-render
 
   const handleDragEnd = async ({ active, over }) => {
