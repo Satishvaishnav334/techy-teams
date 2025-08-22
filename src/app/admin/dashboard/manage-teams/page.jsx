@@ -57,8 +57,8 @@ export default function page() {
               <div key={index} className=' bg-gray-200 w-full flex-col flex justify-between rounded-xl min-h-[400px] shadow-md transition-all duration-300'>
                 <div className='flex justify-between w-full'>
                   <span
-                    className={team?.level === 'level 1' ? 'bg-red-500 h-15 text-lg md:text-2xl font-extrabold md:px-6  p-4 rounded-br-xl rounded-tl-xl text-white' : 'bg-gray-500 h-15 text-lg md:text-2xl font-extrabold md:px-6  p-4 rounded-br-xl rounded-tl-xl text-white'
-                      && team?.level === 'level 2' ? 'bg-gray-700 h-15 text-lg md:text-2xl font-extrabold md:px-6  p-4 rounded-br-xl rounded-tl-xl text-white' : 'bg-gray-500 h-15  text-lg md:text-2xl font-extrabold md:px-6 p-4 rounded-br-xl rounded-tl-xl text-white'}>
+                    className={team?.level === 'level 1' ? 'bg-gray-600 h-15 text-lg md:text-2xl font-extrabold md:px-6  p-4 rounded-br-xl rounded-tl-xl text-white' : 'bg-gray-300 h-15 text-lg md:text-2xl font-extrabold md:px-6  p-4 rounded-br-xl rounded-tl-xl text-white'
+                      && team?.level === 'level 2' ? 'bg-gray-400 h-15 text-lg md:text-2xl font-extrabold md:px-6  p-4 rounded-br-xl rounded-tl-xl text-white' : 'bg-gray-300 h-15  text-lg md:text-2xl font-extrabold md:px-6 p-4 rounded-br-xl rounded-tl-xl text-white'}>
                     {team?.level?.split("level")}
                   </span>
                   <span className=' mx-auto py-5 w-[80%] text-lg md:text-2xl font-extrabold md:px-6 text-center  rounded-br-xl rounded-tl-xl '>
@@ -93,11 +93,11 @@ export default function page() {
                   <div
                     className='flex justify-around gap-4 my-2 mx-5 '>
                     <Link href={`/admin/dashboard/manage-teams/update/${team?.slug}`}
-                      className='bg-black text-white font-semibold flex gap-2 text-xl text-right px-3 py-2 rounded-lg'>
+                      className='hover:bg-yellow-600 bg-yellow-500 text-white font-semibold flex gap-2 text-xl text-right px-3 py-2 rounded-lg'>
                       <Pencil />Edit
                     </Link>
                     <button onClick={(e) => handleDelete(team?.slug, team?.teamName)}
-                      className='bg-black text-white flex gap-2 font-semibold  text-xl text-right px-3 py-2 rounded-lg'>
+                      className=' bg-red-500  hover:bg-red-600 text-white flex gap-2 font-semibold  text-xl text-right px-3 py-2 rounded-lg'>
                       <Trash /> Delete
                     </button>
                   </div>

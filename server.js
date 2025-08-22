@@ -11,12 +11,11 @@ const handler = app.getRequestHandler();
 
 app.prepare().then(() => {
   const httpServer = createServer(handler);
-
+  
   const io = new Server(httpServer);
 
   io.on("connection", (socket) => {
     console.log(" user connected", socket.id)
-    
     socket.on("notification", (value) => {
       console.log(value, "message from client")
       io.of("/").emit("notification", value);

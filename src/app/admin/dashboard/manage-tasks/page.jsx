@@ -37,8 +37,8 @@ const TaskCard = ({ task }) => {
     >
       <div className='flex flex-col items-between     gap-3 w-full'>
         <span
-          className={task?.priority === 'Important' ? 'bg-red-500 text-lg md:text-2xl font-bold rounded-t-lg  px-3 py-2  text-white' : 'bg-gray-500 rounded-t-lg  text-lg md:text-2xl font-bold  px-3 py-2   text-white'
-            && task?.priority === 'Medium' ? 'bg-gray-700  text-lg md:text-2xl font-bold  px-3 py-2 rounded-t-lg  text-white' : 'bg-gray-500  rounded-t-lg  text-lg md:text-2xl font-bold px-3 py-2  text-white'}>
+          className={task?.priority === 'Important' ? 'bg-gray-600 text-lg md:text-2xl font-bold rounded-t-lg  px-3 py-2  text-white' : 'bg-gray-300 rounded-t-lg  text-lg md:text-2xl font-bold  px-3 py-2   text-white'
+            && task?.priority === 'Medium' ? 'bg-gray-400  text-lg md:text-2xl font-bold  px-3 py-2 rounded-t-lg  text-white' : 'bg-gray-300  rounded-t-lg  text-lg md:text-2xl font-bold px-3 py-2  text-white'}>
           {task?.priority}
         </span>
         <span className=' mx-auto  w-[80%] text-lg md:text-2xl font-extrabold text-center   '>
@@ -54,11 +54,11 @@ const TaskCard = ({ task }) => {
           <div className='flex justify-between  w-full'>
             <div className='flex justify-between gap-2 my-2 mx-3  '>
               <Link href={`/admin/dashboard/manage-tasks/update/${task?.slug}`}
-                className='bg-black text-white font-semibold flex gap-2 text-sm text-right px-3 py-2  rounded-lg'>
+                className=' bg-yellow-500 hover:bg-yellow-600 text-white font-semibold flex gap-2 text-sm text-right px-3 py-2  rounded-lg'>
                 <Pencil size={18} />Edit
               </Link>
               <Link href={`/admin/dashboard/manage-tasks/delete/${task?.slug}`}
-                className='bg-black text-white z-50 cursor-pointer flex gap-2 font-semibold  text-sm text-right px-3 py-2 rounded-lg'>
+                className='bg-red-500 hover:bg-red-600 text-white z-50 cursor-pointer flex gap-2 font-semibold  text-sm text-right px-3 py-2 rounded-lg'>
                 <Trash size={18} /> Delete
               </Link>
             </div>

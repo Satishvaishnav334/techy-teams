@@ -3,6 +3,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { getCookie, setCookie } from "cookies-next/client";
 import { useRouter } from "next/navigation";
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 export default function Home() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -47,7 +49,7 @@ export default function Home() {
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
-        <label className="block font-semibold text-2xl  my-1">Email</label>
+        <lable className="block font-semibold text-2xl  my-1">Email</lable>
         <input
           type="text"
           className="border border-gray-600 text-xl rounded-2xl w-full p-2"
@@ -64,7 +66,7 @@ export default function Home() {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <button className="bg-blue-600 font-semibold text-white px-3 py-2 my-2 rounded-lg text-xl" type="submit">Publish</button>
+        <button className="bg-blue-600 font-semibold text-white px-3 py-2 my-2 rounded-lg text-xl" type="submit">Sign Up</button>
       </form>
     </div>
   );

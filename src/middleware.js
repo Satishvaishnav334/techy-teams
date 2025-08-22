@@ -10,8 +10,8 @@
         return NextResponse.redirect(new URL('/login', request.url));
       }
       const isAdmin = user.role==='admin';
-      
-       if (pathname.startsWith("/admin/dashboard") && user?.role !== "admin") {
+        if (pathname.startsWith("/admin/dashboard") && user?.role !== "admin") {
+         console.log(isAdmin)
       return NextResponse.redirect(new URL("/dashboard", request.url));
     }
       return NextResponse.next();
@@ -19,3 +19,5 @@
     export const config = {
       matcher: ['/dashboard/:path*', '/api/protected/:path*'], // Protect specific paths
     };
+
+    //Not working

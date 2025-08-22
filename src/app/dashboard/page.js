@@ -32,7 +32,7 @@ const TaskCard = ({ task }) => {
       <div className='flex flex-col items-between     gap-3 w-full'>
         <span
           className={task?.priority === 'Important' ? 'bg-red-500 text-lg md:text-2xl font-bold rounded-t-lg  px-3 py-2  text-white' : 'bg-gray-500 rounded-t-lg  text-lg md:text-2xl font-bold  px-3 py-2   text-white'
-            && task?.priority === 'Medium' ? 'bg-gray-700  text-lg md:text-2xl font-bold  px-3 py-2 rounded-t-lg  text-white' : 'bg-gray-500 rounded-t-lg  text-lg md:text-2xl font-bold px-3 py-2  text-white'}>
+            && task?.priority === 'Medium' ? 'bg-yellow-400 text-lg md:text-2xl font-bold  px-3 py-2 rounded-t-lg  text-white' : 'bg-gray-500 rounded-t-lg  text-lg md:text-2xl font-bold px-3 py-2  text-white'}>
           {task?.priority}
         </span>
         <span className=' mx-auto  w-[80%] text-lg md:text-2xl font-extrabold text-center   '>
@@ -154,7 +154,7 @@ export default function Page() {
                 <div className='flex justify-between w-full'>
                   <span
                     className={team?.level === 'level 1' ? 'bg-red-500 h-15 text-lg md:text-2xl font-extrabold md:px-6  p-4 rounded-br-xl rounded-tl-xl text-white' : 'bg-gray-500 h-15 text-lg md:text-2xl font-extrabold md:px-6  p-4 rounded-br-xl rounded-tl-xl text-white'
-                      && team?.level === 'level 2' ? 'bg-gray-700 h-15 text-lg md:text-2xl font-extrabold md:px-6  p-4 rounded-br-xl rounded-tl-xl text-white' : 'bg-gray-500 h-15  text-lg md:text-2xl font-extrabold md:px-6 p-4 rounded-br-xl rounded-tl-xl text-white'}>
+                      && team?.level === 'level 2' ? 'bg-yellow-400 h-15 text-lg md:text-2xl font-extrabold md:px-6  p-4 rounded-br-xl rounded-tl-xl text-white' : 'bg-gray-500 h-15  text-lg md:text-2xl font-extrabold md:px-6 p-4 rounded-br-xl rounded-tl-xl text-white'}>
                     {team?.level?.split("level")}
                   </span>
                   <span className=' mx-auto py-5 w-[80%] text-lg md:text-2xl font-extrabold md:px-6 text-center  rounded-br-xl rounded-tl-xl '>

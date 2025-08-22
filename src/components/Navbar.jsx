@@ -46,6 +46,7 @@ function Navbar() {
     toast.info("Logout Succesfully", { closeButton: true })
 
   }
+  console.log(user.role)
   return (
     <div className='w-full bg-white justify-end  flex border-b-black border-1 shadow-lg  '>
      
