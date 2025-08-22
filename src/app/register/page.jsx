@@ -20,6 +20,7 @@ export default function Home() {
       formData.append('name', name);
       const res = await axios.post("/api/auth/member-register", formData)
       toast.success(res.data.message,{ closeButton: true })
+      router.push('dashboard')
     } catch (error) {
       toast.error("Cannot Create Account ",{ closeButton: true })
       console.error("Error fetching users:", error);
