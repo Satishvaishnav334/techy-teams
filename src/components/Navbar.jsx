@@ -10,7 +10,8 @@ import { useLoadingContext } from './context/LoadingContext';
 import { toast } from 'sonner';
 function Navbar() {
   const router = useRouter();
-  const { user, createNotification } = useLoadingContext()
+  const { user, createNotification ,setIsLogin,isLogin} = useLoadingContext()
+  const [name,setName] = useState(false)
   const [isOpen, setIsOpen] = useState(false);
   const items = [
     { label: 'Tasks', href: '/dashboard/tasks' },
@@ -23,6 +24,7 @@ function Navbar() {
   ]
 
   useEffect(() => {
+    router.refresh();
     const handleResize = () => {
       if (window.innerWidth >= 768) {
         setIsOpen(false);
@@ -36,10 +38,16 @@ function Navbar() {
   }, [])
 
   const Logout = async () => {
-    deleteCookie('token');
-    deleteCookie('name');
-    router.push('/login')
-    toast.info("Logout Succesfully", { closeButton: true })
+    const token = getCookie('token')
+    if (token) {
+      setIsLogin(true)
+      deleteCookie('token');
+      router.push('/login') 
+      toast.info("Logout Succesfully", { closeButton: true })
+    }
+    router.push('/login') 
+    setIsLogin(false)
+ 
 
   }
   return (
@@ -80,7 +88,7 @@ function Navbar() {
                   Icon: <UserPen className="h-6 w-6" />,
                 },
                 {
-                  label: user?.role ? "Logout" : "Login",
+                  label: isLogin ? "Logout" : "Login",
                   onClick: () => { user?.role ? Logout() : router.push('login') },
                   Icon: <LogOut className="h-6 w-6" />
                 },
@@ -106,7 +114,7 @@ function Navbar() {
                     Icon: <UserPen className="h-6 w-6" />,
                   },
                   {
-                    label: user?.role ? "Logout" : "Login",
+                  label: isLogin ? "Logout" : "Login",
                     onClick: () => { user?.role ? Logout() : router.push('login') },
                     Icon: <LogOut className="h-6 w-6" />
                   },

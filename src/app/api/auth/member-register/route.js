@@ -8,6 +8,7 @@ import connectToDatabase from "../../lib/connect";
 export async function POST(request) {
   try {
     connectToDatabase()
+    Members;
     const data = await request.formData();
     const name = data.get("name");
     const email = data.get("email");

@@ -103,10 +103,10 @@ function AdminDashboard() {
       </div>
 
       <Table>
-        <TableCaption>My tasks</TableCaption>
+        <TableCaption>All tasks</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead>Title</TableHead>
+            <TableHead>Task Title</TableHead>
             <TableHead>Status</TableHead>
             <TableHead>Priority</TableHead>
             <TableHead>Due Date</TableHead>
@@ -169,7 +169,7 @@ function AdminDashboard() {
         <TableCaption>All teams</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead>Name</TableHead>
+            <TableHead>Team Name</TableHead>
             <TableHead>Description</TableHead>
             <TableHead>Members</TableHead>
             <TableHead className="text-right">Actions</TableHead>

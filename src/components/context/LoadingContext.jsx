@@ -13,6 +13,7 @@ export const LoadingProvider = ({ children }) => {
 
     const [user, setUser] = useState({})
     const [loading, setLoading] = useState(false)
+    const [isLogin, setIsLogin] = useState(false)
     const [notifications, setNotifications] = useState([]);
  
     
@@ -58,7 +59,7 @@ export const LoadingProvider = ({ children }) => {
     }, []);
 
     return (
-        <LoadingContext.Provider value={{ loading, setLoading, notifications, refresh: fetchContaxtData, setNotifications, user, setUser, createNotification }}>
+        <LoadingContext.Provider value={{ loading, setLoading,isLogin,setIsLogin, notifications, refresh: fetchContaxtData, setNotifications, user, setUser, createNotification }}>
             {children}
         </LoadingContext.Provider>
     );
