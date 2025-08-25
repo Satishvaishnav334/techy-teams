@@ -8,9 +8,9 @@ export default function page() {
   const { user } = useLoadingContext()
 
   return (
-    <div className='flex flex-col w-full p-5'>
-      <div className='bg-gray-200 w-100 m-4 rounded-2xl shadow-md p-10'>
-        <h1 className='text-2xl  text-center lg:text-3xl font-extrabold'>
+    <div className='flex flex-col w-full sm:p-5'>
+      <div className='bg-gray-200 sm:w-100 sm:m-4 mx-2 my-4 rounded-2xl shadow-md sm:p-10 p-3'>
+        <h1 className='sm:text-2xl text-xl  text-center lg:text-3xl font-extrabold'>
           WelCome  To <span className='text-orange-600'>Teams</span>
         </h1>
       </div>
@@ -52,9 +52,9 @@ export default function page() {
                 </div>
                
                  <div
-                    className='flex justify-end mt-5'>
-                    <p className='bg-gray-300 min-w-[40%] font-semibold  text-sm text-right    py-1 px-2 rounded-br-xl rounded-tl-xl'>
-                      Created {formatDate(team?.createdAt)}
+                  className='flex justify-end mt-5'>
+                  <p className='bg-gray-300 w-full xl:w-[60%] font-semibold  text-sm text-center    py-1 px-2 xl:rounded-br-xl xl:rounded-tl-xl'>
+                    Created {formatDate(team?.createdAt)}
                     </p>
                   </div>
 

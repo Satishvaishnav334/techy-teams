@@ -16,10 +16,8 @@ function Navbar() {
   const items = [
     { label: 'Tasks', href: '/dashboard/tasks' },
     { label: 'Teams', href: '/dashboard/teams' },
-    { label: 'About', href: '/dashboard/about' },
-    { label: 'Contact', href: '/dashboard/contact' },
-    { label: 'Blogs', href: '/dashboard/blogs' },
-    { label: 'Pricing', href: '/dashboard/pricing' },
+    { label: 'Contact', href: '/contact' },
+    { label: 'Pricing', href: '/pricing' },
 
   ]
 
@@ -40,16 +38,18 @@ function Navbar() {
   const Logout = async () => {
     const token = getCookie('token')
     if (token) {
-      setIsLogin(true)
+      setIsLogin(false)
       deleteCookie('token');
       router.push('/login') 
       toast.info("Logout Succesfully", { closeButton: true })
     }
-    router.push('/login') 
-    setIsLogin(false)
- 
-
+    else{ 
+      router.push('/login') 
+      setIsLogin(false)
+    }
+    router.refresh()
   }
+
   return (
     <div className='w-full bg-white justify-end  flex border-b-black border-1 shadow-lg  '>
 
@@ -61,7 +61,7 @@ function Navbar() {
             </Link>
           </div>
 
-          <div className=' hidden md:flex justify-between items-center w-[55%] lg:w-[56%]   font-semibold lg:text-lg text-sm lg:gap-3'>
+          <div className=' hidden md:flex justify-end  items-center w-[55%] lg:w-[56%]   font-semibold lg:text-lg text-sm gap-10'>
 
             {user?.role == 'admin' && (
               <Link href='/admin/dashboard' className='hover:text-[#111111d1]   font-semibold transition-colors duration-300'>
@@ -110,12 +110,12 @@ function Navbar() {
 
                   {
                     label: "Profile",
-                    onClick: () => router.push('/dashboard/profile'),
+                    onClick: () => {router.push('/dashboard/profile'); setIsOpen(false)},
                     Icon: <UserPen className="h-6 w-6" />,
                   },
                   {
                   label: isLogin ? "Logout" : "Login",
-                    onClick: () => { user?.role ? Logout() : router.push('login') },
+                    onClick: () => { user?.role ? Logout() : router.push('login'); setIsOpen(false) },
                     Icon: <LogOut className="h-6 w-6" />
                   },
                 ]}
@@ -125,12 +125,12 @@ function Navbar() {
 
               <div className=' flex  flex-col justify-between items-start my-5   font-semibold text-lg gap-4'>
                 {user?.role == 'admin' && (
-                  <Link href='/admin/dashboard' className='hover:text-[#111111d1]  font-semibold transition-colors duration-300'>
+                  <Link href='/admin/dashboard' onClick={setIsOpen(false)} className='hover:text-[#111111d1]  font-semibold transition-colors duration-300'>
                     Admin Panel
                   </Link>
                 )}
                 {items.map((item, index) => (
-                  <Link key={index} href={item.href} className='hover:text-[#111111d1] transition-colors duration-300'>
+                  <Link key={index} href={item.href} onClick={()=>setIsOpen(false)} className='hover:text-[#111111d1] transition-colors duration-300'>
                     {item.label}
                   </Link>
                 ))}

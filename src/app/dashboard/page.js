@@ -14,7 +14,7 @@ export default function Page() {
   const { user, createNotification, refresh } = useLoadingContext();
   const [trigger, setTrigger] = useState(false); // trigger re-render
   const router = useRouter()
- 
+
   const handleDragEnd = async ({ active, over }) => {
     if (!over) return;
 
@@ -51,8 +51,8 @@ export default function Page() {
 
   return (
     <div className='flex flex-col w-full sm:p-5'>
-      <div className='bg-gray-200 w-100 sm:m-4 rounded-2xl shadow-md sm:p-10'>
-        <h1 className='sm:text-2xl text-sm  text-center lg:text-3xl font-extrabold'>
+      <div className='bg-gray-200 sm:w-100 sm:m-4 mx-2 my-4 rounded-2xl shadow-md sm:p-10 p-3'>
+        <h1 className='sm:text-2xl text-xl  text-center lg:text-3xl font-extrabold'>
           WelCome   <span className='text-orange-600'>{user?.name}</span>
         </h1>
       </div>
@@ -119,7 +119,7 @@ export default function Page() {
                 </div>
                 <div
                   className='flex justify-end mt-5'>
-                  <p className='bg-gray-300 min-w-[40%] font-semibold  text-sm text-right    py-1 px-2 rounded-br-xl rounded-tl-xl'>
+                  <p className='bg-gray-300 w-full xl:w-[60%] font-semibold  text-sm text-center    py-1 px-2 xl:rounded-br-xl xl:rounded-tl-xl'>
                     Created {formatDate(team?.createdAt)}
                   </p>
                 </div>
@@ -183,12 +183,12 @@ const TaskCard = ({ task }) => {
         <div className='flex flex-col items-between justify-between  w-full'>
           <p className='text-lg  px-3'>{task.description}</p>
           <p className='px-3'>Status : {task.status}</p>
-          <div className='flex justify-end w-full'>
-            <div className='flex items-end  mt-2'>
-              <p className={date1 < date ? 'bg-gray-300    font-semibold  text-sm text-right    py-1 px-2 rounded-br-xl w-full  rounded-tl-xl' : 'bg-red-500 text-white w-full  font-semibold  text-sm text-right    py-1 px-2 rounded-br-xl rounded-tl-xl'} >
-                {date1 < date ? ` Due Date ${formatDate(task.dueDate)}` : `Over Due ${formatDate(task.dueDate)}`}
-              </p>
-            </div>
+          <div
+            className='flex justify-end mt-5'>
+            <p className={`bg-gray-300 w-full xl:w-[60%] font-semibold  text-sm text-center    py-1 px-2 xl:rounded-br-xl xl:rounded-tl-xl 
+             ${date1 < date ? 'bg-gray-300 text-gray-800' : 'bg-red-500 text-white'} `} >
+              {date1 < date ? ` Due Date ${formatDate(task.dueDate)}` : `Over Due ${formatDate(task.dueDate)}`}
+            </p>
           </div>
         </div>
       </div>
