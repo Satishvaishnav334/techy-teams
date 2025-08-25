@@ -3,17 +3,29 @@
 'use client'
 import React, { useState } from "react";
 import { Button, Input, Textarea, Typography } from "@material-tailwind/react";
-
-export function page() {
+import axios from "axios";
+import { toast } from "sonner";
+export default function page() {
   const [firstname,setFirstName] = useState('')
   const [lastname,setLastName] = useState('')
   const [email,setEmail] = useState('')
   const [message,setMessage] = useState('')
-  const handleSubmit = () =>{
-    console.log(firstname )    
-    console.log(lastname )    
-    console.log(email )    
-    console.log(message )    
+  const handleSubmit = async(e) =>{
+     e.preventDefault();
+    try {
+     
+      const formData = new FormData();
+      formData.append('firstname', firstname);
+      formData.append('lastname', lastname);
+      formData.append('email', email);
+      formData.append('message', message);
+      const res = await axios.post("/api/client-data", formData)
+      toast.success(res.data.message, { closeButton: true })
+    } catch (error) {
+      toast.error(error.massage, { closeButton: true })
+      console.error("Error fetching users:", error);
+    }
+  
   }
   return (
     <section className="px-8 py-8 lg:py-16">
@@ -148,4 +160,3 @@ export function page() {
   );
 }
 
-export default page;

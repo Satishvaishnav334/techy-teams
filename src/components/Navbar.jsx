@@ -47,7 +47,7 @@ function Navbar() {
       router.push('/login') 
       setIsLogin(false)
     }
-    router.refresh()
+    
   }
 
   return (

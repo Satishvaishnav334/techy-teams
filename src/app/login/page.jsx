@@ -20,11 +20,13 @@ export default function Page() {
       }
     }
     checkSession()
+    // window.location.reload();
     setTimeout(() => {
       checkSession()
     }, 2000)
   }, [])
 
+  
   const handleLogIn = async (e) => {
     e.preventDefault()
     try {
