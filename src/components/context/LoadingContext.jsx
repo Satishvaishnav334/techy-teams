@@ -13,7 +13,7 @@ export const LoadingProvider = ({ children }) => {
 
     const [user, setUser] = useState({})
     const [loading, setLoading] = useState(false)
-    const [isLogin, setIsLogin] = useState(false)
+    const [isLogin, setIsLogin] = useState(user ? true : false)
     const [notifications, setNotifications] = useState([]);
  
     
@@ -28,7 +28,6 @@ export const LoadingProvider = ({ children }) => {
     };
     const fetchContaxtData = async () => {
         try {
-            
             const token = getCookie('token')
             const user = await decrypt(token);
             const name = user.username

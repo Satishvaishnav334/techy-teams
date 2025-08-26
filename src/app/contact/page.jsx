@@ -25,8 +25,8 @@ export default function page() {
       toast.error(error.massage, { closeButton: true })
       console.error("Error fetching users:", error);
     }
-  
   }
+  
   return (
     <section className="px-8 py-8 lg:py-16">
       <div className="container mx-auto text-center">

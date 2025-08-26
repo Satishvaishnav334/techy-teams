@@ -3,18 +3,40 @@ import { Icons } from "./icons.jsx"
 import { Button } from "./button2.0.jsx"
 import { Input } from "./Input.jsx"
 import { Label } from "./label.jsx"
+import axios from "axios";
+import React, { useState } from "react";
+
+import { toast } from "sonner";
 import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react"
 import Link from "next/link"
 import logo from "../../../public/logo.png"
 function StackedCircularFooter() {
+  const [firstname, setFirstName] = useState('')
+  const [lastname, setLastName] = useState('')
+  const [email, setEmail] = useState('')
+  const [message, setMessage] = useState('')
   const items = [
-    { label: 'Tasks', href: '/tasks' },
-    { label: 'Teams', href: '/teams' },
-    { label: 'About', href: '/about' },
+    { label: 'Tasks', href: '/dashboard/tasks' },
+    { label: 'Teams', href: '/dashboard/teams' },
     { label: 'Contact', href: '/contact' },
-    { label: 'Blogs', href: '/blogs' },
     { label: 'Pricing', href: '/pricing' },
   ]
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const formData = new FormData();
+      formData.append('firstname', firstname ? firstname : "Subscribe");
+      formData.append('lastname', lastname ? lastname : "Subscribe");
+      formData.append('email', email ? email : "Subscribe");
+      formData.append('message', message ? message : "Subscribe");
+      const res = await axios.post("/api/client-data", formData)
+      toast.success(res.data.message, { closeButton: true })
+    } catch (error) {
+      toast.error(error.massage, { closeButton: true })
+      console.error("Error fetching users:", error);
+    }
+  }
+
   return (
     <footer className="p-10 border-t border-gray-500 bg-white">
       <div className="container mx-auto px-4 md:px-6">
@@ -48,13 +70,14 @@ function StackedCircularFooter() {
             </Button>
           </div>
           <div className="mb-8 w-full max-w-md">
-            <form className="flex space-x-2">
+            <form className="flex space-x-2" onSubmit={handleSubmit}>
               <div className="flex-grow">
                 <Label htmlFor="email" className="sr-only">Email</Label>
                 <Input
                   id="email"
                   placeholder="Enter your email"
                   type="email"
+                  onChange={(e)=>setEmail(e.target.value)}
                   className="rounded-full" />
               </div>
               <Button type="submit" className="rounded-full">Subscribe</Button>
