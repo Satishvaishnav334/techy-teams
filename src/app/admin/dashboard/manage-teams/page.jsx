@@ -36,7 +36,7 @@ export default function page() {
     }
   }
   return (
-    <div className='flex flex-col w-full p-5'>
+    <div className='flex flex-col w-full sm:p-5 p-2'>
       <div className='w-full flex justify-between'>
         <div className='bg-gray-200  m-4 rounded-2xl shadow-md p-5 md:p-8'>
           <h1 className='text-2xl  text-center lg:text-3xl font-extrabold'>
@@ -50,11 +50,11 @@ export default function page() {
         </div>
       </div>
       {/* <h1 className='text-xl text-center lg:text-3xl font-bold mb-4'>All Teams</h1> */}
-      <div className='w-full  p-5 mb-10'>
-        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 w-full gap-5'>
+      <div className='w-full  sm:p-5 p-2 mb-10'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 w-full gap-3 sm:gap-5'>
           {
             teams?.map((team, index) => (
-              <div key={index} className=' bg-gray-200 w-full flex-col flex justify-between rounded-xl min-h-[400px] shadow-md transition-all duration-300'>
+              <div key={index} className=' bg-gray-200 w-full flex-col flex justify-between rounded-xl  shadow-md transition-all duration-300'>
                 <div className='flex justify-between w-full'>
                   <span
                     className={team?.level === 'level 1' ? 'bg-gray-600 h-15 text-lg md:text-2xl font-extrabold md:px-6  p-4 rounded-br-xl rounded-tl-xl text-white' : 'bg-gray-300 h-15 text-lg md:text-2xl font-extrabold md:px-6  p-4 rounded-br-xl rounded-tl-xl text-white'
@@ -65,9 +65,9 @@ export default function page() {
                     {team?.teamName}
                   </span>
                 </div>
-                <div className='p-4 flex flex-col justify-start h-full'>
+                <div className='px-4 flex flex-col justify-start h-full'>
                   <span className='  font-bold  text-sm md:text-lg  py-2 px-1 '> Members :</span>
-                  <div className='grid grid-cols-2 justify-around gap-5'>
+                  <div className='grid grid-cols-2 justify-around  gap-5'>
                     {
                       team?.members?.map((member, index) => (
                         <div key={index}>
@@ -75,13 +75,7 @@ export default function page() {
                         </div>
                       ))
                     }
-                    {team?.members?.length < 4 &&
-                      (
-                        <button className='bg-white/90  font-bold  text-sm md:text-lg  py-2 px-4 rounded-lg flex justify-center items-center ' >
-                          <Plus />
-                        </button>
-                      )
-                    }
+
                   </div>
                   <div className='my-5'>
                     <p className='text-center text-lg'>{team?.description}</p>
@@ -89,54 +83,45 @@ export default function page() {
                   </div>
                 </div>
 
-                <div className='md:flex flex-col justify-between w-full ' >
-                  {/* <div className='flex sm:flex-row flex-col justify-around gap-4 my-2 sm:mx-5 '>
-                    <Link href={`/admin/dashboard/manage-teams/update/${team?.slug}`}
-                      className='hover:bg-yellow-600 bg-yellow-500 text-white font-semibold flex gap-2 text-xl text-right px-3 py-2 rounded-lg'>
-                      <Pencil />Edit
-                    </Link>
+
+                <div className='flex flex-col  justify-between  w-full'>
+                  <div className='flex flex-row justify-around px-5 sm:gap-5 gap-2 '>
                     <button onClick={(e) => handleDelete(team?.slug, team?.teamName)}
-                      className=' bg-red-500  hover:bg-red-600 text-white flex gap-2 font-semibold  text-xl text-right px-3 py-2 rounded-lg'>
+                      className=' bg-red-500 cursor-pointer hover:bg-red-600 text-white flex gap-2  font-semibold  sm:text-xl text-lg  px-3 py-2 rounded-lg'>
                       <Trash /> Delete
                     </button>
-                  </div> */}
-                  {/* <div className='flex flex-col xl:flex-row justify-between  w-full'> */}
-                    <div className='flex justify-between gap-2 my-2 mx-3  '>
-                      <button onClick={(e) => handleDelete(team?.slug, team?.teamName)}
-                        className=' bg-red-500  hover:bg-red-600 text-white flex gap-2 font-semibold  text-xl text-right px-3 py-2 rounded-lg'>
-                        <Trash /> Delete
-                      </button>
-                      <Link href={`/admin/dashboard/manage-teams/update/${team?.slug}`}
-                        className='hover:bg-yellow-600 bg-yellow-500 text-white font-semibold flex gap-2 text-xl text-right px-3 py-2 rounded-lg'>
-                        <Pencil />Edit
-                      </Link> 
-                    </div>
-                    <div
-                      className='flex justify-end mt-5'>
-                      <p className='bg-gray-300 min-w-[40%] font-semibold  text-sm text-right    py-1 px-2 rounded-br-xl rounded-tl-xl'>
-                        Created {formatDate(team?.createdAt)}
-                      </p>
-                    </div>
+                    <Link href={`/admin/dashboard/manage-teams/update/${team?.slug}`}
+                      className='hover:bg-yellow-600 bg-yellow-500 text-white font-semibold flex gap-2 sm:text-xl text-md px-3 py-2 rounded-lg'>
+                      <Pencil />Edit
+                    </Link>
+                  </div>
+                  <div
+                    className='flex justify-end mt-5'>
+                    <p className='bg-gray-300 min-w-[40%] font-semibold  text-sm text-right    py-1 px-2 rounded-br-xl rounded-tl-xl'>
+                      Created {formatDate(team?.createdAt)}
+                    </p>
                   </div>
                 </div>
-                )
-                )
-          }
+
               </div>
+            )
+            )
+          }
+        </div>
       </div>
-      </div>
-      )
+    </div>
+  )
 }
 
-      function formatDate(dateString) {
+function formatDate(dateString) {
   const date = new Date(dateString);
-      return date.toLocaleDateString('en-US', {
-        year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      // hour: 'numeric',
-      // minute: '2-digit',
-      hour12: true
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    // hour: 'numeric',
+    // minute: '2-digit',
+    hour12: true
   });
 }
 

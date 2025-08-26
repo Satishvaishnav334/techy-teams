@@ -6,10 +6,12 @@ import { useAdminContext } from '@/components/context/AdminContext'
 import { useParams, useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { useLoadingContext } from '@/components/context/LoadingContext'
+import { Button, Input, Textarea, Typography } from "@material-tailwind/react";
+
 function page() {
     const { slug } = useParams()
-    const { users, refresh} = useAdminContext()
-    const {user,setLoading,createNotification} = useLoadingContext()
+    const { users, refresh } = useAdminContext()
+    const { user, setLoading, createNotification } = useLoadingContext()
     const [team, setTeam] = useState({})
     const [newteamName, setTeamName] = useState()
     const [desc, setDesc] = useState()
@@ -75,42 +77,66 @@ function page() {
 
 
     return (
-        <div className="  flex flex-col items-center justify-center min-h-screen text-black bg-gray-100">
-            <h1 className="text-3xl font-bold mb-6">Create team</h1>
-            <form onSubmit={handleUpdate} className="p-4 m-2 bg-white rounded shadow-md">
-                <label className="block font-semibold text-2xl  my-1">Team Name</label>
-                <input
-                    type="text"
-                    className="border border-gray-600 text-xl rounded-2xl w-full p-2"
-                    defaultValue={team?.teamName}
-                    value={newteamName}
-                    onChange={(e) => { setTeamName(e.target.value) }}
-                />
-
-                <div>
-                    <label className="block font-semibold text-xl  my-1"> Level</label>
-
-                    <select className="border border-gray-600 text-xl rounded-2xl  p-2" value={level} onChange={(e) => setLevel(e.target.value)}>
-                        <option value={team?.level}>{team?.level}</option>
-                        <option value="level 1">Level 1</option>
-                        <option value="level 2">Level 2</option>
-                        <option value="level 3">Level 3 </option>
-                    </select>
-
+        <div className="  flex flex-col items-center justify-center md:h-[90vh] text-black ">
+            <form onSubmit={handleUpdate} className=" m-2  rounded-xl shadow-md shadow-black/50 p-5 flex flex-col gap-3">
+                <h1 className=" text-center sm:text-2xl text-xl !text-gray-900 font-bold " >
+                    Update Team
+                </h1>
+                <div className='flex sm:flex-row flex-col justify-around items-around h-full w-full sm:gap-5 gap-2'>
+                    <div >
+                        <Typography variant="xl" className="my-2 text-left font-medium !text-gray-900" >
+                            Team Name
+                        </Typography>
+                        <Input
+                            className="  focus:border-t-gray-900 rounded-lg text-xl w-full p-2"
+                            type="text"
+                            defaultValue={team?.teamName}
+                            value={newteamName}
+                            onChange={(e) => { setTeamName(e.target.value) }}
+                            size="xl" name="task-title"
+                            containerProps={{
+                                className: "min-w-full",
+                            }}
+                            labelProps={{
+                                className: "hidden",
+                            }}
+                        />
+                    </div>
+                    <div>
+                        <Typography variant="xl" className="my-2 text-left font-medium !text-gray-900" >
+                            Team Level
+                        </Typography>
+                        <select className=" border border-gray-600 text-xl rounded-2xl  p-2 " value={level} onChange={(e) => setLevel(e.target.value)}>
+                            <option value={team?.level}>{team?.level}</option>
+                            <option value="level 1">Level 1</option>
+                            <option value="level 2">Level 2</option>
+                            <option value="level 3">Level 3 </option>
+                        </select>
+                    </div>
                 </div>
-                <label className="block font-semibold text-2xl  my-1">Description</label>
-                <textarea
-                    type="text"
-                    className="border border-gray-600 text-xl rounded-2xl w-full p-2"
+
+                <Typography variant="xl" className="my-2 text-left font-medium !text-gray-900" >
+                    Team Description
+                </Typography>
+                <Textarea
+                    className="focus:border-t-gray-900  text-xl rounded-lg w-full p-2"
+                    required={true}
+                    rows={4} color="gray"
                     defaultValue={team?.description}
                     value={desc}
                     onChange={(e) => { setDesc(e.target.value) }}
+                    name="message"
+                    containerProps={{
+                        className: "!min-w-full",
+                    }}
+                    labelProps={{
+                        className: "hidden",
+                    }}
                 />
-                <label className="block font-semibold text-2xl  my-1">Date</label>
 
-                <div className="p-5 text-2xl rounded-lg border my-4 w-full">
-                    <h2 className="text-lg font-semibold mb-3">Select User you Want to Assign team</h2>
-                    <div className="grid grid-cols-2 gap-3 ">
+                <div className="p-5 my-5 text-2xl rounded-lg border w-full">
+                    <h2 className="text-lg font-semibold mb-3">Select Team Members</h2>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                         {users?.map((member, index) => {
                             return (
                                 <label key={index} className="flex items-center space-x-2">
@@ -127,10 +153,10 @@ function page() {
                         })}
                     </div>
                 </div>
-                <button className="bg-blue-600 font-semibold text-white px-3 py-2 my-2 rounded-lg text-xl" type="submit">Create team</button>
+                <button className="bg-blue-600 font-semibold text-white px-3 py-2 my-2 rounded-lg text-xl" type="submit">Update Team</button>
             </form>
-
         </div>
+
     )
 }
 

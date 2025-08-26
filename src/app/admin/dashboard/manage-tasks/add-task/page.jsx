@@ -9,7 +9,7 @@ import { toast } from 'sonner'
 import { useLoadingContext } from '@/components/context/LoadingContext'
 import { Button, Input, Textarea, Typography } from "@material-tailwind/react";
 function page() {
-
+  
   const { users, refresh, } = useAdminContext()
   const { user, createNotification } = useLoadingContext()
   const router = useRouter()
@@ -63,10 +63,10 @@ function page() {
         <h1 className=" text-center sm:text-2xl text-xl !text-gray-900 font-bold " >
           Create New Task
         </h1>
-        <Typography variant="xl" className="mb-2 text-left font-medium !text-gray-900" >
+        <Typography  variant="xl" className="my-2 text-left font-medium !text-gray-900" >
           Task Title
         </Typography>
-        <Input type="text" required={true} className="  focus:border-t-gray-900 rounded-lg w-full p-2" placeholder="Enter Task Name or Title *" value={title}
+        <Input type="text" required={true} className="  focus:border-t-gray-900 rounded-lg text-xl w-full p-2" placeholder="Enter Task Name or Title *" value={title}
           onChange={(e) => setTitle(e.target.value)} color="gray" size="xl" name="task-title"
           containerProps={{
             className: "min-w-full",
