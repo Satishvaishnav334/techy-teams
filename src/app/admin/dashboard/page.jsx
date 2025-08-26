@@ -81,14 +81,13 @@ function AdminDashboard() {
     }
   };
   return (
-    <div className='flex flex-col items-center justify-start w-full p-4'>
-      <h1 className='text-2xl font-bold my-4'>Welcome Back {user?.name}</h1>
-
-      <div className='my-5 w-full h-full'>
-        <h1 className='text-2xl font-bold my-4'>Task Table</h1>
-        <div className='flex items-center justify-start gap-5 p-4   w-full'>
-          <Link href='/admin/dashboard/manage-tasks/add-task' className='px-4 py-2 bg-blue-600 text-white flex gap-1 rounded hover:bg-blue-700'>
-            <Plus />Add New Tasks
+    <div className='flex flex-col items-center justify-start w-full  p-2'>
+      <div className=' w-full h-full mt-4'>
+        <h1 className='sm:text-2xl text-lg font-bold text-center '>Task Table</h1>
+        <div className='flex items-center justify-start gap-5 sm:p-4   w-full'>
+          <Link href='/admin/dashboard/manage-tasks/add-task' className='sm:px-4 px-2 justify-center items-center py-1 sm:py-2 text-sm sm:text-lg bg-blue-600 text-white flex gap-1 rounded hover:bg-blue-700'>
+            <Plus />
+            Add Tasks
           </Link>
           <div className="flex w-[60%]  bg-gray-100">
             <input
@@ -145,12 +144,12 @@ function AdminDashboard() {
           ))}
         </TableBody>
       </Table>
-      <hr />
-      <div className='my-5 w-full h-full'>
-        <h1 className='text-2xl font-bold my-4'>Team  Table</h1>
-        <div className='flex items-center justify-start gap-5 p-4 my-5 w-full'>
-          <Link href='/admin/dashboard/manage-teams/add-team' className='px-4 py-2 bg-blue-600 text-white flex gap-1 rounded hover:bg-blue-700'>
-            <Plus /> Add New teams
+      <hr className='text-gray-500 h-1 w-full my-3' />
+      <div className=' w-full h-full mt-4'>
+        <h1 className='sm:text-2xl text-lg font-bold text-center'>Team  Table</h1>
+        <div className='flex items-center justify-start gap-5 p-4 m w-full'>
+          <Link href='/admin/dashboard/manage-teams/add-team' className='sm:px-4 sm:py-2 px-2 py-1 text-sm sm:text-lg justify-center items-center bg-blue-600 text-white flex gap-1 rounded hover:bg-blue-700'>
+            <Plus /> Add teams
           </Link>
           <div className="flex md:w-[60%] bg-gray-100">
             <input
@@ -172,7 +171,8 @@ function AdminDashboard() {
             <TableHead>Team Name</TableHead>
             <TableHead>Description</TableHead>
             <TableHead>Members</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
+            <TableHead >Edit</TableHead>
+            <TableHead >Delete</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -181,21 +181,24 @@ function AdminDashboard() {
               <TableCell>{team.teamName}</TableCell>
               <TableCell>{team.description}</TableCell>
               <TableCell>
-                {team.members?.map((user) => <TableCell>{user?.name}</TableCell>)}
+                {team.members?.map((user) => <span className='mx-2'>{user?.name}</span>)}
               </TableCell>
-              <TableCell className="text-right flex gap-2 justify-end">
-                <button
-                  onClick={() => handleTeamDelete(team?.slug, team?.teamName)}
-                  className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
-                >
-                  Delete
-                </button>
+              <TableCell className="">
                 <button
                   onClick={() => router.push(`/admin/dashboard/manage-teams/update/${team?.slug}`)}
                   className="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
                 >
                   Edit
                 </button>
+              </TableCell>  
+              <TableCell className="">
+                <button
+                  onClick={() => handleTeamDelete(team?.slug, team?.teamName)}
+                  className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+                >
+                  Delete
+                </button>
+
               </TableCell>
             </TableRow>
           ))}

@@ -35,11 +35,11 @@ function page() {
     const handleDelete = async (slug) => {
         if (!confirm("Delete Task")) return;
         try {
-            setLoading(true)
+            
             const deletetask = await axios.delete(`/api/get-tasks/${slug}`)
             if (deletetask.status == '200') {
                 createNotification(`The task ${task?.title} is Delete by ${user.name}`)
-                setLoading(false)
+               
                 router.push('/admin/dashboard/manage-tasks')
             }
         }
@@ -53,7 +53,9 @@ function page() {
     }
 
     useEffect(() => {
+        setLoading(true)
         fetchTask()
+         setLoading(false)  
     }, [])
     console.log(task)
 

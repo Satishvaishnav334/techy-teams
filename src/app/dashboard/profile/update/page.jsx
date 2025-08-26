@@ -44,7 +44,7 @@ function page() {
         <input
           type="text"
           className="border border-gray-600 text-xl rounded-2xl w-full p-2"
-          defaultValue={user?.email}
+          defaultValue ={user?.email}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />

@@ -8,7 +8,6 @@ import { DatePicker } from "@/components/ui/date-picker"
 import { toast } from 'sonner'
 import { useLoadingContext } from '@/components/context/LoadingContext'
 import { Button, Input, Textarea, Typography } from "@material-tailwind/react";
-
 function page() {
 
   const { users, refresh, } = useAdminContext()
@@ -20,6 +19,7 @@ function page() {
   const [priority, setPriority] = useState()
   const [assignedTo, setAssignedTo] = useState('')
   const [date, setDate] = useState()
+
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
@@ -34,7 +34,6 @@ function page() {
       formData.append('assignedTo', assignedTo);
       formData.append('dueDate', date ? date : "15 july 2026");
       console.log(date)
-
       const create = await axios.post('/api/get-tasks', formData)
       console.log(create)
       if (create.status == '200') {
@@ -58,16 +57,16 @@ function page() {
 
   return (
 
-    <div className="  flex flex-col items-center justify-center h-[90vh] text-black ">
+    <div className="  flex flex-col items-center justify-center sm:h-[90vh] text-black ">
       {/* <h1 className="text-3xl font-bold mb-6">Create Task </h1> */}
-      <form onSubmit={handleCreate} className=" m-2 bg-gray-100 rounded-xl shadow-md shadow-black/50 p-5 flex flex-col gap-3">
-        <h1 className=" text-center text-2xl !text-gray-900 font-bold " >
+      <form onSubmit={handleCreate} className=" m-2  rounded-xl shadow-md shadow-black/50 p-5 flex flex-col gap-3">
+        <h1 className=" text-center sm:text-2xl text-xl !text-gray-900 font-bold " >
           Create New Task
         </h1>
-        <Typography  variant="xl" className="mb-2 text-left font-medium !text-gray-900" >
+        <Typography variant="xl" className="mb-2 text-left font-medium !text-gray-900" >
           Task Title
         </Typography>
-        <Input type="text" required={true} className=" text-xl focus:border-t-gray-900 rounded-lg w-full p-2" placeholder="Enter Task Name or Title *" value={title}
+        <Input type="text" required={true} className="  focus:border-t-gray-900 rounded-lg w-full p-2" placeholder="Enter Task Name or Title *" value={title}
           onChange={(e) => setTitle(e.target.value)} color="gray" size="xl" name="task-title"
           containerProps={{
             className: "min-w-full",
@@ -77,8 +76,8 @@ function page() {
           }}
         />
         <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-600  w-full '>
-          <div className='w-full flex flex-col items-center justify-center'>
-            <Typography variant="xl" className="my-2 text-left font-medium !text-gray-900" >
+          <div className='w-full flex flex-col items-start sm:items-center sm:justify-center'>
+            <Typography variant="xl" className="sm:my-2 text-left font-medium !text-gray-900" >
               Task Due Date
             </Typography>
             <DatePicker
@@ -86,7 +85,7 @@ function page() {
               onDateChange={setDate}
             />
           </div>
-          <div className='w-full flex flex-col items-center justify-center'>
+          <div className='w-full flex flex-col items-start sm:items-center sm:justify-center'>
             <Typography variant="xl" className="my-2 text-left font-medium !text-gray-900" >
               Assign Task To
             </Typography>
@@ -105,7 +104,7 @@ function page() {
         <Typography variant="xl" className="my-2 text-left font-medium !text-gray-900" >
           Task Description
         </Typography>
-        <Textarea required={true} value={desc} rows={6} color="gray" placeholder="Enter Task Description *" name="message" className="focus:border-t-gray-900  text-xl rounded-lg w-full p-2"
+        <Textarea required={true} value={desc} rows={4} color="gray" placeholder="Enter Task Description *" name="message" className="focus:border-t-gray-900  text-xl rounded-lg w-full p-2"
           onChange={(e) => setDesc(e.target.value)}
           containerProps={{
             className: "!min-w-full",
@@ -115,8 +114,8 @@ function page() {
           }}
         />
 
-        <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-600  w-full '>
-          <div className='w-full flex flex-col items-center justify-center'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 justify-start text-gray-600  w-full '>
+          <div className='w-full flex flex-col items-start sm:items-center sm:justify-center'>
             <Typography variant="xl" className="my-2 text-left font-medium !text-gray-900" >
               Task Priority
             </Typography>
@@ -127,7 +126,7 @@ function page() {
               <option value="Low">Low </option>
             </select>
           </div>
-          <div className='w-full flex flex-col items-center justify-center'>
+          <div className='w-full flex flex-col items-start sm:items-center sm:justify-center'>
             <Typography variant="xl" className="my-2 text-left font-medium !text-gray-900" >
               Task Status
             </Typography>

@@ -27,7 +27,9 @@ function page() {
         }
     }
     useEffect(() => {
+        setLoading(true)
         fetchteam()
+        setLoading(false)
     }, [])
 
     const handleUpdate = async (e) => {

@@ -10,8 +10,8 @@ import { toast } from 'sonner';
 import { useLoadingContext } from '@/components/context/LoadingContext';
 
 export default function page() {
-  const {  teams, refresh,  } = useAdminContext()
-  const {user,setLoading,createNotification} = useLoadingContext()
+  const { teams, refresh, } = useAdminContext()
+  const { user, setLoading, createNotification } = useLoadingContext()
   const router = useRouter()
 
   const handleDelete = async (slug, teamName) => {
@@ -83,15 +83,14 @@ export default function page() {
                       )
                     }
                   </div>
-                    <div className='my-5'>
-                  <p className='text-center text-lg'>{team?.description}</p>
-                 
+                  <div className='my-5'>
+                    <p className='text-center text-lg'>{team?.description}</p>
+
+                  </div>
                 </div>
-                </div>
-              
+
                 <div className='md:flex flex-col justify-between w-full ' >
-                  <div
-                    className='flex justify-around gap-4 my-2 mx-5 '>
+                  {/* <div className='flex sm:flex-row flex-col justify-around gap-4 my-2 sm:mx-5 '>
                     <Link href={`/admin/dashboard/manage-teams/update/${team?.slug}`}
                       className='hover:bg-yellow-600 bg-yellow-500 text-white font-semibold flex gap-2 text-xl text-right px-3 py-2 rounded-lg'>
                       <Pencil />Edit
@@ -100,33 +99,44 @@ export default function page() {
                       className=' bg-red-500  hover:bg-red-600 text-white flex gap-2 font-semibold  text-xl text-right px-3 py-2 rounded-lg'>
                       <Trash /> Delete
                     </button>
-                  </div>
-                  <div
-                    className='flex justify-end mt-5'>
-                    <p className='bg-gray-300 min-w-[40%] font-semibold  text-sm text-right    py-1 px-2 rounded-br-xl rounded-tl-xl'>
-                      Created {formatDate(team?.createdAt)}
-                    </p>
+                  </div> */}
+                  {/* <div className='flex flex-col xl:flex-row justify-between  w-full'> */}
+                    <div className='flex justify-between gap-2 my-2 mx-3  '>
+                      <button onClick={(e) => handleDelete(team?.slug, team?.teamName)}
+                        className=' bg-red-500  hover:bg-red-600 text-white flex gap-2 font-semibold  text-xl text-right px-3 py-2 rounded-lg'>
+                        <Trash /> Delete
+                      </button>
+                      <Link href={`/admin/dashboard/manage-teams/update/${team?.slug}`}
+                        className='hover:bg-yellow-600 bg-yellow-500 text-white font-semibold flex gap-2 text-xl text-right px-3 py-2 rounded-lg'>
+                        <Pencil />Edit
+                      </Link> 
+                    </div>
+                    <div
+                      className='flex justify-end mt-5'>
+                      <p className='bg-gray-300 min-w-[40%] font-semibold  text-sm text-right    py-1 px-2 rounded-br-xl rounded-tl-xl'>
+                        Created {formatDate(team?.createdAt)}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            )
-            )
+                )
+                )
           }
-        </div>
+              </div>
       </div>
-    </div>
-  )
+      </div>
+      )
 }
 
-function formatDate(dateString) {
+      function formatDate(dateString) {
   const date = new Date(dateString);
-  return date.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    // hour: 'numeric',
-    // minute: '2-digit',
-    hour12: true
+      return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      // hour: 'numeric',
+      // minute: '2-digit',
+      hour12: true
   });
 }
 
