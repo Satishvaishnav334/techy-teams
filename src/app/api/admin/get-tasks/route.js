@@ -1,7 +1,7 @@
 import { NextResponse, NextRequest } from 'next/server';
-import Task from '../models/task.js';
-import connectToDatabase from '../lib/connect';
-import Member from '../models/users.js';
+import Task from '../../models/task.js';
+import connectToDatabase from '../../lib/connect';
+import Member from '../../models/users.js';
 export async function GET(req, res) {
     try {
         await connectToDatabase();

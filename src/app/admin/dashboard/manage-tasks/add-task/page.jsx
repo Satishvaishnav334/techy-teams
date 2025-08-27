@@ -34,7 +34,7 @@ function page() {
       formData.append('assignedTo', assignedTo);
       formData.append('dueDate', date ? date : "15 july 2026");
       console.log(date)
-      const create = await axios.post('/api/get-tasks', formData)
+      const create = await axios.post('/api/admin/get-tasks', formData)
       console.log(create)
       if (create.status == '200') {
         createNotification(` New task ${title} Create by ${user.name}`)

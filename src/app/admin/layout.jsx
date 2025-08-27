@@ -7,7 +7,8 @@ import { cn } from "@/lib/utils";
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar";
 import { useLoadingContext } from "@/components/context/LoadingContext";
 import Loader from '@/components/ui/pulsating-loader'
-import { useRouter } from "next/navigation";
+import { useRouter, redirect } from "next/navigation";
+
 export default function RootLayout({ children }) {
     const router = useRouter()
     const links = [
@@ -50,29 +51,12 @@ export default function RootLayout({ children }) {
         },
 
     ];
-    const { setLoading, loading, user } = useLoadingContext();
+    const { setLoading, loading } = useLoadingContext();
     const [open, setOpen] = useState(false)
-    const checkSession = () => {
-        const token = getCookie('token');
-        if (!token) {
-            router.push('/login');
-        }
-    };
-    useEffect(() => {
-        const isAdmin = user?.role === "admin"
-
-        const checkIsAdmin = () => {
-            if (!isAdmin) {
-                router.push('/dashboard');
-            }
-            checkSession();
-        };
-
-        checkIsAdmin()
 
 
+  
 
-    }, []);
     return (
         <AdminDataProvider>
             <div

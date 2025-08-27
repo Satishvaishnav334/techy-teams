@@ -19,7 +19,7 @@ function page() {
       formData.append('email', email ? email : user?.email);
       formData.append('oldPassword', oldpassword);
       formData.append('password', password );
-      const res = await axios.put(`/api/get-users/${user.name}`, formData)
+      const res = await axios.put(`/api/get-user/${user.name}`, formData)
       console.log(res)
       toast.success(res.data.message)
       router.push('/dashboard/profile')

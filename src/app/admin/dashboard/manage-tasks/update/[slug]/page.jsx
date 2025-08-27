@@ -26,7 +26,7 @@ function page() {
     useEffect(() => {
         const fetchTask = async () => {
             try {
-                const task = await axios.get(`/api/get-tasks/${slug}`)
+                const task = await axios.get(`/api/admin/get-tasks/${slug}`)
                 setTask(task.data)
                 setAssignedTo(task.data.assignedTo)
             }
@@ -56,7 +56,7 @@ function page() {
             formData.append('assignedTo', assignedTo?._id ? assignedTo?._id : task?.assignedTo?._id);
             formData.append('dueDate', date ? date : task?.dueDate);
 
-            const update = await axios.put(`/api/get-tasks/${slug}`, formData)
+            const update = await axios.put(`/api/admin/get-tasks/${slug}`, formData)
             if (update.status == '200') {
                 createNotification(`The task ${newtitle ? newtitle : task?.title} is Updated by ${user.name}`)
                 refresh()

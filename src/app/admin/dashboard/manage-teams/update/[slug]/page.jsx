@@ -20,7 +20,7 @@ function page() {
     const router = useRouter()
     async function fetchteam() {
         try {
-            const team = await axios.get(`/api/get-teams/${slug}`)
+            const team = await axios.get(`/api/admin/get-teams/${slug}`)
             setTeam(team?.data)
             setMembers(team?.data?.members)
         }
@@ -45,7 +45,7 @@ function page() {
             formData.append('slug', newslug ? newslug : slug);
             formData.append('level', level ? level : team?.level);
             formData.append('members', members ? members : team?.members);
-            const res = await axios.put(`/api/get-teams/${slug}`, formData)
+            const res = await axios.put(`/api/admin/get-teams/${slug}`, formData)
             if (res.status == '200') {
                 createNotification(`The Team ${newteamName ? newteamName : team?.teamName} is Upadted by ${user?.name}`)
                 router.push('/admin/dashboard/manage-teams')

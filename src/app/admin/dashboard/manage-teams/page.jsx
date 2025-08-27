@@ -17,7 +17,7 @@ export default function page() {
   const handleDelete = async (slug, teamName) => {
     try {
       setLoading(true)
-      const res = await axios.delete(`/api/get-teams/${slug}`)
+      const res = await axios.delete(`/api/admin/get-teams/${slug}`)
       if (res.status == '200') {
         createNotification(`The Team ${teamName} is Deleted by ${user?.name}`)
         router.push('/admin/dashboard/manage-teams')

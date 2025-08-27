@@ -30,7 +30,7 @@ function page() {
       formData.append('description', desc)
       formData.append('members', addmemebers)
 
-      const create = await axios.post('/api/get-teams', formData)
+      const create = await axios.post('/api/admin/get-teams', formData)
       if (create.status == '200') {
         createNotification(`New Team ${teamName}  Created by ${user?.name}`)
         router.push('/admin/dashboard/manage-teams')

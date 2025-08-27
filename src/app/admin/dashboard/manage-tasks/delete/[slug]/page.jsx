@@ -20,7 +20,7 @@ function page() {
     async function fetchTask() {
         try {
             setLoading(true)
-            const task = await axios.get(`/api/get-tasks/${slug}`)
+            const task = await axios.get(`/api/admin/get-tasks/${slug}`)
             if (task.status == '200') {
                 setLoading(false)
             }
@@ -36,7 +36,7 @@ function page() {
         if (!confirm("Delete Task")) return;
         try {
             
-            const deletetask = await axios.delete(`/api/get-tasks/${slug}`)
+            const deletetask = await axios.delete(`/api/admin/get-tasks/${slug}`)
             if (deletetask.status == '200') {
                 createNotification(`The task ${task?.title} is Delete by ${user.name}`)
                

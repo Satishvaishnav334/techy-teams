@@ -7,6 +7,7 @@ import brecrypt from "bcrypt";
 import connectToDatabase from "../../lib/connect.js";
 export async function POST(request) {
   try {
+    connectToDatabase();
     const data = await request.formData();
     const email = data.get("email");
     const password = data.get("password");
@@ -14,8 +15,10 @@ export async function POST(request) {
     if (!user) {
       return NextResponse.json({ error: "Invalid email  " }, { status: 401 });
     }
+    console.log(user)
     const isPasswordValid = await brecrypt.compare(password, user.password);
     console.log(isPasswordValid)
+    
    
     if (!isPasswordValid) { return NextResponse.json({ error: "Invalid  password" }, { status: 401 }); }
     const tokenuser =  { username: user.name, email: user.email ,role: user.role}

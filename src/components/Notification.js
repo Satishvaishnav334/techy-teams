@@ -16,7 +16,7 @@ export default function Home() {
   //     socket = io('http://localhost:3000'); // Connect to your custom server
   //   }
   //   const data = async () => {
-  //     await axios.get('/api/get-tasks')
+  //     await axios.get('/api/admin/get-tasks')
   //   }
   //   data()
   //   // Listen for 'chat message' events

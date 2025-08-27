@@ -1,8 +1,8 @@
 'use server'
 import { NextResponse } from 'next/server';
-import connectToDatabase from '../../lib/connect.js';
-import Member from '../../models/users.js';
-import taskModel from '../../models/task.js';
+import connectToDatabase from '../../../lib/connect.js';
+import Member from '../../../models/users.js';
+import taskModel from '../../../models/task.js';
 
 export async function GET(req, { params }) {
     try {

@@ -33,7 +33,7 @@ export default function Page() {
       const formData = new FormData()
       formData.append('taskId', taskId)
       formData.append('newStatus', newStatus)
-      const res = await axios.put(`/api/get-tasks/update-status/`, formData);
+      const res = await axios.put(`/api/admin/get-tasks/update-status/`, formData);
       if (res.status == '200') {
         createNotification(`Updated Status of ${task?.title} to ${newStatus} by ${user?.name}`)
 

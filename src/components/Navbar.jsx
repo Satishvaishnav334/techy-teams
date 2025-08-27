@@ -4,7 +4,7 @@ import { DropdownMenu } from "@/components/ui/dropdown-menu"
 import { UserPen, House, User, LogOut, AlignRight, BellRing, X } from "lucide-react"
 import { useEffect, useState } from "react";
 import { deleteCookie, getCookie } from 'cookies-next'
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useLoadingContext } from './context/LoadingContext';
 import { toast } from 'sonner';
@@ -38,10 +38,11 @@ function Navbar() {
   const Logout = async () => {
     const token = getCookie('token')
     if (token) {
-      setIsLogin(false)
+      
       deleteCookie('token');
-      router.push('/login') 
       toast.info("Logout Succesfully", { closeButton: true })
+      setIsLogin(false)
+      redirect('/login') 
     }
     else{ 
       router.push('/login') 
