@@ -8,6 +8,7 @@ import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar";
 import { useLoadingContext } from "@/components/context/LoadingContext";
 import Loader from '@/components/ui/pulsating-loader'
 import { useRouter, redirect } from "next/navigation";
+import Navbar from "@/components/Navbar";
 
 export default function RootLayout({ children }) {
     const router = useRouter()
@@ -51,17 +52,19 @@ export default function RootLayout({ children }) {
         },
 
     ];
-    const { setLoading, loading,user } = useLoadingContext();
+    const { setLoading, loading } = useLoadingContext();
     const [open, setOpen] = useState(false)
 
 
     useEffect(() => {
+
+        setLoading(false)
         const checkSession = () => {
             const token = getCookie('token');
             if (!token) {
-                router.push('/login');  
+                router.push('/admin-login');
             }
-        };
+        }
         checkSession()
         setInterval(checkSession, 3000)
 
@@ -69,6 +72,7 @@ export default function RootLayout({ children }) {
 
     return (
         <AdminDataProvider>
+            <Navbar isAdmin={true} />
             <div
                 className={cn(
                     "rounded-md flex flex-col md:flex-row bg-white w-full flex-1  mx-auto border border-neutral-200 dark:border-neutral-700 overflow-hidden",

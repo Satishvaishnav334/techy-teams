@@ -33,9 +33,9 @@ export default function RootLayout({ children }) {
       <body  className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <main>
           <LoadingProvider>
-            <Navbar />
+            {/* <Navbar /> */}
             {children}
-            < Footer />
+            {/* < Footer /> */}
           </LoadingProvider>
         </main>
         <Toaster position="top-right" richColors></Toaster>

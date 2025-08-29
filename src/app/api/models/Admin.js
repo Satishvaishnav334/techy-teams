@@ -1,16 +1,16 @@
 import mongoose, { Schema } from "mongoose";
 
-const UserSchema = new mongoose.Schema(
+const AdminSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, unique: true, trim: true },
     email: { type: String, required: true, unique: true, trim: true },
     password: { type: String, required: true, trim: true },
-    tasks: [{ type: Schema.Types.ObjectId, ref: 'Task' }],
-    team: [{ type: Schema.Types.ObjectId, ref: 'Team' }],
+    role: { type: String, required: true, enum: ["admin", "user"], default: "user" },
+
   },
   { timestamps: true }
-); 
+);
 
-const userModel = mongoose.models?.Member || mongoose.model('Member', UserSchema)
+const AdminModel = mongoose.models?.Admin || mongoose.model('Admin', AdminSchema)
 
-export default userModel;
+export default AdminModel;

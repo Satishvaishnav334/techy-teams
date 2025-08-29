@@ -8,16 +8,10 @@ import { redirect, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useLoadingContext } from './context/LoadingContext';
 import { toast } from 'sonner';
-function Navbar() {
+function Navbar({ isAdmin }) {
   const router = useRouter();
-  const { user, createNotification, setIsLogin, isLogin,isAdmin,setIsAdmin } = useLoadingContext()
+  const { user, setIsLogin, isLogin } = useLoadingContext()
   const [isOpen, setIsOpen] = useState(false);
-  const Userlinks = [
-    { label: 'Tasks', href: '/dashboard/tasks' },
-    { label: 'Teams', href: '/dashboard/teams' },
-    { label: 'Contact', href: '/contact' },
-    { label: 'Pricing', href: '/pricing' },
-  ]
   const Adminlinks = [
     {
       label: "Admin Dashboard",
@@ -56,20 +50,17 @@ function Navbar() {
   }, [])
 
   const Logout = async () => {
-    const token = getCookie('token')
-    if (token) {
-
-      deleteCookie('token');
-      toast.info("Logout Succesfully", { closeButton: true })
-      setIsLogin(false)
-      setIsAdmin(false)
-      redirect('/login')
-
-    }
-    else {
-      router.push('/login')
-      setIsLogin(false)
-    }
+    // const token = getCookie('token')
+    // if (token) {
+    //   deleteCookie('token');
+    //   toast.info("Logout Succesfully", { closeButton: true })
+    //   setIsLogin(false)
+    //   router.push('/login')
+    // }
+    // else {
+    //   router.push('/login')
+    //   setIsLogin(false)
+    // }
 
   }
 
@@ -83,20 +74,29 @@ function Navbar() {
             </Link>
           </div>
 
-          <div className=' hidden md:flex justify-end  items-center w-[55%] lg:w-[56%]   font-semibold lg:text-lg text-sm gap-10'>
+          {!isAdmin && (
+            <div className=' hidden md:flex justify-end  items-center w-[55%] lg:w-[56%]   font-semibold lg:text-lg text-sm gap-10'>
+              {isLogin && (
+                <div className='flex gap-10'>
+                  <Link href='/admin/dashboard' className='hover:text-[#111111d1]   font-semibold transition-colors duration-300'>
+                    Team
+                  </Link>
+                  <Link href='/admin/dashboard' className='hover:text-[#111111d1]   font-semibold transition-colors duration-300'>
+                    Task
+                  </Link>
+                </div>
+              )}
+              <div className='flex gap-10'>
+                <Link href='/admin/dashboard' className='hover:text-[#111111d1]   font-semibold transition-colors duration-300'>
+                  Contact
+                </Link>
+                <Link href='/admin/dashboard' className='hover:text-[#111111d1]   font-semibold transition-colors duration-300'>
+                  Pricing
+                </Link>
+              </div>
+            </div>
+          )}
 
-            {isAdmin && (
-              <Link href='/admin/dashboard' className='hover:text-[#111111d1]   font-semibold transition-colors duration-300'>
-                Admin Panel
-              </Link>
-            )}
-
-            {Userlinks.map((item, index) => (
-              <Link key={index} href={item.href} className='hover:text-[#111111d1] transition-colors duration-300'>
-                {item.label}
-              </Link>
-            ))}
-          </div>
 
           <div className='hidden md:flex  justify-end items-center w-[15%] gap-2'>
             {/* <div className='mx-5'>

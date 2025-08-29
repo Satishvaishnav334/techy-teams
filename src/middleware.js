@@ -8,7 +8,7 @@ export async function middleware(request) {
  
   const user = token && await decrypt(token);
   const isAdmin = user?.role === 'admin';
-  // console.log(user, "user", isAdmin)
+  console.log(user, "user", isAdmin)
 
   if (pathname.startsWith('/api/auth')) {
     return NextResponse.next();

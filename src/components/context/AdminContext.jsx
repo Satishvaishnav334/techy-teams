@@ -14,10 +14,11 @@ const AdminContext = createContext();
 export const AdminDataProvider = ({ children }) => {
     const router = useRouter()
     const [users, setUsers] = useState([])
-    const [user, setUser] = useState()
+    const [admin, setAdmin] = useState()
     const [tasks, setTasks] = useState([])
     const [teams, setTeams] = useState([])
     const { setLoading } = useLoadingContext()
+    const [isAdmin, setIsAdmin] = useState(admin?.role == "admin" ? true : false)
 
     const fetchContaxtData = async () => {
         try {
@@ -26,21 +27,17 @@ export const AdminDataProvider = ({ children }) => {
             const token = getCookie('token')
             const user = await decrypt(token);
             const name = user?.username
-            const res2 = await axios.get(`/api/get-user/${name}`);
-            setUser(res2.data)
-            if (res2.status == 200) {
-                const isAdmin = res2.data.role === "admin"
-                if (!isAdmin) {
-                    // console.log(isAdmin) 
-                    router.push('/dashboard');
-                }
-                const res = await axios.get(`/api/admin/get-users`);
-                setUsers(res.data)
-                const res3 = await axios.get('/api/admin/get-teams');
-                setTeams(res3.data)
-                const res4 = await axios.get('/api/admin/get-tasks');
-                setTasks(res4.data)
-            }
+            const res2 = await axios.get(`/api/admin/get-admin/${name}`);
+            setAdmin(res2.data)
+            setIsAdmin(res2.data.role == "admin" ? true : false)
+            console.log(res2)
+            const res = await axios.get(`/api/admin/get-users`);
+            setUsers(res.data)
+            const res3 = await axios.get('/api/admin/get-teams');
+            setTeams(res3.data)
+            const res4 = await axios.get('/api/admin/get-tasks');
+            setTasks(res4.data)
+
 
         } catch (err) {
             console.error('❌ Failed to fetch categories:', err);
@@ -52,11 +49,23 @@ export const AdminDataProvider = ({ children }) => {
     };
 
     useEffect(() => {
+
+        setLoading(false)
+        const checkSession = () => {
+            const token = getCookie('token');
+            if (!token) {
+                router.push('/admin-login');
+            }
+            
+        }
+        checkSession()
+        setInterval(checkSession, 3000)
+
         fetchContaxtData();
     }, []);
 
     return (
-        <AdminContext.Provider value={{ users, refresh: fetchContaxtData, teams, tasks }}>
+        <AdminContext.Provider value={{ users, refresh: fetchContaxtData, teams, tasks, admin, isAdmin }}>
             {children}
         </AdminContext.Provider>
     );

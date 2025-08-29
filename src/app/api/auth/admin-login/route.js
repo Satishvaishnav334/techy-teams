@@ -1,7 +1,6 @@
-import userModel from "../../models/users.js";
+import adminModel from "../../models/Admin.js";
 import { NextResponse } from "next/server";
 import { cookies } from 'next/headers';
-import { setCookie } from "cookies-next";
 import { encrypt } from "@/lib/auth.js";
 import brecrypt from "bcrypt";
 import connectToDatabase from "../../lib/connect.js";
@@ -11,17 +10,17 @@ export async function POST(request) {
     const data = await request.formData();
     const email = data.get("email");
     const password = data.get("password");
-    const user = await userModel.findOne({ $or: [{ email: email }, { name: email }] });
+    const user = await adminModel.findOne({ $or: [{ email: email }, { name: email }] });
     if (!user) {
       return NextResponse.json({ error: "Invalid email  " }, { status: 401 });
     }
-    // console.log(user)
+    console.log(user)
     const isPasswordValid = await brecrypt.compare(password, user.password);
-    // console.log(isPasswordValid) //check password correct or not
+    console.log(isPasswordValid) //check password correct or not
     
    
     if (!isPasswordValid) { return NextResponse.json({ error: "Invalid  password" }, { status: 401 }); }
-    const tokenuser =  { username: user.name, email: user.email }
+    const tokenuser =  { username: user.name, email: user.email ,role: user.role}
     const token = await encrypt(tokenuser)
    
     const cookiesStore = await cookies();

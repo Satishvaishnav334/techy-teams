@@ -17,38 +17,38 @@ import {
 } from "@/components/ui/table";
 import Link from 'next/link';
 import { Plus } from 'lucide-react';
-import { getCookie } from 'cookies-next/client';
+import { deleteCookie, getCookie } from 'cookies-next/client';
 
 function AdminDashboard() {
-  const { tasks, teams, users, refresh } = useAdminContext();
-  const { user, createNotification, setLoading } = useLoadingContext()
+  const { tasks, teams, users, refresh, admin, isAdmin } = useAdminContext();
+  const { createNotification, setLoading } = useLoadingContext()
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
   const [searchTeam, setSearchTeam] = useState('');
-  
 
-    const filteredtasks = useMemo(() => {
 
-      return tasks?.filter((p) =>
-        p?.title?.toLowerCase().includes(searchTerm.toLowerCase())
+
+  const filteredtasks = useMemo(() => {
+
+    return tasks?.filter((p) =>
+      p?.title?.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  }, [tasks, searchTerm]);
+
+  const filteredteams = useMemo(() => {
+    return teams
+      ?.filter((p) =>
+        p?.teamName?.toLowerCase().includes(searchTeam.toLowerCase())
       )
-    }, [tasks, searchTerm]);
-
-    const filteredteams = useMemo(() => {
-      return teams
-        ?.filter((p) =>
-          p?.teamName?.toLowerCase().includes(searchTeam.toLowerCase())
-        )
   }, [teams, searchTeam]);
 
-  // Delete task
   const handleDelete = async (slug, title) => {
     if (!confirm("Are you sure you want to delete this task?")) return;
     try {
       setLoading(true)
       const res = await axios.delete(`/api/admin/get-tasks/${slug}`);
       if (res.status == '200') {
-        createNotification(`The Task ${title} is Deleted by ${user?.name}`)
+        createNotification(`The Task ${title} is Deleted by ${admin?.name}`)
         refresh();
       }
       else {
@@ -67,7 +67,7 @@ function AdminDashboard() {
       setLoading(true)
       const res = await axios.delete(`/api/admin/get-teams/${slug}`);
       if (res.status == '200') {
-        createNotification(`The Team ${teamName} is Deleted by ${user?.name}`)
+        createNotification(`The Team ${teamName} is Deleted by ${admin?.name}`)
 
         refresh();
       } else {
@@ -91,7 +91,7 @@ function AdminDashboard() {
           </Link>
           <div className="flex w-[60%]  bg-gray-100">
             <input
-              
+
               type="text"
               placeholder="Search tasks..."
               className="border p-2 rounded w-full"
@@ -154,7 +154,7 @@ function AdminDashboard() {
           </Link>
           <div className="flex md:w-[60%] bg-gray-100">
             <input
-              
+
               type="text"
               placeholder="Search Teams..."
               className="border p-2 rounded w-full"

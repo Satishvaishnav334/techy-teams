@@ -53,14 +53,16 @@ export default function RootLayout({ children }) {
     }, []);
     return (
         <>
+            <Navbar />
             {
                 loading ?
                     <div className='h-[90vh] w-full flex  justify-center items-center'>
                         <Loader />
                     </div>
                     :
-                    children
+                        children
             }
+            < Footer />
         </>
     );
 }
