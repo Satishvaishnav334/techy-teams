@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect, createContext } from "react";
 import { getCookie } from "cookies-next/client";
-import { AdminDataProvider} from "@/components/context/AdminContext";
+import { AdminDataProvider } from "@/components/context/AdminContext";
 import { LayoutDashboard, Users, ListTodo } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -47,11 +47,12 @@ export default function RootLayout({ children }) {
                 router.push('/login');
             }
         };
-        checkSession();
+        checkSession()
+        setInterval(checkSession, 3000)
 
     }, []);
     return (
-        <>     
+        <>
             {
                 loading ?
                     <div className='h-[90vh] w-full flex  justify-center items-center'>

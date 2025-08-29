@@ -15,6 +15,7 @@ export const LoadingProvider = ({ children }) => {
     const [user, setUser] = useState({})
     const [loading, setLoading] = useState(false)
     const [isLogin, setIsLogin] = useState(user ? true : false)
+    const [isAdmin, setIsAdmin] = useState(user?.role == "admin" ? true : false)
     const [notifications, setNotifications] = useState([]);
 
     const createNotification = (notification) => {
@@ -36,6 +37,7 @@ export const LoadingProvider = ({ children }) => {
             setLoading(true)
             const res2 = await axios.get(`/api/get-user/${name}`);
             setUser(res2.data)
+            setIsAdmin(res2.data.role=="admin" ? true : false)
         }
         catch (error) {
             console.log(error)
@@ -61,14 +63,9 @@ export const LoadingProvider = ({ children }) => {
             socket.off('notification');
         };
     }, []);
-    // const token = getCookie('token')
-    // setTimeout(() => {
-    //     if (!token) {
-    //         router.push('/login')
-    //     }
-    // }, 5000)
+
     return (
-        <LoadingContext.Provider value={{ loading, setLoading, isLogin, setIsLogin, notifications, refresh: fetchContaxtData, setNotifications, user, setUser, createNotification }}>
+        <LoadingContext.Provider value={{ loading, setLoading,setIsAdmin,isAdmin, isLogin, setIsLogin, notifications, refresh: fetchContaxtData, setNotifications, user, setUser, createNotification }}>
             {children}
         </LoadingContext.Provider>
     );

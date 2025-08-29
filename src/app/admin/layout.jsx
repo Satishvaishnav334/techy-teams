@@ -51,16 +51,21 @@ export default function RootLayout({ children }) {
         },
 
     ];
-    const { setLoading, loading } = useLoadingContext();
+    const { setLoading, loading,user } = useLoadingContext();
     const [open, setOpen] = useState(false)
 
 
-    useEffect(()=>{
-      const token = getCookie('token')
-      if(!token){
-        router.push('/login')
-      }
-    },[])
+    useEffect(() => {
+        const checkSession = () => {
+            const token = getCookie('token');
+            if (!token) {
+                router.push('/login');  
+            }
+        };
+        checkSession()
+        setInterval(checkSession, 3000)
+
+    }, []);
 
     return (
         <AdminDataProvider>

@@ -10,8 +10,7 @@ import { useLoadingContext } from './context/LoadingContext';
 import { toast } from 'sonner';
 function Navbar() {
   const router = useRouter();
-  const { user, createNotification, setIsLogin, isLogin } = useLoadingContext()
-  const [name, setName] = useState(false)
+  const { user, createNotification, setIsLogin, isLogin,isAdmin,setIsAdmin } = useLoadingContext()
   const [isOpen, setIsOpen] = useState(false);
   const Userlinks = [
     { label: 'Tasks', href: '/dashboard/tasks' },
@@ -63,6 +62,7 @@ function Navbar() {
       deleteCookie('token');
       toast.info("Logout Succesfully", { closeButton: true })
       setIsLogin(false)
+      setIsAdmin(false)
       redirect('/login')
 
     }
@@ -85,7 +85,7 @@ function Navbar() {
 
           <div className=' hidden md:flex justify-end  items-center w-[55%] lg:w-[56%]   font-semibold lg:text-lg text-sm gap-10'>
 
-            {user?.role == 'admin' && (
+            {isAdmin && (
               <Link href='/admin/dashboard' className='hover:text-[#111111d1]   font-semibold transition-colors duration-300'>
                 Admin Panel
               </Link>
@@ -146,7 +146,7 @@ function Navbar() {
               </DropdownMenu>
 
               <div className=' flex  flex-col justify-between items-start my-5   font-semibold text-lg gap-4'>
-                {user?.role == 'admin' && (
+                {isAdmin && (
                   Adminlinks.map((item, index) => (
                     <Link key={index} href={item.href} onClick={() => setIsOpen(false)} className='hover:text-[#111111d1] transition-colors duration-300'>
                       {item.label}

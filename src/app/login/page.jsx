@@ -58,7 +58,7 @@ export default function Page() {
             Username Or Email
           </Typography>
           <Input type="text" className=" focus:border-t-gray-900  border-gray-500 rounded-lg w-full p-2"
-            placeholder="Enter Your Email Address OR Username"
+            placeholder="Enter Your Email Address OR Username *"
             required={true}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -73,9 +73,9 @@ export default function Page() {
           <Typography variant="xl" className=" text-left font-medium !text-gray-900" >
             Password
           </Typography>
-          <Input type="text" className=" focus:border-t-gray-900 border-gray-500 rounded-lg w-full p-2"
-            placeholder="Enter Your Password"
-            // required={true}
+          <Input type="password" className=" focus:border-t-gray-900 border-gray-500 rounded-lg w-full p-2"
+            placeholder="Enter Your Password *"
+            required={true}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             containerProps={{

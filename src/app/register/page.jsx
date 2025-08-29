@@ -77,7 +77,7 @@ export default function Home() {
           </Typography>
           <Input type="text" className=" focus:border-t-gray-900  border-gray-500 rounded-lg w-full p-2"
             required={true}
-            placeholder="Enter Email Address "
+            placeholder="Enter Email Address *"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             containerProps={{
@@ -90,9 +90,9 @@ export default function Home() {
           <Typography variant="xl" className=" text-left font-medium !text-gray-900" >
             Password
           </Typography>
-          <Input type="text" className=" focus:border-t-gray-900 border-gray-500 rounded-lg w-full p-2"
+          <Input type="password" className=" focus:border-t-gray-900 border-gray-500 rounded-lg w-full p-2"
             required={true}
-            placeholder="Enter Your Password"
+            placeholder="Enter Your Password *"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             containerProps={{
