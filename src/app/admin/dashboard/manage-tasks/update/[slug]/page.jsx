@@ -40,14 +40,14 @@ function page() {
 
     }, [])
 
-    console.log(task)
+    // console.log(task)
 
     const handleUpdate = async (e) => {
         e.preventDefault();
         try {
             setLoading(true)
-            console.log(assignedTo)
-            console.log(task?.assignedTo?._id)
+            // console.log(assignedTo)
+            // console.log(task?.assignedTo?._id)
             const newslug = newtitle?.split(' ').join('-').toLowerCase();
             const formData = new FormData();
             formData.append('title', newtitle ? newtitle : task?.title);

@@ -15,9 +15,9 @@ export async function POST(request) {
     if (!user) {
       return NextResponse.json({ error: "Invalid email  " }, { status: 401 });
     }
-    console.log(user)
+    // console.log(user)
     const isPasswordValid = await brecrypt.compare(password, user.password);
-    console.log(isPasswordValid)
+    // console.log(isPasswordValid) //check password correct or not
     
    
     if (!isPasswordValid) { return NextResponse.json({ error: "Invalid  password" }, { status: 401 }); }

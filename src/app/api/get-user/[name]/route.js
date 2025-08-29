@@ -38,7 +38,7 @@ export async function PUT(req, { params }) {
         // const oldPassword = data.get("oldPassword");
         // const password = await hashPassword(rowpassword);
         const user = await Member.findOne({ name });
-        console.log(user);
+        // console.log(user);
 
         if (!user) {
             return NextResponse.json({ message: "Invalid User" }, { status: 403 });

@@ -31,11 +31,11 @@ export async function POST(request) {
         const createdBy = data.get("createdBy");
         const assignedTo = data.get("assignedTo");
 
-        console.log(assignedTo)
+        // console.log(assignedTo)
         const task = await Task.create({
             title, slug, description, createdBy, assignedTo, dueDate, status, priority
         })
-        console.log(task)
+        // console.log(task)
         const user = await Member.updateOne(
             {
                 _id: assignedTo

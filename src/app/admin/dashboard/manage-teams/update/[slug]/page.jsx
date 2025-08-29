@@ -38,7 +38,6 @@ function page() {
         e.preventDefault();
         try {
             setLoading(true)
-            console.log("object")
             const newslug = newteamName?.split(' ').join('-').toLowerCase();
             const formData = new FormData();
             formData.append('teamName', newteamName ? newteamName : team?.teamName);

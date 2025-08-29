@@ -57,7 +57,7 @@ function page() {
         fetchTask()
          setLoading(false)  
     }, [])
-    console.log(task)
+    // console.log(task)
 
 
 

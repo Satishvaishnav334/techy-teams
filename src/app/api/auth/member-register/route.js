@@ -14,7 +14,7 @@ export async function POST(request) {
     const email = data.get("email");
     const password = data.get("password");
     const hashedPassword = await hashPassword(password);
-    console.log(name, email, hashedPassword);
+    // console.log(name, email, hashedPassword);
     const user = await Members.create({ name, email, password: hashedPassword });
     // console.log(user);
     if (user) {

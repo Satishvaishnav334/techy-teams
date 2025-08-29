@@ -31,7 +31,7 @@ export const AdminDataProvider = ({ children }) => {
             if (res2.status == 200) {
                 const isAdmin = res2.data.role === "admin"
                 if (!isAdmin) {
-                    console.log(isAdmin)
+                    // console.log(isAdmin) 
                     router.push('/dashboard');
                 }
                 const res = await axios.get(`/api/admin/get-users`);

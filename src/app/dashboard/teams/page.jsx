@@ -83,27 +83,3 @@ function formatDate(dateString) {
 }
 
 
-// function Card({ members }) {
-//   // const [totalMembers, setTotalMembers] = useState(false)
-
-//   // useEffect(() => {
-//   //   if (members?.length < 4) {
-//   //     setTotalMembers(true)
-//   //     console.log(totalMembers, "hi")
-//   //   }
-//   // }, [])
-//   // console.log(members?.length < 4) 
-//   return (
-//     <div>
-//       {!members?.length < 4 ? 
-       
-//           <div className='bg-white  font-bold  text-sm md:text-lg  py-2 px-4 rounded-lg flex justify-center items-center ' >
-//           name
-//           </div>
-//        : <></>
-//       }
-//     </div >
-//   )
-// }
-
-// export { Card }

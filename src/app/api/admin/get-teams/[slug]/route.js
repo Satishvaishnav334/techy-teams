@@ -20,7 +20,7 @@ export async function DELETE(req, { params }) {
         await connectToDatabase();
         const { slug } = await params;
         const team = await teamModel.findOne({ slug })
-        console.log(team._id)
+        // console.log(team._id)
         const olduser = await Member.updateMany({
             _id: team.members
         },
@@ -29,7 +29,7 @@ export async function DELETE(req, { params }) {
         )
         
         const data = await teamModel.deleteOne({slug});
-        console.log(data)
+        // console.log(data)
         return NextResponse.json({ message: "Team Deleted Successfully" }, { status: 200 });
     }
     catch (error) {
@@ -55,7 +55,7 @@ export async function PUT(req, { params }) {
             .filter(Boolean);
 
         const team = await teamModel.findOne({ slug })
-        console.log(team._id, "team Id")
+        // console.log(team._id, "team Id")
 
         const olduser = await Member.updateMany({
             _id: team.members
@@ -84,7 +84,7 @@ export async function PUT(req, { params }) {
                 }
             }
         )
-        console.log(user)
+        // console.log(user)
 
         return NextResponse.json(team, { status: 200 });
     }

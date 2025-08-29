@@ -27,7 +27,7 @@ export default function Page() {
     setTrigger((prev) => !prev);
 
     try {
-      console.log(taskId, newStatus)
+      // console.log(taskId, newStatus)
       const formData = new FormData()
       formData.append('taskId', taskId)
       formData.append('newStatus', newStatus)

@@ -19,7 +19,7 @@ export async function middleware(request) {
   }
   if (pathname.startsWith('/api/admin/')) {
     if (!isAdmin) {
-      console.log(isAdmin)
+      // console.log(isAdmin)
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
     return NextResponse.next();

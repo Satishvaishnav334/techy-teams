@@ -22,7 +22,7 @@ function page() {
       formData.append('oldPassword', oldpassword);
       formData.append('password', password);
       const res = await axios.put(`/api/get-user/${user.name}`, formData)
-      console.log(res)
+      // console.log(res)
       toast.success(res.data.message)
       refresh()
       router.push('/dashboard/profile')

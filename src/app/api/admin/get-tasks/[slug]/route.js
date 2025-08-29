@@ -29,7 +29,7 @@ export async function DELETE(req, { params }) {
             $pull: { tasks: task._id }
         })
         const data = await taskModel.deleteOne({ slug });
-        console.log(data)
+        // console.log(data)
         return NextResponse.json(data, { status: 200 });
     }
     catch (error) {
@@ -50,8 +50,8 @@ export async function PUT(req, { params }) {
         const dueDate = data.get("dueDate");
         const assignedTo = data.get("assignedTo");
         const task = await taskModel.findOne({ slug })
-        console.log(task)
-        console.log(assignedTo,"assign to")
+        // console.log(task)
+        // console.log(assignedTo,"assign to")
         const taskremove = await Member.updateMany({
             _id: task.members
         }, {

@@ -16,7 +16,7 @@ import { useLoadingContext } from '@/components/context/LoadingContext';
 export default function Page() {
   const { tasks } = useAdminContext();
   const { createNotification, user } = useLoadingContext()
-  console.log(tasks)
+  // console.log(tasks)
   const [trigger, setTrigger] = useState(false); // trigger re-render
   // const [searchItem, setSearchItem] = useState('')
 
@@ -34,7 +34,7 @@ export default function Page() {
     setTrigger((prev) => !prev);
 
     try {
-      console.log(taskId, newStatus)
+      // console.log(taskId, newStatus)
       const formData = new FormData()
       formData.append('taskId', taskId)
       formData.append('newStatus', newStatus)
