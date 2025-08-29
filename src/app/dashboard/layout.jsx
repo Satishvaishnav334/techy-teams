@@ -40,17 +40,17 @@ export default function RootLayout({ children }) {
     ];
     const { loading } = useLoadingContext()
     const router = useRouter()
-    useEffect(() => {
-        const checkSession = () => {
-            const token = getCookie('token');
-            if (!token) {
-                router.push('/login');
-            }
-        };
-        checkSession()
-        setInterval(checkSession, 3000)
+    // useEffect(() => {
+    //     const checkSession = () => {
+    //         const token = getCookie('token');
+    //         if (!token) {
+    //             router.push('/login');
+    //         }
+    //     };
+    //     checkSession()
+    //     setInterval(checkSession, 3000)
 
-    }, []);
+    // }, []);
     return (
         <>
             <Navbar />

@@ -8,7 +8,7 @@ import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar";
 import { useLoadingContext } from "@/components/context/LoadingContext";
 import Loader from '@/components/ui/pulsating-loader'
 import { useRouter, redirect } from "next/navigation";
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/NavbarAdmin";
 
 export default function RootLayout({ children }) {
     const router = useRouter()
@@ -81,7 +81,6 @@ export default function RootLayout({ children }) {
                 <Sidebar open={open} setOpen={setOpen} >
                     <SidebarBody className="justify-between gap-10">
                         <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
-
                             <div className="mt-8 flex fixed flex-col gap-2">
                                 {links.map((link, idx) => (
                                     <SidebarLink key={idx} link={link} />

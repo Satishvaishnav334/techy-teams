@@ -1,6 +1,6 @@
 
 import "./globals.css";
-import Navbar from "../components/Navbar.jsx";
+import Navbar from "../components/NavbarAdmin.jsx";
 import Footer from "../components/Footer.jsx";
 import { LoadingProvider } from "@/components/context/LoadingContext";
 import { Toaster } from "@/components/ui/sonner"

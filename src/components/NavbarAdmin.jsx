@@ -12,7 +12,28 @@ function Navbar({ isAdmin }) {
   const router = useRouter();
   const { user, setIsLogin, isLogin } = useLoadingContext()
   const [isOpen, setIsOpen] = useState(false);
-
+  const Adminlinks = [
+    {
+      label: "Admin Dashboard",
+      href: "/admin/dashboard",
+    },
+    {
+      label: "Add New Task",
+      href: "/admin/dashboard/manage-tasks/add-task",
+    },
+    {
+      label: "Add New Team",
+      href: "/admin/dashboard/manage-teams/add-team",
+    },
+    {
+      label: "Manage Tasks",
+      href: "/admin/dashboard/manage-tasks",
+    },
+    {
+      label: "Manage Teams",
+      href: "/admin/dashboard/manage-teams",
+    },
+  ]
 
   useEffect(() => {
     router.refresh();
@@ -34,10 +55,10 @@ function Navbar({ isAdmin }) {
       deleteCookie('token');
       toast.info("Logout Succesfully", { closeButton: true })
       setIsLogin(false)
-      router.push('/dashboard/login')
+      router.push('/admin-login')
     }
     else {
-      router.push('/dashboard/login')
+      router.push('/admin-login')
       setIsLogin(false)
     }
   }
@@ -52,32 +73,9 @@ function Navbar({ isAdmin }) {
             </Link>
           </div>
 
-        
-            <div className=' hidden md:flex justify-end  items-center w-[55%] lg:w-[56%]   font-semibold lg:text-lg text-sm gap-10'>
-              {isLogin && (
-                <div className='flex gap-10'>
-                  <Link href='/dashboard/tasks' className='hover:text-[#111111d1]   font-semibold transition-colors duration-300'>
-                    Team
-                  </Link>
-                  <Link href='/dashboard/teams' className='hover:text-[#111111d1]   font-semibold transition-colors duration-300'>
-                    Task
-                  </Link>
-                </div>
-              )}
-              <div className='flex gap-10'>
-                <Link href='/dashboard/contact' className='hover:text-[#111111d1]   font-semibold transition-colors duration-300'>
-                  Contact
-                </Link>
-                <Link href='/dashboard/pricing' className='hover:text-[#111111d1]   font-semibold transition-colors duration-300'>
-                  Pricing
-                </Link>
-              </div>
-            </div>
-        
+
+
           <div className='hidden md:flex  justify-end items-center w-[15%] gap-2'>
-            {/* <div className='mx-5'>
-              <BellRing />
-            </div> */}
             <DropdownMenu role={user?.role}
               options={[
                 {
@@ -92,7 +90,6 @@ function Navbar({ isAdmin }) {
                 },
               ]}
             >
-
             </DropdownMenu>
           </div>
 
