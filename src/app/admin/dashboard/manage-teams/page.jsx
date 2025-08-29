@@ -91,8 +91,8 @@ export default function page() {
                       <Trash /> Delete
                     </button>
                     <Link href={`/admin/dashboard/manage-teams/update/${team?.slug}`}
-                      className='hover:bg-yellow-600 bg-yellow-500 text-white font-semibold flex gap-2 sm:text-xl text-md px-3 py-2 rounded-lg'>
-                      <Pencil />Edit
+                      className='bg-blue-600 hover:bg-blue-700 text-white font-semibold flex gap-2 sm:text-xl text-md px-3 py-2 rounded-lg'>
+                      <Pencil />Update
                     </Link>
                   </div>
                   <div

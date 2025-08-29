@@ -55,7 +55,12 @@ export default function RootLayout({ children }) {
     const [open, setOpen] = useState(false)
 
 
-  
+    useEffect(()=>{
+      const token = getCookie('token')
+      if(!token){
+        router.push('/login')
+      }
+    },[])
 
     return (
         <AdminDataProvider>

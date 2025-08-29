@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/table";
 import Link from 'next/link';
 import { Plus } from 'lucide-react';
+import { getCookie } from 'cookies-next/client';
 
 function AdminDashboard() {
   const { tasks, teams, users, refresh } = useAdminContext();
@@ -101,7 +102,7 @@ function AdminDashboard() {
         </div>
       </div>
 
-      <Table>
+      <Table className='my-3'>
         <TableCaption>All tasks</TableCaption>
         <TableHeader>
           <TableRow>
@@ -126,9 +127,9 @@ function AdminDashboard() {
               <TableCell className="">
                 <button
                   onClick={() => router.push(`/admin/dashboard/manage-tasks/update/${task.slug}`)}
-                  className="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+                  className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
                 >
-                  Edit
+                  Update
                 </button>
               </TableCell>
 
@@ -165,14 +166,14 @@ function AdminDashboard() {
       </div>
 
 
-      <Table className="mt-8">
+      <Table className="my-3">
         <TableCaption>All teams</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead>Team Name</TableHead>
             <TableHead>Description</TableHead>
             <TableHead>Members</TableHead>
-            <TableHead >Edit</TableHead>
+            <TableHead >Update</TableHead>
             <TableHead >Delete</TableHead>
           </TableRow>
         </TableHeader>
@@ -187,9 +188,9 @@ function AdminDashboard() {
               <TableCell className="">
                 <button
                   onClick={() => router.push(`/admin/dashboard/manage-teams/update/${team?.slug}`)}
-                  className="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+                  className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
                 >
-                  Edit
+                  Update
                 </button>
               </TableCell>
               <TableCell className="">

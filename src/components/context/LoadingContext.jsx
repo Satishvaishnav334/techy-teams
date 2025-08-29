@@ -17,7 +17,6 @@ export const LoadingProvider = ({ children }) => {
     const [isLogin, setIsLogin] = useState(user ? true : false)
     const [notifications, setNotifications] = useState([]);
 
-
     const createNotification = (notification) => {
         if (!socket) {
             socket = io('http://localhost:3000'); // Connect to your custom server
@@ -27,15 +26,17 @@ export const LoadingProvider = ({ children }) => {
             socket.off('notification');
         };
     };
+
     const fetchContaxtData = async () => {
         try {
             const token = getCookie('token')
+
             const user = await decrypt(token);
             const name = user.username
             setLoading(true)
             const res2 = await axios.get(`/api/get-user/${name}`);
             setUser(res2.data)
-        }   
+        }
         catch (error) {
             console.log(error)
         }
@@ -44,7 +45,7 @@ export const LoadingProvider = ({ children }) => {
         }
     }
 
- 
+
 
     useEffect(() => {
 
@@ -60,7 +61,12 @@ export const LoadingProvider = ({ children }) => {
             socket.off('notification');
         };
     }, []);
-
+    // const token = getCookie('token')
+    // setTimeout(() => {
+    //     if (!token) {
+    //         router.push('/login')
+    //     }
+    // }, 5000)
     return (
         <LoadingContext.Provider value={{ loading, setLoading, isLogin, setIsLogin, notifications, refresh: fetchContaxtData, setNotifications, user, setUser, createNotification }}>
             {children}

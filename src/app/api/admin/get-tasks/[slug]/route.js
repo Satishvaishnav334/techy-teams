@@ -50,6 +50,8 @@ export async function PUT(req, { params }) {
         const dueDate = data.get("dueDate");
         const assignedTo = data.get("assignedTo");
         const task = await taskModel.findOne({ slug })
+        console.log(task)
+        console.log(assignedTo,"assign to")
         const taskremove = await Member.updateMany({
             _id: task.members
         }, {

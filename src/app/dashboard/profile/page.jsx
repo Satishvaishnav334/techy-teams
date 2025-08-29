@@ -7,14 +7,16 @@ function page() {
 
   return (
     <div className='flex justify-center items-center h-[90vh] '>
-      <div className='bg-green-300 flex flex-col justify-center  rounded-2xl shadow-xl h-[80%] w-[50%] p-20'>
-        <h1 className='text-2xl text-center lg:text-6xl font-extrabold md:m-2'> name : {user?.name}</h1>
-        <h1 className='text-2xl lg:text-3xl  md:m-2'> Email : {user?.email}</h1>
-        <h1 className='text-2xl lg:text-3xl  md:m-2'>Role : {user?.role}</h1>
-        <h1 className='text-2xl lg:text-3xl  md:m-2'>Joing Date : {formatDate(user?.createdAt)}</h1>
-        <h1 className='text-2xl lg:text-3xl  md:m-2'>Last Update : {formatDate(user?.updatedAt)}</h1>
+      <div className=" m-2  rounded-xl shadow-md lg:w-[30%] sm:w-[50%] w-[90%] sm:mx-10 shadow-black/50 p-5 flex flex-col gap-3">
+        <h1 className='text-xl text-center lg:text-4xl font-bold md:m-2'> Username : <span className='font-medium '>{user?.name}</span> </h1>
+        <h1 className='text-xl  lg:text-2xl font-bold '> Email : <span className='font-medium '>{user?.email}</span> </h1>
+        <h1 className='text-xl lg:text-2xl font-bold '> Role : <span className='font-medium '>{user?.role}</span> </h1>
+        <h1 className='text-xl  lg:text-2xl font-bold '> Joing Date :  <span className='font-medium '>{formatDate(user?.createdAt)}</span> </h1>
+        <h1 className='text-xl  lg:text-2xl font-bold '> Last Update :  <span className='font-medium '>{formatDate(user?.updatedAt)}</span> </h1>
+
+
         <Link href='/dashboard/profile/update'>
-          <button className='bg-blue-600 font-semibold text-white px-3 py-2 my-2 rounded-lg text-xl'>Update Profile</button>
+          <button className='bg-blue-600 cursor-pointer hover:bg-blue-700 font-semibold text-white px-3 py-2 my-2 rounded-lg text-xl'>Update</button>
         </Link>
       </div>
     </div>

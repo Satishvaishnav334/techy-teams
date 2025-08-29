@@ -38,6 +38,7 @@ function page() {
         e.preventDefault();
         try {
             setLoading(true)
+            console.log("object")
             const newslug = newteamName?.split(' ').join('-').toLowerCase();
             const formData = new FormData();
             formData.append('teamName', newteamName ? newteamName : team?.teamName);
@@ -153,7 +154,7 @@ function page() {
                         })}
                     </div>
                 </div>
-                <button className="bg-blue-600 font-semibold text-white px-3 py-2 my-2 rounded-lg text-xl" type="submit">Update Team</button>
+                <button className="bg-blue-600 hover:bg-blue-700 font-semibold text-white px-3 py-2 my-2 rounded-lg text-xl" type="submit">Update Team</button>
             </form>
         </div>
 

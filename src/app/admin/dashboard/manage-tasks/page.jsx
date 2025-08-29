@@ -2,7 +2,7 @@
 import React, { useMemo, useState } from 'react';
 import axios from 'axios'
 import { Pencil, Trash, Plus } from 'lucide-react';
-import { toast } from "sonner"  
+import { toast } from "sonner"
 import {
   DndContext,
   useDraggable,
@@ -15,7 +15,7 @@ import { useLoadingContext } from '@/components/context/LoadingContext';
 
 export default function Page() {
   const { tasks } = useAdminContext();
-  const {createNotification,user} = useLoadingContext()
+  const { createNotification, user } = useLoadingContext()
   console.log(tasks)
   const [trigger, setTrigger] = useState(false); // trigger re-render
   // const [searchItem, setSearchItem] = useState('')
@@ -39,13 +39,13 @@ export default function Page() {
       formData.append('taskId', taskId)
       formData.append('newStatus', newStatus)
       const res = await axios.put(`/api/admin/get-tasks/update-status/`, formData);
-     if (res.status == '200') {
-                createNotification(`Updated Status of ${task?.title} to ${newStatus} by ${user?.name}`)
-            }
+      if (res.status == '200') {
+        createNotification(`Updated Status of ${task?.title} to ${newStatus} by ${user?.name}`)
+      }
     } catch (err) {
       console.error('API failed:', err);
     }
-    
+
   };
 
   const getTasksByStatus = (status) =>
@@ -137,23 +137,25 @@ const TaskCard = ({ task }) => {
             Assigned To :  {task?.assignedTo?.name}
           </div>
 
-          <div className='flex flex-col xl:flex-row justify-between  w-full'>
-            <div className='flex justify-between gap-2 my-2 mx-3  '>
+
+            <div className='flex flex-row justify-around px-5 sm:gap-5 gap-2 my-3 text-md '>
               <Link href={`/admin/dashboard/manage-tasks/update/${task?.slug}`}
-                className=' bg-yellow-500 hover:bg-yellow-600 text-white font-semibold flex gap-2 text-sm text-right  px-3 rounded-b-lg py-2  rounded-lg'>
-                <Pencil size={18} />Edit
+                className=' bg-blue-600 hover:bg-blue-700 text-white font-semibold flex gap-1  text-right  px-3 rounded-b-lg py-2  rounded-lg'>
+                <Pencil size={18} />Update
               </Link>
               <Link href={`/admin/dashboard/manage-tasks/delete/${task?.slug}`}
-                className='bg-red-500 hover:bg-red-600 text-white z-50 cursor-pointer flex gap-2 font-semibold  text-sm text-right  px-3 rounded-b-lg py-2 rounded-lg'>
+                className='bg-red-500 hover:bg-red-600 text-white z-50 cursor-pointer flex gap-1 font-semibold   text-right  px-3 rounded-b-lg py-2 rounded-lg'>
                 <Trash size={18} /> Delete
               </Link>
             </div>
 
-            <div className='flex items-end  '>
-              <p className={date1 < date ? 'bg-gray-300   font-semibold  text-sm xl:text-right    py-1 px-2 xl:rounded-br-xl w-full  xl:rounded-tl-xl' : 'bg-red-500 text-white w-full font-semibold  text-sm xl:text-right    py-1 px-2 xl:rounded-br-xl xl:rounded-tl-xl'} >
-                Due {formatDate(task.dueDate)}
-              </p>
-            </div>
+          <div
+            className='flex justify-end '>
+            <p className={`bg-gray-300 w-full xl:w-[60%] font-semibold  text-sm text-center    py-1 px-2 xl:rounded-br-xl xl:rounded-tl-xl 
+              ${date1 < date ? 'bg-gray-300 text-gray-800' : 'bg-red-500 text-white'} `} >
+              {date1 < date ? ` Due Date ${formatDate(task.dueDate)}` : `Over Due ${formatDate(task.dueDate)}`}
+            </p>
+               
           </div>
         </div>
       </div>
@@ -170,7 +172,7 @@ const Column = ({ id, title, tasks }) => {
       className={`p-4 bg-gray-200 rounded-xl min-h-[400px] shadow-md transition-all duration-300 ${isOver ? 'ring-2 ring-orange-400' : ''
         }`}
     >
-   
+
       <h2 className=' text-center text-xl  lg:text-2xl font-bold mb-2 '>{title}</h2>
       {tasks?.length > 0 ? (
         tasks?.map((task) => <TaskCard key={task._id} task={task} />)

@@ -34,29 +34,14 @@ export async function PUT(req, { params }) {
         const data = await req.formData();
         const username = data.get("name");
         const email = data.get("email");
-        const rowpassword = data.get("password");
-        const oldPassword = data.get("oldPassword");
-        const password = await hashPassword(rowpassword)
-        const user = await Member.findOne({ name })
-        console.log(user)
+        // const rowpassword = data.get("password");
+        // const oldPassword = data.get("oldPassword");
+        // const password = await hashPassword(rowpassword);
+        const user = await Member.findOne({ name });
+        console.log(user);
 
         if (!user) {
             return NextResponse.json({ message: "Invalid User" }, { status: 403 });
-        }
-        const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
-        if (password) {
-            const userUpdate = await Member.updateOne(
-                { name },
-                {
-                    $set: {
-                        name: username, email, password
-                    }
-                });
-
-            return NextResponse.json({message:"Profile Update Successfully"}, { status: 200 });
-        }
-        if (!isPasswordValid) {
-            return NextResponse.json({ message: "Invalid Old Password" }, { status: 403 });
         }
         const userUpdate = await Member.updateOne(
             { name },
@@ -66,7 +51,7 @@ export async function PUT(req, { params }) {
                 }
             });
 
-        return NextResponse.json({message:"Profile Update Successfully"}, {status: 200 });
+        return NextResponse.json({ message: "Profile Update Successfully" }, { status: 200 });
     }
     catch (error) {
         console.log(error);

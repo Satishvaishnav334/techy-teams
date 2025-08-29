@@ -143,7 +143,7 @@ function page() {
 
 
 
-        <button className="bg-blue-600 font-semibold text-white px-3 py-2 my-2 rounded-lg text-xl" type="submit">Create Task</button>
+        <button className="bg-blue-600 hover:bg-blue-700 font-semibold text-white px-3 py-2 my-2 rounded-lg text-xl" type="submit">Create Task</button>
       </form>
 
     </div>

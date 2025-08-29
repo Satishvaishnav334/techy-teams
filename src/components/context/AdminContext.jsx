@@ -25,7 +25,7 @@ export const AdminDataProvider = ({ children }) => {
             setLoading(true)
             const token = getCookie('token')
             const user = await decrypt(token);
-            const name = user.username
+            const name = user?.username
             const res2 = await axios.get(`/api/get-user/${name}`);
             setUser(res2.data)
             if (res2.status == 200) {

@@ -1,20 +1,30 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'
+import { getCookie } from 'cookies-next';
+import { useRouter } from 'next/navigation';
 import {
   DndContext,
   useDraggable,
   useDroppable,
   closestCenter,
 } from '@dnd-kit/core';
-import { useRouter } from 'next/navigation';
 import { useLoadingContext } from '@/components/context/LoadingContext';
 
 export default function Page() {
   const { user, createNotification, refresh } = useLoadingContext();
   const [trigger, setTrigger] = useState(false); // trigger re-render
   const router = useRouter()
-
+      useEffect(() => {
+          const checkSession = () => {
+              const token = getCookie('token');
+              if (!token) {
+                  router.push('/login');
+              }
+          };
+          checkSession();
+  
+      }, []);
   const handleDragEnd = async ({ active, over }) => {
     if (!over) return;
 

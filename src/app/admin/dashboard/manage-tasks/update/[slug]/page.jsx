@@ -46,6 +46,8 @@ function page() {
         e.preventDefault();
         try {
             setLoading(true)
+            console.log(assignedTo)
+            console.log(task?.assignedTo?._id)
             const newslug = newtitle?.split(' ').join('-').toLowerCase();
             const formData = new FormData();
             formData.append('title', newtitle ? newtitle : task?.title);
@@ -53,7 +55,7 @@ function page() {
             formData.append('description', desc ? desc : task?.description);
             formData.append('priority', priority ? priority : task?.priority);
             formData.append('status', status ? status : task?.status);
-            formData.append('assignedTo', assignedTo?._id ? assignedTo?._id : task?.assignedTo?._id);
+            formData.append('assignedTo', assignedTo ? assignedTo : task?.assignedTo?._id);
             formData.append('dueDate', date ? date : task?.dueDate);
 
             const update = await axios.put(`/api/admin/get-tasks/${slug}`, formData)
@@ -164,7 +166,7 @@ function page() {
                         </select>
                     </div>
                 </div>
-                <button className="bg-blue-600 font-semibold cursor-pointer text-white px-3 py-2 my-2 rounded-lg text-xl" type="submit">Update Task</button>
+                <button className="bg-blue-600 hover:bg-blue-700 font-semibold cursor-pointer text-white px-3 py-2 my-2 rounded-lg text-xl" type="submit">Update Task</button>
             </form>
 
         </div>
