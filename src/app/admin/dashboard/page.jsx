@@ -183,7 +183,7 @@ function AdminDashboard() {
               <TableCell>{team.teamName}</TableCell>
               <TableCell>{team.description}</TableCell>
               <TableCell>
-                {team.members?.map((user) => <span className='mx-2'>{user?.name}</span>)}
+                {team.members?.map((user,index) => <span key={index} className='mx-2'>{user?.name}</span>)}
               </TableCell>
               <TableCell className="">
                 <button

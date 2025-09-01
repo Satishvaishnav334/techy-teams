@@ -6,18 +6,26 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
 import { Input, Typography } from "@material-tailwind/react";
+import Navbar from "@/components/Navbar";
 
-import { useLoadingContext } from "@/components/context/LoadingContext";
 export default function Home() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const router = useRouter();
-  const { setLoading } = useLoadingContext()
+  const links = [
+    {
+      label: "Contact",
+      href: "/contact",
+    },
+    {
+      label: "Pricing",
+      href: "/pricing",
+    },
+  ];
   const handleLogIn = async (e) => {
     e.preventDefault();
     try {
-      setLoading(true)
       const formData = new FormData();
       formData.append('email', email);
       formData.append('password', password);
@@ -29,10 +37,6 @@ export default function Home() {
       toast.error(error.massage, { closeButton: true })
       console.error("Error fetching users:", error);
     }
-    finally {
-      setLoading(false)
-
-    }
   };
 
   useEffect(() => {
@@ -43,13 +47,14 @@ export default function Home() {
       }
     }
     checkSession()
-    setTimeout(() => {
-      checkSession()
-    }, 2000)
+
   }, [])
   return (
-    <div className="  flex md:flex-row flex-col   items-center justify-around  h-[90vh] text-black mb-15 md:mb-0  lg:gap-10 gap-5">
-      <div className="bg-yellow-300 w-full h-full flex justify-center items-center ">
+    <div className="  flex  flex-col    h-full text-black ">
+      <Navbar links={links} islogin={false}  />
+      <div className=" flex md:flex-row flex-col justify-around  items-center h-[90vh] w-full mb-15 md:mb-0  lg:gap-10 gap-5">
+
+        <div className="bg-yellow-300 w-full h-full flex justify-center items-center ">
         <h1 className="font-bold text-2xl">Branding </h1>
       </div>
 
@@ -108,6 +113,7 @@ export default function Home() {
           I have an account
           <Link href='/login' className="text-red-500 mx-2 font-bold"> Login</Link>
         </p>
+      </div>
       </div>
     </div>
   );

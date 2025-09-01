@@ -16,44 +16,38 @@ import { useLoadingContext } from "@/components/context/LoadingContext";
 export default function RootLayout({ children }) {
     const links = [
         {
-            label: "Dashboard",
-            href: "/admin/dashboard",
-            icon: (
-                <LayoutDashboard className=" font-bold dark:text-neutral-200 h-6 w-6 flex-shrink-0 text-[#111111d1] transition-colors duration-300 " />
-            ),
+            label: "Home",
+            href: "/dashboard",
+           
         },
         {
-            label: "Manage Teams",
-            href: "/admin/dashboard/manage-teams",
-            icon: (
-                <Users className=" font-bold dark:text-neutral-200 h-6 w-6 flex-shrink-0 text-[#111111d1] transition-colors duration-300 ]" />
-            ),
+            label: "Tasks",
+            href: "/dashboard/tasks",
+       
         },
         {
-            label: "Manage Tasks",
-            href: "/admin/dashboard/manage-tasks",
-            icon: (
-                <ListTodo className=" font-bold dark:text-neutral-200 h-6 w-6 flex-shrink-0 text-[#111111d1] transition-colors duration-300 ]" />
-            ),
+            label: "Teams",
+            href: "/dashboard/teams",
+        
         },
-
     ];
-    const { loading } = useLoadingContext()
-    const router = useRouter()
-    // useEffect(() => {
-    //     const checkSession = () => {
-    //         const token = getCookie('token');
-    //         if (!token) {
-    //             router.push('/login');
-    //         }
-    //     };
-    //     checkSession()
-    //     setInterval(checkSession, 3000)
 
-    // }, []);
+    const { loading,user } = useLoadingContext()
+    const router = useRouter()
+    useEffect(() => {
+        const checkSession = () => {
+            const token = getCookie('token');
+            if (!token) {
+                router.push('/login');
+            }
+        };
+        checkSession()
+        setInterval(checkSession, 3000)
+
+    }, []);
     return (
         <>
-            <Navbar />
+            <Navbar islogin={true} links={links} user={user}/>
             {
                 loading ?
                     <div className='h-[90vh] w-full flex  justify-center items-center'>

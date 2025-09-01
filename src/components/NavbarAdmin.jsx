@@ -67,20 +67,19 @@ function Navbar({ isAdmin }) {
     <div className='w-full bg-white justify-end  flex border-b-black border-1 shadow-lg  '>
       <nav className='border-b-1 w-[100%] p-3 '>
         <div className=' flex justify-between items-center   text-[#11111198]'>
-          <div className='text-black w-[25%]  lg:w-[40%]'>
+          
+
+<div className='text-black w-[25%]  lg:w-[40%]'>
             <Link href='/dashboard'>
               <h1 className='text-2xl lg:text-4xl font-extrabold md:m-2'>Techy_Teams</h1>
             </Link>
           </div>
-
-
-
           <div className='hidden md:flex  justify-end items-center w-[15%] gap-2'>
             <DropdownMenu role={user?.role}
               options={[
                 {
                   label: "Profile",
-                  onClick: () => router.push('/dashboard/profile'),
+                  onClick: () => router.push('/admin/dashboard/profile'),
                   Icon: <UserPen className="h-6 w-6" />,
                 },
                 {
@@ -105,7 +104,7 @@ function Navbar({ isAdmin }) {
 
                   {
                     label: "Profile",
-                    onClick: () => { router.push('/dashboard/profile'); setIsOpen(false) },
+                    onClick: () => { router.push('/admin/dashboard/profile'); setIsOpen(false) },
                     Icon: <UserPen className="h-6 w-6" />,
                   },
                   {

@@ -14,7 +14,7 @@ import { useLoadingContext } from '@/components/context/LoadingContext';
 export default function Page() {
   const { user, createNotification, refresh } = useLoadingContext();
   const [trigger, setTrigger] = useState(false); // trigger re-render
-  const router = useRouter()
+  const router = useRouter();
 
 
   const handleDragEnd = async ({ active, over }) => {
