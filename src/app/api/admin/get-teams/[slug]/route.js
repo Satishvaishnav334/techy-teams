@@ -27,8 +27,8 @@ export async function DELETE(req, { params }) {
             { $pull: { team: team._id } },
             { new: true }
         )
-        
-        const data = await teamModel.deleteOne({slug});
+
+        const data = await teamModel.deleteOne({ slug });
         // console.log(data)
         return NextResponse.json({ message: "Team Deleted Successfully" }, { status: 200 });
     }
@@ -57,10 +57,17 @@ export async function PUT(req, { params }) {
         const team = await teamModel.findOne({ slug })
         // console.log(team._id, "team Id")
 
+        // const oldTeam = await Member.updateOne({
+        //     _id: team.members
+        // },
+        //     { $unset: { team: team._id } },
+        //     { new: true }
+        // )
+
         const olduser = await Member.updateMany({
             _id: team.members
         },
-            { $pull: { team: team._id } },
+            { $unset: { team: team._id } },
             { new: true }
         )
 
@@ -78,7 +85,7 @@ export async function PUT(req, { params }) {
             _id: members
         },
             {
-                $addToSet:
+                $set:
                 {
                     team: { _id: team._id }
                 }

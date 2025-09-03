@@ -10,8 +10,8 @@ import { useLoadingContext } from '@/components/context/LoadingContext'
 import { Button, Input, Textarea, Typography } from "@material-tailwind/react";
 function page() {
   
-  const { users, refresh, } = useAdminContext()
-  const { user, createNotification } = useLoadingContext()
+  const { users, admin,refresh, } = useAdminContext()
+  const {  createNotification,setLoading } = useLoadingContext()
   const router = useRouter()
   const [title, setTitle] = useState()
   const [desc, setDesc] = useState()
@@ -23,21 +23,24 @@ function page() {
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
-      const slug = title?.split(' ').join('-').toLowerCase();
+      setLoading(true)
+      const date = new Date()
+      const slug = title?.split(' ').join('-').toLowerCase().date;
       const formData = new FormData();
       formData.append('title', title);
       formData.append('slug', slug);
-      formData.append('status', status ? status : "pending");
+      formData.append('status', status ? status : "pending"); 
       formData.append('priority', priority ? priority : "Medium");
-      formData.append('createdBy', user._id);
+      formData.append('createdBy', admin._id);
       formData.append('description', desc);
       formData.append('assignedTo', assignedTo);
       formData.append('dueDate', date ? date : "15 july 2026");
       const create = await axios.post('/api/admin/get-tasks', formData)
       // console.log(create)
       if (create.status == '200') {
-        createNotification(` New task ${title} Create by ${user.name}`)
+        createNotification(` New task ${title} Create by ${admin.name}`)
         refresh()
+        setLoading(false)
         router.push('/admin/dashboard/manage-tasks')
       }
     } catch (error) {

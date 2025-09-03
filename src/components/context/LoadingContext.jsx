@@ -31,18 +31,16 @@ export const LoadingProvider = ({ children }) => {
     const fetchContaxtData = async () => {
         try {
             const token = getCookie('token')
-
             const user = await decrypt(token);
             const name = user.username
             setLoading(true)
             const res2 = await axios.get(`/api/get-user/${name}`);
             setUser(res2.data)
-                setIsAdmin(res2.data.role=="admin" ? true : false)
         }
         catch (error) {
             console.log(error)
         }
-        finally {
+        finally { 
             setLoading(false)
         }
     }

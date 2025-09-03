@@ -14,8 +14,8 @@ import { useAdminContext } from '@/components/context/AdminContext';
 import { useLoadingContext } from '@/components/context/LoadingContext';
 
 export default function Page() {
-  const { tasks } = useAdminContext();
-  const { createNotification, user } = useLoadingContext()
+  const { tasks ,admin} = useAdminContext();
+  const { createNotification} = useLoadingContext()
   // console.log(tasks)
   const [trigger, setTrigger] = useState(false); // trigger re-render
   // const [searchItem, setSearchItem] = useState('')
@@ -40,7 +40,7 @@ export default function Page() {
       formData.append('newStatus', newStatus)
       const res = await axios.put(`/api/admin/get-tasks/update-status/`, formData);
       if (res.status == '200') {
-        createNotification(`Updated Status of ${task?.title} to ${newStatus} by ${user?.name}`)
+        createNotification(`Updated Status of ${task?.title} to ${newStatus} by ${admin?.name}`)
       }
     } catch (err) {
       console.error('API failed:', err);

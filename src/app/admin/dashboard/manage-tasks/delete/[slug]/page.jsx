@@ -12,8 +12,8 @@ import { useLoadingContext } from '@/components/context/LoadingContext'
 function page() {
 
     const { slug } = useParams()
-    const { refresh  } = useAdminContext()
-    const {createNotification,user,setLoading} = useLoadingContext()
+    const { refresh ,admin } = useAdminContext()
+    const {createNotification,setLoading} = useLoadingContext()
     const [task, setTask] = useState({})
     const router = useRouter()
 
@@ -21,13 +21,10 @@ function page() {
         try {
             setLoading(true)
             const task = await axios.get(`/api/admin/get-tasks/${slug}`)
-            if (task.status == '200') {
-                setLoading(false)
-            }
             setTask(task.data)
-
         }
         catch (error) {
+            setLoading(false)
             console.log(error)
         }
     }
@@ -35,19 +32,19 @@ function page() {
     const handleDelete = async (slug) => {
         if (!confirm("Delete Task")) return;
         try {
-            
+            setLoading(true)
             const deletetask = await axios.delete(`/api/admin/get-tasks/${slug}`)
             if (deletetask.status == '200') {
-                createNotification(`The task ${task?.title} is Delete by ${user.name}`)
-               
-                router.push('/admin/dashboard/manage-tasks')
+                createNotification(`The task ${task?.title} is Delete by ${admin.name}`)
             }
+
         }
         catch (error) {
             console.log(error)
         }
         finally {
             refresh()
+            setLoading(false)
             router.push('/admin/dashboard/manage-tasks')
         }
     }

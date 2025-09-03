@@ -11,8 +11,8 @@ import { Button, Input, Textarea, Typography } from "@material-tailwind/react";
 
 function page() {
     const { slug } = useParams()
-    const { users, refresh } = useAdminContext()
-    const { user, createNotification, setLoading } = useLoadingContext()
+    const { users, refresh,admin } = useAdminContext()
+    const {  createNotification, setLoading } = useLoadingContext()
     const [task, setTask] = useState({})
     const [newtitle, setTitle] = useState()
     const [desc, setDesc] = useState()
@@ -26,9 +26,11 @@ function page() {
     useEffect(() => {
         const fetchTask = async () => {
             try {
+                setLoading(true)
                 const task = await axios.get(`/api/admin/get-tasks/${slug}`)
                 setTask(task.data)
                 setAssignedTo(task.data.assignedTo)
+                setLoading(false)
             }
             catch (error) {
                 console.log(error)
@@ -48,6 +50,7 @@ function page() {
             setLoading(true)
             // console.log(assignedTo)
             // console.log(task?.assignedTo?._id)
+            // console.log(assignedTo)
             const newslug = newtitle?.split(' ').join('-').toLowerCase();
             const formData = new FormData();
             formData.append('title', newtitle ? newtitle : task?.title);
@@ -55,16 +58,14 @@ function page() {
             formData.append('description', desc ? desc : task?.description);
             formData.append('priority', priority ? priority : task?.priority);
             formData.append('status', status ? status : task?.status);
-            formData.append('assignedTo', assignedTo ? assignedTo : task?.assignedTo?._id);
+            formData.append('assignedTo', assignedTo ? assignedTo?._id : task?.assignedTo?._id);
             formData.append('dueDate', date ? date : task?.dueDate);
-
             const update = await axios.put(`/api/admin/get-tasks/${slug}`, formData)
             if (update.status == '200') {
-                createNotification(`The task ${newtitle ? newtitle : task?.title} is Updated by ${user.name}`)
+                createNotification(`The task ${newtitle ? newtitle : task?.title} is Updated by ${admin.name}`)
                 refresh()
                 router.push('/admin/dashboard/manage-tasks')
             }
-
         } catch (error) {
             console.error('Error creating team:', error);
             toast.error("Server Error", { closeButton: true })
@@ -119,7 +120,7 @@ function page() {
                                 {
                                     users?.map((member, index) => {
                                         return (
-                                            <option key={index} value={member._id}>{member.name}</option>
+                                            <option key={index} value={member._id}>{member.name}</option>   
                                         );
                                     })}
                             </select>

@@ -14,7 +14,7 @@ export default function Page() {
   const router = useRouter();
   const { setLoading } = useLoadingContext()
 
- 
+
 
 
   const handleLogIn = async (e) => {
@@ -29,8 +29,8 @@ export default function Page() {
       router.push(`/admin/dashboard`)
       setIsLogin(true)
     } catch (error) {
-      toast.error("Invalid email or password", { closeButton: true })
       console.log(" users:", error.message);
+      // toast.error("Invalid email or password", { closeButton: true })
     }
     finally {
       setLoading(false)

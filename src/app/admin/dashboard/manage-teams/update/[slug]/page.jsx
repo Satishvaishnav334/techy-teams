@@ -10,8 +10,8 @@ import { Button, Input, Textarea, Typography } from "@material-tailwind/react";
 
 function page() {
     const { slug } = useParams()
-    const { users, refresh } = useAdminContext()
-    const { user, setLoading, createNotification } = useLoadingContext()
+    const { users, refresh,admin } = useAdminContext()
+    const {  setLoading, createNotification } = useLoadingContext()
     const [team, setTeam] = useState({})
     const [newteamName, setTeamName] = useState()
     const [desc, setDesc] = useState()
@@ -47,7 +47,7 @@ function page() {
             formData.append('members', members ? members : team?.members);
             const res = await axios.put(`/api/admin/get-teams/${slug}`, formData)
             if (res.status == '200') {
-                createNotification(`The Team ${newteamName ? newteamName : team?.teamName} is Upadted by ${user?.name}`)
+                createNotification(`The Team ${newteamName ? newteamName : team?.teamName} is Upadted by ${admin?.name}`)
                 router.push('/admin/dashboard/manage-teams')
                 refresh();
             } else {

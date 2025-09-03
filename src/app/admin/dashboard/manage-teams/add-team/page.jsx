@@ -9,8 +9,8 @@ import { useLoadingContext } from '@/components/context/LoadingContext'
 import { Button, Input, Textarea, Typography } from "@material-tailwind/react";
 
 function page() {
-  const { users, refresh } = useAdminContext()
-  const { user, setLoading, createNotification } = useLoadingContext()
+  const { users, refresh,admin } = useAdminContext()
+  const {  setLoading, createNotification } = useLoadingContext()
   const [teamName, setTeamName] = useState('')
   const [level, setLevel] = useState('')
   const [desc, setDesc] = useState("")
@@ -26,13 +26,12 @@ function page() {
       formData.append('teamName', teamName)
       formData.append('slug', slug)
       formData.append('level', level)
-      formData.append('createdBy', user._id)
+      formData.append('createdBy', admin._id)
       formData.append('description', desc)
       formData.append('members', addmemebers)
-
       const create = await axios.post('/api/admin/get-teams', formData)
       if (create.status == '200') {
-        createNotification(`New Team ${teamName}  Created by ${user?.name}`)
+        createNotification(`New Team ${teamName}  Created by ${admin?.name}`)
         router.push('/admin/dashboard/manage-teams')
         refresh();
       } else {

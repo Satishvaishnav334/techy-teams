@@ -1,10 +1,10 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { getCookie } from "cookies-next/client";
-import { LayoutDashboard, Users, ListTodo, Plus } from "lucide-react";
+import { LayoutDashboard, Users, ListTodo   ,Edit,CirclePlus,Home, Trash, ScanEye } from "lucide-react";
 import { AdminDataProvider } from "@/components/context/AdminContext";
 import { cn } from "@/lib/utils";
-import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar";
+import { Sidebar, SidebarBody, SidebarLink, SidebarSup } from "@/components/ui/sidebar";
 import { useLoadingContext } from "@/components/context/LoadingContext";
 import Loader from '@/components/ui/pulsating-loader'
 import { useRouter, redirect } from "next/navigation";
@@ -19,6 +19,16 @@ export default function RootLayout({ children }) {
             icon: (
                 <LayoutDashboard className=" font-bold dark:text-neutral-200 h-6 w-6 flex-shrink-0 text-[#111111d1] transition-colors duration-300 " />
             ),
+            sub: [
+                {
+                    label: "Go To Home",
+                    href: "/admin/dashboard",
+                    icon: (
+                        <Home className=" font-bold dark:text-neutral-200 h-5 w-5 flex-shrink-0 text-[#111111d1] transition-colors duration-300 " />
+                    ),
+                },
+           
+            ]
         },
         {
             label: "Manage Tasks",
@@ -27,13 +37,37 @@ export default function RootLayout({ children }) {
             icon: (
                 <ListTodo className=" font-bold dark:text-neutral-200 h-6 w-6 flex-shrink-0 text-[#111111d1] transition-colors duration-300 ]" />
             ),
-        },
-        {
-            label: "Create New Task",
-            href: "/admin/dashboard/manage-teams/add-task",
-            icon: (
-                <Plus className=" font-bold dark:text-neutral-200 h-6 w-6 flex-shrink-0 text-[#111111d1] transition-colors duration-300 " />
-            ),
+            sub: [
+                {
+                    label: "Create New Task",
+                    href: "/admin/dashboard/manage-tasks/add-task",
+                    icon: (
+                        <CirclePlus className=" font-bold dark:text-neutral-200 h-5 w-5 flex-shrink-0 text-[#111111d1] transition-colors duration-300 " />
+                    ),
+                },
+                {
+                    label: "Update Tasks",
+                    href: "/admin/dashboard/manage-tasks",
+                    icon: (
+                        <Edit className=" font-bold dark:text-neutral-200 h-5 w-5 flex-shrink-0 text-[#111111d1] transition-colors duration-300 " />
+                    ),
+                },
+               
+                {
+                    label: "Delete Tasks",
+                    href: "/admin/dashboard/manage-tasks",
+                    icon: (
+                        <Trash className=" font-bold dark:text-neutral-200 h-5 w-5 flex-shrink-0 text-[#111111d1] transition-colors duration-300 " />
+                    ),
+                },
+                {
+                    label: "Review & Complate",
+                    href: "/admin/dashboard/manage-tasks",
+                    icon: (
+                        <ScanEye className=" font-bold dark:text-neutral-200 h-5 w-5 flex-shrink-0 text-[#111111d1] transition-colors duration-300 " />
+                    ),
+                }
+            ]
         },
         {
             label: "Manage Teams",
@@ -41,31 +75,35 @@ export default function RootLayout({ children }) {
             icon: (
                 <Users className=" font-bold dark:text-neutral-200 h-6 w-6 flex-shrink-0 text-[#111111d1] transition-colors duration-300 ]" />
             ),
+            sub: [
+                {
+                    label: "Create New Team",
+                    href: "/admin/dashboard/manage-teams/add-team",
+                    icon: (
+                         <CirclePlus className=" font-bold dark:text-neutral-200 h-5 w-5 flex-shrink-0 text-[#111111d1] transition-colors duration-300 " />
+                    ),
+                },
+                {
+                    label: "Update Teams",
+                    href: "/admin/dashboard/manage-teams",
+                    icon: (
+                        <Edit className=" font-bold dark:text-neutral-200 h-5 w-5 flex-shrink-0 text-[#111111d1] transition-colors duration-300 " />
+                    ),
+                },
+                {
+                    label: "Delete Teams",
+                    href: "/admin/dashboard/manage-teams",
+                    icon: (
+                        <Trash className=" font-bold dark:text-neutral-200 h-6 w-6 flex-shrink-0 text-[#111111d1] transition-colors duration-300 " />
+                    ),
+                }
+            ]
         },
-          {
-            label: "Create New Team",
-            href: "/admin/dashboard/manage-teams/add-team",
-            icon: (
-                <Plus className=" font-bold dark:text-neutral-200 h-6 w-6 flex-shrink-0 text-[#111111d1] transition-colors duration-300 " />
-            ),
-        },
-    ];
-    // sub: [{
-    //     label: "Add New Team",
-    //     href: "/admin/dashboard/manage-teams/add-team",
-    //     icon: (
-    //         <Plus className=" font-bold dark:text-neutral-200 h-6 w-6 flex-shrink-0 text-[#111111d1] transition-colors duration-300 " />
-    //     ),
-    // },{
-    //     label: "Update Teams",
-    //     href: "/admin/dashboard/manage-tasks",
-    //     icon: (
-    //         <Plus className=" font-bold dark:text-neutral-200 h-6 w-6 flex-shrink-0 text-[#111111d1] transition-colors duration-300 " />
-    //     ),
-    // }],
+    ]
 
     const { setLoading, loading } = useLoadingContext();
     const [open, setOpen] = useState(false)
+    const [hoverOpen, setHoverOpen] = useState(false)
 
 
     useEffect(() => {
@@ -92,10 +130,11 @@ export default function RootLayout({ children }) {
                 <Sidebar open={open} setOpen={setOpen} >
                     <SidebarBody className="justify-between gap-10">
                         <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
-                            <div className=" flex fixed flex-col gap-2 mt-8">
-
+                            <div className=" flex fixed flex-col justify-start items-start mt-15">
                                 {links.map((link, idx) => (
-                                    <SidebarLink key={idx} link={link} />
+                                    <div key={idx} className="flex gap-3 flex-col">
+                                        <SidebarSup key={idx} link={link} />
+                                    </div>
                                 ))}
                             </div>
                         </div>

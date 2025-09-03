@@ -10,8 +10,8 @@ import { toast } from 'sonner';
 import { useLoadingContext } from '@/components/context/LoadingContext';
 
 export default function page() {
-  const { teams, refresh, } = useAdminContext()
-  const { user, setLoading, createNotification } = useLoadingContext()
+  const { teams, refresh,admin } = useAdminContext()
+  const {  setLoading, createNotification } = useLoadingContext()
   const router = useRouter()
 
   const handleDelete = async (slug, teamName) => {
@@ -19,7 +19,7 @@ export default function page() {
       setLoading(true)
       const res = await axios.delete(`/api/admin/get-teams/${slug}`)
       if (res.status == '200') {
-        createNotification(`The Team ${teamName} is Deleted by ${user?.name}`)
+        createNotification(`The Team ${teamName} is Deleted by ${admin?.name}`)
         router.push('/admin/dashboard/manage-teams')
         refresh();
       } else {

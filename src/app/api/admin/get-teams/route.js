@@ -46,7 +46,7 @@ export async function POST(req) {
                 _id: { $in: members }
             },
             {
-                $addToSet: { team: team._id }
+                $set: { team: team._id }
             }
         )
         // console.log(team)

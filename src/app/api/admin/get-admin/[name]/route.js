@@ -9,7 +9,7 @@ export async function GET(req, { params }) {
         AdminModel;
         const { name } = await params;
         const data = await AdminModel.findOne({ name })
-        console.log(data)
+        // console.log(data)
         return NextResponse.json(data, { status: 200 });
     }
     catch (error) {

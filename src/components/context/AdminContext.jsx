@@ -30,7 +30,7 @@ export const AdminDataProvider = ({ children }) => {
             const res2 = await axios.get(`/api/admin/get-admin/${name}`);
             setAdmin(res2.data)
             setIsAdmin(res2.data.role == "admin" ? true : false)
-            console.log(res2)
+            // console.log(res2)
             const res = await axios.get(`/api/admin/get-users`);
             setUsers(res.data)
             const res3 = await axios.get('/api/admin/get-teams');
