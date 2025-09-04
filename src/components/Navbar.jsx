@@ -25,9 +25,8 @@ import { usePathname } from 'next/navigation';
         
         },
     ];
-function Navbar({ islogin, menuHide }) {
+function Navbar({ islogin }) {
   const router = useRouter();
-  console.log(menuHide)
   const [isOpen, setIsOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(islogin);
     const pathname = usePathname();
@@ -70,20 +69,14 @@ function Navbar({ islogin, menuHide }) {
             </Link>
           </div>
           <div className=' hidden md:flex justify-end  items-center w-[55%] lg:w-[56%]   font-semibold lg:text-lg text-sm gap-10'>
-            {
-              <div className='flex gap-10'>
-                  <Link href="/dashboard"  className={ pathname == '/dashboard' ? `hover:text-black text-black    font-semibold transition-colors duration-300` : `hover:text-[#111111d1]  font-semibold transition-colors duration-300` }>
-                    Home
-                  </Link>
-                  <Link href="/dashboard/tasks"  className={ pathname == '/dashboard/tasks' ? `hover:text-black text-black     font-semibold transition-colors duration-300` : `hover:text-[#111111d1]  font-semibold transition-colors duration-300` }>
-                    Tasks
-                  </Link>
-                  <Link href="/dashboard/teams"  className={ pathname == '/dashboard/teams' ? `hover:text-black text-black    font-semibold transition-colors duration-300` : `hover:text-[#111111d1]  font-semibold transition-colors duration-300` }>
-                    Teams
-                  </Link>
-                
-              </div>
-            }
+             {
+                  links.map((item, index) => (
+                    <Link key={index} href={item.href} 
+                          className={ pathname == item?.href ? `flex items-center ml-5  justify-start gap-2 group/sidebar py-1 hover:text-black text-black/80     transition-colors duration-300` : `flex items-center ml-5  justify-start gap-2 group/sidebar py-2 hover:text-[#111111d1]   transition-colors duration-300` }>
+                      {item.label}
+                    </Link>
+                  ))
+                }
           </div>
 
 
@@ -134,7 +127,8 @@ function Navbar({ islogin, menuHide }) {
               <div className=' flex  flex-col justify-between items-start my-5   font-semibold text-lg gap-4'>
                 {
                   links.map((item, index) => (
-                    <Link key={index} href={item.href} onClick={() => setIsOpen(false)} className='hover:text-[#111111d1] transition-colors duration-300'>
+                    <Link key={index} href={item.href} onClick={() => setIsOpen(false)} 
+                          className={ pathname == item?.href ? `flex items-center ml-5  justify-start gap-2 group/sidebar py-1 hover:text-black text-black/80     transition-colors duration-300` : `flex items-center ml-5  justify-start gap-2 group/sidebar py-2 hover:text-[#111111d1]   transition-colors duration-300` }>
                       {item.label}
                     </Link>
                   ))

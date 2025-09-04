@@ -34,7 +34,7 @@ export const options = {
     },
     title: {
       display: true,
-      text: 'Team Perforemence   ',
+      text: 'Overall Team Perforemence   ',
     },
   },
 };
@@ -52,7 +52,7 @@ function page() {
     setInProgressTask(getTasksByStatus("in-progress"))
     setTeamMates(user?.team?.members)
   }, [])
-  // console.log(teamMates?.map((mem)=>mem?.tasks?.map((tsk)=>tsk?.length)),"team tasks")
+  console.log(teamMates?.map((mem)=>mem?.tasks?.map((tsk)=>tsk?.length)),"team tasks")
   const bardata = {
     labels: teamMates?.map((mem) => mem?.name),
     datasets: [
@@ -116,14 +116,14 @@ function page() {
           <p className='text-orange-400 font-semibold text-lg'>{inProgressTask?.length}</p>
         </Link>
       </div>
-      <div className='flex h-full  w-full justify-around items-end p-5'>
-        <div className=''>
-          <Pie data={data} width={300} height={300} />
-        </div>
-        <div className=' '>
-          <Bar options={options} data={bardata} width={500} height={300} />
-        </div>
-      </div>
+       <div className='flex h-full flex-col md:flex-row w-full md:w-[90vw] lg:w-full   justify-around gap-5 lg:items-end lg:p-5'>
+            <div className=''>
+              <Pie options={options} data={data} width={300} height={300} />
+            </div>
+            <div className=' h-full'>
+              <Bar options={options} data={bardata}  width={500} height={350} />
+            </div>
+          </div>
     </div>
   )
 }
