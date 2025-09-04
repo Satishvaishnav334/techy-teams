@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import axios from 'axios'
 import {
   DndContext,
@@ -12,7 +12,10 @@ import { useLoadingContext } from '@/components/context/LoadingContext';
 export default function Page() {
   const { user, createNotification, refresh } = useLoadingContext();
   const [trigger, setTrigger] = useState(false); // trigger re-render
-
+  const [disable, setDisable] = useState(false)
+  const handleDragEnd2 = async () => {
+    createNotification(`Can't Updated Status after to backword}`)
+  }
   const handleDragEnd = async ({ active, over }) => {
     if (!over) return;
 
@@ -31,7 +34,7 @@ export default function Page() {
       const formData = new FormData()
       formData.append('taskId', taskId)
       formData.append('newStatus', newStatus)
-      const res = await axios.put(`/api/admin/get-tasks/update-status/`, formData);
+      const res = await axios.put('/api/get-user/update-status/', formData);
       if (res.status == '200') {
         createNotification(`Updated Status of ${task?.title} to ${newStatus} by ${user?.name}`)
 
@@ -58,19 +61,22 @@ export default function Page() {
       <div className='w-full  p-5 mb-10'>
         <h1 className='text-xl text-center lg:text-3xl font-bold mb-4'>My Task</h1>
 
-        <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+        <DndContext collisionDetection={closestCenter} onDragEnd={!disable ? handleDragEnd : handleDragEnd2}>
           <div className='grid grid-cols-1  md:grid-cols-3 gap-5'>
             <Column
+              disable={false}
               id='pending'
               title='Pending Tasks'
               tasks={getTasksByStatus('pending')}
             />
             <Column
+              disable={false}
               id='in-progress'
               title='In Progress Tasks'
               tasks={getTasksByStatus('in-progress')}
             />
             <Column
+              disable={true}
               id='completed'
               title='Completed Tasks'
               tasks={getTasksByStatus('completed')}
@@ -140,11 +146,12 @@ const TaskCard = ({ task }) => {
   );
 };
 
-const Column = ({ id, title, tasks }) => {
+const Column = ({ id, title, tasks, disable }) => {
   const { setNodeRef, isOver } = useDroppable({ id });
-
+  const noref = useRef()
   return (
     <div
+      // ref={!disable ?  noref : setNodeRef}
       ref={setNodeRef}
       className={`p-4 bg-gray-200 rounded-xl min-h-[400px] shadow-md transition-all duration-300 ${isOver ? 'ring-2 ring-orange-400' : ''
         }`}

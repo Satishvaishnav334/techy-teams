@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import taskModel from "../../../models/task";
+import taskModel from "../../models/task";
 export async function PUT(req) {
     try {
         console.log("object")

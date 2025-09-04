@@ -94,9 +94,9 @@ function page() {
       <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5'>
         <Link href="/dashboard/tasks" className=' bg-red-100 flex-col hover:bg-red-200 flex justify-center items-center rounded-xl min-h-[150px]  max-w-[400px] shadow-md transition-all duration-300'>
           <h1 className='font-bold text-2xl '>Total Tasks</h1>
-          <p className='text-green-600 font-semibold text-lg'>{tasks?.length}</p>
+          <p className='text-green-600 font-semibold text-lg'>{tasks?.length == 0 ? "No Task" : tasks?.length}</p>
         </Link>
-        <Link href="/dashboard/teams" className=' bg-blue-100 flex-col hover:bg-blue-200 flex justify-center items-center rounded-xl min-h-[150px]  max-w-[400px] shadow-md transition-all duration-300'>
+        <Link href="/admin/dashboard/manage-teams" className=' bg-blue-100 flex-col hover:bg-blue-200 flex justify-center items-center rounded-xl min-h-[150px]  max-w-[400px] shadow-md transition-all duration-300'>
           <h1 className='font-bold text-2xl '> All Teams</h1>
           <p className='text-red-500 font-semibold text-lg'>Go To Team</p>
         </Link>
@@ -104,15 +104,15 @@ function page() {
       <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5'>
         <Link href="/admin/dashboard/manage-tasks" className=' bg-gray-200 flex-col hover:bg-gray-300 flex justify-center items-center rounded-xl min-h-[150px]  max-w-[400px] shadow-md transition-all duration-300'>
           <h1 className='font-bold text-2xl '>Completed Tasks</h1>
-          <p className='text-green-600 font-semibold text-lg'>{complatedTask?.length}</p>
+          <p className='text-green-600 font-semibold text-lg'>{complatedTask?.length == 0 ? "No Completed Task" : complatedTask?.length}</p>
         </Link>
         <Link href="/admin/dashboard/manage-tasks" className=' bg-gray-200 flex-col hover:bg-gray-300 flex justify-center items-center rounded-xl min-h-[150px]  max-w-[400px] shadow-md transition-all duration-300'>
           <h1 className='font-bold text-2xl '>Pandding Tasks</h1>
-          <p className='text-red-800 font-semibold text-lg'>{panddingTask?.length}</p>
+          <p className='text-red-800 font-semibold text-lg'>{panddingTask?.length == 0 ? "No Pending Task" : panddingTask?.length}</p>
         </Link>
         <Link href="/admin/dashboard/manage-tasks" className=' bg-gray-200 flex-col hover:bg-gray-300 flex justify-center items-center rounded-xl min-h-[150px]  max-w-[400px] shadow-md transition-all duration-300'>
           <h1 className='font-bold text-2xl '>In-Progress Tasks</h1>
-          <p className='text-orange-400 font-semibold text-lg'>{inProgressTask?.length}</p>
+          <p className='text-orange-400 font-semibold text-lg'>{inProgressTask?.length == 0 ? "No In-Progress Task" : inProgressTask?.length}</p>
         </Link>
       </div>
       <div className='flex h-full flex-col md:flex-row w-full md:w-[90vw] lg:w-full   justify-around gap-5 lg:items-end lg:p-5'>
