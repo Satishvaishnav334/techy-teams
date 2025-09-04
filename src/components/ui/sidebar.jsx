@@ -4,7 +4,7 @@ import Link from "next/link";
 import React, { useState, createContext, useContext, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { ChevronDown, ChevronRight, User } from "lucide-react";
 
 const SidebarContext = createContext(undefined);
@@ -89,19 +89,17 @@ export const SidebarSup = ({
 }) => {
   const { open, animate } = useSidebar();
   const [hoverOpen, setHoverOpen] = useState(false)
+  const pathname = usePathname()
   const router = useRouter()
-  useEffect(()=>{
-    if(!open){
+  useEffect(() => {
+    if (!open) {
       setHoverOpen(false)
     }
-  },[open])
+  }, [open])
   return (
-    <div onDoubleClick={()=>router.push(link.href)}>
+    <div onDoubleClick={() => router.push(link.href)}>
       <div onClick={() => { setHoverOpen(!hoverOpen) }}
-            
-       
-
-        className={cn("flex items-center mt-2 justify-start gap-5 group/sidebar py-2", className)}
+        className={cn("flex items-center mt-2 justify-start gap-5 group/sidebar py-2", className,)}
         {...props}>
         {link.icon}
         <motion.span
@@ -109,33 +107,33 @@ export const SidebarSup = ({
             display: animate ? (open ? "inline-block" : "none") : "inline-block",
             opacity: animate ? (open ? 1 : 0) : 1,
           }}
-          className=" font-bold  flex-shrink-0 hover:text-[#111111d1]  text-[#11111198] dark:text-neutral-200 text-lg group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0">
+          className={link?.sub?.map((item) => item?.href).includes(pathname) ? " font-bold  flex-shrink-0 text-[#111111d1]  hover:text-[#11111198] dark:text-neutral-200 text-lg group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0" : " font-bold  flex-shrink-0 hover:text-[#111111d1]  text-[#11111198] dark:text-neutral-200 text-lg group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0"}>
           {link.label}
         </motion.span>
         {open && (
           <div>
-            { !hoverOpen ?
-            <ChevronRight
-              animate={{
-                display: animate ? (open ? "inline-block" : "none") : "inline-block",
-                opacity: animate ? (open ? 1 : 0) : 1,
-              }}
-              className=" font-bold  h-6 w-6 flex-shrink-0 hover:text-[#111111d1]  text-[#11111198] dark:text-neutral-200 text-lg group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0">
-            </ChevronRight>
-            :
-            <ChevronDown
-              animate={{
-                display: animate ? (open ? "inline-block" : "none") : "inline-block",
-                opacity: animate ? (open ? 1 : 0) : 1,
-              }}
-              className=" font-bold  h-6 w-6 flex-shrink-0 hover:text-[#111111d1]  text-[#11111198] dark:text-neutral-200 text-lg group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0">
-            </ChevronDown>
+            {!hoverOpen ?
+              <ChevronRight
+                animate={{
+                  display: animate ? (open ? "inline-block" : "none") : "inline-block",
+                  opacity: animate ? (open ? 1 : 0) : 1,
+                }}
+                className=" font-bold  h-6 w-6 flex-shrink-0 hover:text-[#111111d1]  text-[#11111198] dark:text-neutral-200 text-lg group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0">
+              </ChevronRight>
+              :
+              <ChevronDown
+                animate={{
+                  display: animate ? (open ? "inline-block" : "none") : "inline-block",
+                  opacity: animate ? (open ? 1 : 0) : 1,
+                }}
+                className=" font-bold  h-6 w-6 flex-shrink-0 hover:text-[#111111d1]  text-[#11111198] dark:text-neutral-200 text-lg group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0">
+              </ChevronDown>
             }
           </div>
         )}
       </div>
       {link?.sub?.map((item, index) => (
-        <SidebarLink key={index} link={item} hoverOpen={hoverOpen} />
+        <SidebarLink key={index} link={item} hoverOpen={hoverOpen} pathname={pathname} />
       ))}
     </div>
   );
@@ -145,9 +143,11 @@ export const SidebarLink = ({
   link,
   className,
   hoverOpen,
+  pathname,
   ...props
 }) => {
   const { open, animate } = useSidebar();
+
   return (
     <div className={hoverOpen ? "flex" : 'hidden'}>
       <Link
@@ -160,7 +160,7 @@ export const SidebarLink = ({
             display: animate ? (open ? "inline-block" : "none") : "inline-block",
             opacity: animate ? (open ? 1 : 0) : 1,
           }}
-          className=" font-bold   h-6 w-6 flex-shrink-0 hover:text-[#111111d1]  text-[#11111198] dark:text-neutral-200 text-lg group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0">
+          className={pathname == link?.href ? " font-bold   h-6 w-6 flex-shrink-0 text-[#111111d1]  hover:text-[#11111198] dark:text-neutral-200 text-lg group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0" : " font-bold   h-6 w-6 flex-shrink-0 hover:text-[#111111d1]  text-[#11111198] dark:text-neutral-200 text-lg group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0"}>
           {link.label}
         </motion.span>
       </Link>

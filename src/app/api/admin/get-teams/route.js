@@ -8,12 +8,10 @@ export async function GET() {
     try {
         await connectToDatabase();
         Member;
-        const team = await Team.find({}).populate('members', 'name email role')
+        const team = await Team.find({}).populate('members', 'name email tasks')
         // console.log(team)
         const io = globalThis.server?.io;
-        if (io) {
-            io.emit("notification", { message: `All Task fetched}` });
-        }
+      
         return NextResponse.json(team, { status: 200 });
     }
     catch (error) {

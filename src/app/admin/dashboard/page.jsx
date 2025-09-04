@@ -1,225 +1,130 @@
-'use client'
-
-import { useState, useMemo, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAdminContext } from '@/components/context/AdminContext';
-import { useLoadingContext } from '@/components/context/LoadingContext';
-import axios from 'axios';
-import { toast } from 'sonner';
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+'use client';
+import React, { useEffect, useState } from 'react';
+import { Pie } from 'react-chartjs-2';
+import { Bar } from 'react-chartjs-2';
 import Link from 'next/link';
-import { Plus } from 'lucide-react';
-import { deleteCookie, getCookie } from 'cookies-next/client';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement
+} from 'chart.js';
+import { useAdminContext } from '@/components/context/AdminContext';
 
-function AdminDashboard() {
-  const { tasks, teams, users, refresh, admin, isAdmin } = useAdminContext();
-  const { createNotification, setLoading } = useLoadingContext()
-  const router = useRouter();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [searchTeam, setSearchTeam] = useState('');
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement
+);
 
 
+export const options = {
+  plugins: {
+    legend: {
+      position: 'top',
+    },
+    title: {
+      display: true,
+      text: 'Team Perforemence   ',
+    },
+  },
+};
 
-  const filteredtasks = useMemo(() => {
+function page() {
+  // const { user } = useLoadingContext();
+  const { teams, tasks, refresh,isAdmin } = useAdminContext()
+  const [panddingTask, setPanddingTask] = useState()
+  const [complatedTask, setComplatedTask] = useState()
+  const [inProgressTask, setInProgressTask] = useState()
+  const [teamtasks, setTeamTasks] = useState(teams?.map((team) => team?.members?.map((mem) => mem?.tasks?.length)))
 
-    return tasks?.filter((p) =>
-      p?.title?.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  }, [tasks, searchTerm]);
 
-  const filteredteams = useMemo(() => {
-    return teams
-      ?.filter((p) =>
-        p?.teamName?.toLowerCase().includes(searchTeam.toLowerCase())
-      )
-  }, [teams, searchTeam]);
+  useEffect(() => {
+    setPanddingTask(tasks?.filter((task) => task?.status === "pending"))
+    setComplatedTask(tasks?.filter((task) => task?.status === "completed"))
+    setInProgressTask(tasks?.filter((task) => task?.status === "in-progress"))
+    const result = teamtasks.map((subArr) => subArr.reduce((sum, val) => sum + val, 0))
+  }, [tasks, teams])
 
-  const handleDelete = async (slug, title) => {
-    if (!confirm("Are you sure you want to delete this task?")) return;
-    try {
-      setLoading(true)
-      const res = await axios.delete(`/api/admin/get-tasks/${slug}`);
-      if (res.status == '200') {
-        createNotification(`The Task ${title} is Deleted by ${admin?.name}`)
-        refresh();
-      }
-      else {
-        toast.error("Failed to delete task.");
-      }
-    } catch (err) {
-      console.error(err);
-    }
-    finally {
-      setLoading(false)
-    }
+  const bardata = {
+    labels: teams?.map((team) => team?.teamName),
+    datasets: [
+      {
+        label: 'Tasks',
+        data: teams?.map((team) => team?.members?.map((mem) => mem?.tasks?.length)).map(sub => eval(sub.join('+'))),
+        backgroundColor: [
+          "green"
+        ],
+        borderWidth: 1,
+      },
+    ],
   };
-  const handleTeamDelete = async (slug, teamName) => {
-    if (!confirm("Are you sure you want to delete this task?")) return;
-    try {
-      setLoading(true)
-      const res = await axios.delete(`/api/admin/get-teams/${slug}`);
-      if (res.status == '200') {
-        createNotification(`The Team ${teamName} is Deleted by ${admin?.name}`)
 
-        refresh();
-      } else {
-        toast.error("Failed to delete task.");
-      }
-    } catch (err) {
-      console.error(err);
-    }
-    finally {
-      setLoading(false)
-    }
+  const data = {
+    labels: ['Pandding Task', 'In-Progress', 'Completed Task'],
+    datasets: [
+      {
+        label: 'Task Status',
+        data: [panddingTask?.length, inProgressTask?.length, complatedTask?.length],
+        backgroundColor: [
+          "red",
+          "blue",
+          "green"
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+        ],
+        borderWidth: 1,
+      },
+    ],
   };
+
   return (
-    <div className='flex flex-col items-center justify-start w-full  p-2'>
-      <div className=' w-full h-full mt-4'>
-        <h1 className='sm:text-2xl text-lg font-bold text-center '>Task Table</h1>
-        <div className='flex items-center justify-start gap-5 sm:p-4   w-full'>
-          <Link href='/admin/dashboard/manage-tasks/add-task' className='sm:px-4 px-2 justify-center items-center py-1 sm:py-2 text-sm sm:text-lg bg-blue-600 text-white flex gap-1 rounded hover:bg-blue-700'>
-            <Plus />
-            Add Tasks
-          </Link>
-          <div className="flex w-[60%]  bg-gray-100">
-            <input
-
-              type="text"
-              placeholder="Search tasks..."
-              className="border p-2 rounded w-full"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
+    <div className='h-full w-full p-5 flex flex-col justify-around gap-5 items-around'>
+      <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5'>
+        <Link href="/dashboard/tasks" className=' bg-red-100 flex-col hover:bg-red-200 flex justify-center items-center rounded-xl min-h-[150px]  max-w-[400px] shadow-md transition-all duration-300'>
+          <h1 className='font-bold text-2xl '>Total Tasks</h1>
+          <p className='text-green-600 font-semibold text-lg'>{tasks?.length}</p>
+        </Link>
+        <Link href="/dashboard/teams" className=' bg-blue-100 flex-col hover:bg-blue-200 flex justify-center items-center rounded-xl min-h-[150px]  max-w-[400px] shadow-md transition-all duration-300'>
+          <h1 className='font-bold text-2xl '> All Teams</h1>
+          <p className='text-red-500 font-semibold text-lg'>Go To Team</p>
+        </Link>
+      </div>
+      <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5'>
+        <Link href="/admin/dashboard/manage-tasks" className=' bg-gray-200 flex-col hover:bg-gray-300 flex justify-center items-center rounded-xl min-h-[150px]  max-w-[400px] shadow-md transition-all duration-300'>
+          <h1 className='font-bold text-2xl '>Completed Tasks</h1>
+          <p className='text-green-600 font-semibold text-lg'>{complatedTask?.length}</p>
+        </Link>
+        <Link href="/admin/dashboard/manage-tasks" className=' bg-gray-200 flex-col hover:bg-gray-300 flex justify-center items-center rounded-xl min-h-[150px]  max-w-[400px] shadow-md transition-all duration-300'>
+          <h1 className='font-bold text-2xl '>Pandding Tasks</h1>
+          <p className='text-red-800 font-semibold text-lg'>{panddingTask?.length}</p>
+        </Link>
+        <Link href="/admin/dashboard/manage-tasks" className=' bg-gray-200 flex-col hover:bg-gray-300 flex justify-center items-center rounded-xl min-h-[150px]  max-w-[400px] shadow-md transition-all duration-300'>
+          <h1 className='font-bold text-2xl '>In-Progress Tasks</h1>
+          <p className='text-orange-400 font-semibold text-lg'>{inProgressTask?.length}</p>
+        </Link>
+      </div>
+      <div className='flex h-full flex-col md:flex-row w-full md:w-[90vw] lg:w-full   justify-around gap-5 lg:items-end lg:p-5'>
+        <div className=''>
+          <Pie options={options} data={data} width={300} height={300} />
+        </div>
+        <div className=' h-full'>
+          <Bar options={options} data={bardata}  width={500} height={350} />
         </div>
       </div>
-
-      <Table className='my-3'>
-        <TableCaption>All tasks</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Task Title</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Priority</TableHead>
-            <TableHead>Due Date</TableHead>
-            <TableHead>Assigned To</TableHead>
-            <TableHead >Edit</TableHead>
-            <TableHead >Delete</TableHead>
-          </TableRow>
-        </TableHeader>
-
-        <TableBody>
-          {filteredtasks?.map((task) => (
-            <TableRow key={task._id} >
-              <TableCell>{task.title}</TableCell>
-              <TableCell>{task.status}</TableCell>
-              <TableCell>{task.priority}</TableCell>
-              <TableCell >{formatDate(task.dueDate)}</TableCell>
-              <TableCell>{task?.assignedTo?.name}</TableCell>
-              <TableCell className="">
-                <button
-                  onClick={() => router.push(`/admin/dashboard/manage-tasks/update/${task.slug}`)}
-                  className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
-                >
-                  Update
-                </button>
-              </TableCell>
-
-              <TableCell className="">
-                <button
-                  onClick={() => handleDelete(task.slug, task?.title)}
-                  className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
-                >
-                  Delete
-                </button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      <hr className='text-gray-500 h-1 w-full my-3' />
-      <div className=' w-full h-full mt-4'>
-        <h1 className='sm:text-2xl text-lg font-bold text-center'>Team  Table</h1>
-        <div className='flex items-center justify-start gap-5 p-4 m w-full'>
-          <Link href='/admin/dashboard/manage-teams/add-team' className='sm:px-4 sm:py-2 px-2 py-1 text-sm sm:text-lg justify-center items-center bg-blue-600 text-white flex gap-1 rounded hover:bg-blue-700'>
-            <Plus /> Add teams
-          </Link>
-          <div className="flex md:w-[60%] bg-gray-100">
-            <input
-
-              type="text"
-              placeholder="Search Teams..."
-              className="border p-2 rounded w-full"
-              value={searchTeam}
-              onChange={(e) => setSearchTeam(e.target.value)}
-            />
-          </div>
-        </div>
-      </div>
-
-
-      <Table className="my-3">
-        <TableCaption>All teams</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Team Name</TableHead>
-            <TableHead>Description</TableHead>
-            <TableHead>Members</TableHead>
-            <TableHead >Update</TableHead>
-            <TableHead >Delete</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {filteredteams?.map((team) => (
-            <TableRow key={team._id}>
-              <TableCell>{team.teamName}</TableCell>
-              <TableCell>{team.description}</TableCell>
-              <TableCell>
-                {team.members?.map((user,index) => <span key={index} className='mx-2'>{user?.name}</span>)}
-              </TableCell>
-              <TableCell className="">
-                <button
-                  onClick={() => router.push(`/admin/dashboard/manage-teams/update/${team?.slug}`)}
-                  className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
-                >
-                  Update
-                </button>
-              </TableCell>
-              <TableCell className="">
-                <button
-                  onClick={() => handleTeamDelete(team?.slug, team?.teamName)}
-                  className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
-                >
-                  Delete
-                </button>
-
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
     </div>
-  );
+  )
 }
 
-export default AdminDashboard;
-
-function formatDate(dateString) {
-  const date = new Date(dateString);
-  return date.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    // hour: 'numeric',
-    // minute: '2-digit',
-    hour12: true
-  });
-}
+export default page

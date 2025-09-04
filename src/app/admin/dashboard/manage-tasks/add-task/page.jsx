@@ -9,9 +9,9 @@ import { toast } from 'sonner'
 import { useLoadingContext } from '@/components/context/LoadingContext'
 import { Button, Input, Textarea, Typography } from "@material-tailwind/react";
 function page() {
-  
-  const { users, admin,refresh, } = useAdminContext()
-  const {  createNotification,setLoading } = useLoadingContext()
+
+  const { users, admin, refresh, } = useAdminContext()
+  const { createNotification, setLoading } = useLoadingContext()
   const router = useRouter()
   const [title, setTitle] = useState()
   const [desc, setDesc] = useState()
@@ -24,12 +24,14 @@ function page() {
     e.preventDefault();
     try {
       setLoading(true)
-      const date = new Date()
-      const slug = title?.split(' ').join('-').toLowerCase().date;
+      const date2 = new Date()
+      const timestamp = date2.getTime()
+      const slug = title+timestamp;
+      console.log(slug)
       const formData = new FormData();
       formData.append('title', title);
       formData.append('slug', slug);
-      formData.append('status', status ? status : "pending"); 
+      formData.append('status', status ? status : "pending");
       formData.append('priority', priority ? priority : "Medium");
       formData.append('createdBy', admin._id);
       formData.append('description', desc);
@@ -65,7 +67,7 @@ function page() {
         <h1 className=" text-center sm:text-2xl text-xl !text-gray-900 font-bold " >
           Create New Task
         </h1>
-        <Typography  variant="xl" className="my-2 text-left font-medium !text-gray-900" >
+        <Typography variant="xl" className="my-2 text-left font-medium !text-gray-900" >
           Task Title
         </Typography>
         <Input type="text" required={true} className="  focus:border-t-gray-900 rounded-lg text-xl w-full p-2" placeholder="Enter Task Name or Title *" value={title}

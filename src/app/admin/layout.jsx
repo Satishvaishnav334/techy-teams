@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { getCookie } from "cookies-next/client";
-import { LayoutDashboard, Users, ListTodo   ,Edit,CirclePlus,Home, Trash, ScanEye } from "lucide-react";
+import { LayoutDashboard, Users, ListTodo, Edit, CirclePlus, Home, Trash, ScanEye } from "lucide-react";
 import { AdminDataProvider } from "@/components/context/AdminContext";
 import { cn } from "@/lib/utils";
 import { Sidebar, SidebarBody, SidebarLink, SidebarSup } from "@/components/ui/sidebar";
@@ -27,7 +27,7 @@ export default function RootLayout({ children }) {
                         <Home className=" font-bold dark:text-neutral-200 h-5 w-5 flex-shrink-0 text-[#111111d1] transition-colors duration-300 " />
                     ),
                 },
-           
+
             ]
         },
         {
@@ -52,7 +52,7 @@ export default function RootLayout({ children }) {
                         <Edit className=" font-bold dark:text-neutral-200 h-5 w-5 flex-shrink-0 text-[#111111d1] transition-colors duration-300 " />
                     ),
                 },
-               
+
                 {
                     label: "Delete Tasks",
                     href: "/admin/dashboard/manage-tasks",
@@ -80,7 +80,7 @@ export default function RootLayout({ children }) {
                     label: "Create New Team",
                     href: "/admin/dashboard/manage-teams/add-team",
                     icon: (
-                         <CirclePlus className=" font-bold dark:text-neutral-200 h-5 w-5 flex-shrink-0 text-[#111111d1] transition-colors duration-300 " />
+                        <CirclePlus className=" font-bold dark:text-neutral-200 h-5 w-5 flex-shrink-0 text-[#111111d1] transition-colors duration-300 " />
                     ),
                 },
                 {
@@ -103,7 +103,6 @@ export default function RootLayout({ children }) {
 
     const { setLoading, loading } = useLoadingContext();
     const [open, setOpen] = useState(false)
-    const [hoverOpen, setHoverOpen] = useState(false)
 
 
     useEffect(() => {
@@ -124,8 +123,8 @@ export default function RootLayout({ children }) {
         <AdminDataProvider>
             <div
                 className={cn(
-                    "rounded-md flex flex-col md:flex-row bg-white w-full flex-1  mx-auto border border-neutral-200 dark:border-neutral-700 overflow-hidden",
-                    "w-full  " // for your use case, use `h-screen` instead of `h-[60vh]`
+                    "rounded-md flex flex-col md:flex-row bg-white flex-1  w-full border border-neutral-200 dark:border-neutral-700 overflow-hidden",
+                    " w-full " // for your use case, use `h-screen` instead of `h-[60vh]`
                 )}>
                 <Sidebar open={open} setOpen={setOpen} >
                     <SidebarBody className="justify-between gap-10">
@@ -140,19 +139,17 @@ export default function RootLayout({ children }) {
                         </div>
                     </SidebarBody>
                 </Sidebar>
-
                 {
                     loading ?
                         <div className='h-[90vh] w-full flex  justify-center items-center'>
                             <Loader />
                         </div>
                         :
-                        <div className="h-full w-full bg-white">
-                            <Navbar islogin={true} isAdmin={true} />
+                        <div className="h-full w-full md:min-w-[90vw] lg:w-full  bg-white">
+                            <Navbar islogin={true} isAdmin={true} adminLinks={links} />
                             {children}
                         </div>
                 }
-
             </div>
         </AdminDataProvider>
     );

@@ -52,21 +52,15 @@ function page() {
     setInProgressTask(getTasksByStatus("in-progress"))
     setTeamMates(user?.team?.members)
   }, [])
+  // console.log(teamMates?.map((mem)=>mem?.tasks?.map((tsk)=>tsk?.length)),"team tasks")
   const bardata = {
-    labels: teamMates?.map((mem)=>mem?.name),
+    labels: teamMates?.map((mem) => mem?.name),
     datasets: [
       {
-        label: 'Task Status',
-        data: getTasksByStatus("completed"),
+        label: 'Tasks',
+        data: teamMates?.map((mem) => mem?.tasks?.length),
         backgroundColor: [
-          "red",
-          "blue",
           "green"
-        ],
-        borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
         ],
         borderWidth: 1,
       },
@@ -94,33 +88,33 @@ function page() {
       },
     ],
   };
-  console.log(teamMates?.map((mem)=>mem?.name),"teanmates")
-  
+  console.log(teamMates?.map((mem) => mem?.name), "teanmates")
+
   return (
     <div className='h-full w-full p-5 flex flex-col justify-around gap-5 items-around'>
       <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5'>
-        <div className=' bg-red-200 flex-col flex justify-center items-center rounded-xl min-h-[150px]  max-w-[400px] shadow-md transition-all duration-300'>
+        <Link href="/dashboard/tasks" className=' bg-red-100 flex-col hover:bg-red-200 flex justify-center items-center rounded-xl min-h-[150px]  max-w-[400px] shadow-md transition-all duration-300'>
           <h1 className='font-bold text-2xl '>Total Tasks</h1>
           <p className='text-green-600 font-semibold text-lg'>{user?.tasks?.length}</p>
-        </div>
-        <div className=' bg-blue-200 flex-col flex justify-center items-center rounded-xl min-h-[150px]  max-w-[400px] shadow-md transition-all duration-300'>
+        </Link>
+        <Link href="/dashboard/teams" className=' bg-blue-100 flex-col hover:bg-blue-200 flex justify-center items-center rounded-xl min-h-[150px]  max-w-[400px] shadow-md transition-all duration-300'>
           <h1 className='font-bold text-2xl '> {user?.team?.teamName}</h1>
-          <Link href='/dashboard/teams' className='text-red-500 font-semibold text-lg'>Go To Team</Link>
-        </div>
+          <p className='text-red-500 font-semibold text-lg'>Go To Team</p>
+        </Link>
       </div>
       <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5'>
-        <div className=' bg-gray-200 flex-col flex justify-center items-center rounded-xl min-h-[150px]  max-w-[400px] shadow-md transition-all duration-300'>
+        <Link href="/dashboard/tasks" className=' bg-gray-200 flex-col hover:bg-gray-300 flex justify-center items-center rounded-xl min-h-[150px]  max-w-[400px] shadow-md transition-all duration-300'>
           <h1 className='font-bold text-2xl '>Completed Tasks</h1>
           <p className='text-green-600 font-semibold text-lg'>{complatedTask?.length}</p>
-        </div>
-        <div className=' bg-gray-200 flex-col flex justify-center items-center rounded-xl min-h-[150px]  max-w-[400px] shadow-md transition-all duration-300'>
+        </Link>
+        <Link href="/dashboard/tasks" className=' bg-gray-200 flex-col hover:bg-gray-300 flex justify-center items-center rounded-xl min-h-[150px]  max-w-[400px] shadow-md transition-all duration-300'>
           <h1 className='font-bold text-2xl '>Pandding Tasks</h1>
           <p className='text-red-800 font-semibold text-lg'>{panddingTask?.length}</p>
-        </div>
-        <div className=' bg-gray-200 flex-col flex justify-center items-center rounded-xl min-h-[150px]  max-w-[400px] shadow-md transition-all duration-300'>
+        </Link>
+        <Link href="/dashboard/tasks" className=' bg-gray-200 flex-col hover:bg-gray-300 flex justify-center items-center rounded-xl min-h-[150px]  max-w-[400px] shadow-md transition-all duration-300'>
           <h1 className='font-bold text-2xl '>In-Progress Tasks</h1>
           <p className='text-orange-400 font-semibold text-lg'>{inProgressTask?.length}</p>
-        </div>
+        </Link>
       </div>
       <div className='flex h-full  w-full justify-around items-end p-5'>
         <div className=''>

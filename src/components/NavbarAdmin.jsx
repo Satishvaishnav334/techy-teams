@@ -4,36 +4,17 @@ import { DropdownMenu } from "@/components/ui/dropdown-menu"
 import { UserPen, House, User, LogOut, AlignRight, BellRing, X } from "lucide-react"
 import { useEffect, useState } from "react";
 import { deleteCookie, getCookie } from 'cookies-next'
-import { redirect, useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useLoadingContext } from './context/LoadingContext';
 import { toast } from 'sonner';
-function Navbar({ isAdmin }) {  
+import { SidebarLink } from './ui/sidebar';
+function Navbar({ adminLinks }) {
   const router = useRouter();
   const { user, setIsLogin, isLogin } = useLoadingContext()
   const [isOpen, setIsOpen] = useState(false);
-  const Adminlinks = [
-    {
-      label: "Admin Dashboard",
-      href: "/admin/dashboard",
-    },
-    {
-      label: "Add New Task",
-      href: "/admin/dashboard/manage-tasks/add-task",
-    },
-    {
-      label: "Add New Team",
-      href: "/admin/dashboard/manage-teams/add-team",
-    },
-    {
-      label: "Manage Tasks",
-      href: "/admin/dashboard/manage-tasks",
-    },
-    {
-      label: "Manage Teams",
-      href: "/admin/dashboard/manage-teams",
-    },
-  ]
+  const pathname = usePathname();
+
 
   useEffect(() => {
     router.refresh();
@@ -62,15 +43,12 @@ function Navbar({ isAdmin }) {
       setIsLogin(false)
     }
   }
-
   return (
     <div className='w-full bg-white justify-end  flex border-b-black border-1 shadow-lg  '>
       <nav className='border-b-1 w-[100%] p-3 '>
         <div className=' flex justify-between items-center   text-[#11111198]'>
-          
-
-<div className='text-black w-[25%]  lg:w-[40%]'>
-            <Link href='/dashboard'>
+          <div className='text-black w-[25%]  lg:w-[40%]'>
+            <Link href='/admin/dashboard'>
               <h1 className='text-2xl lg:text-4xl font-extrabold md:m-2'>Techy_Teams</h1>
             </Link>
           </div>
@@ -98,7 +76,7 @@ function Navbar({ isAdmin }) {
           </div>
 
           {isOpen && (
-            <div className='absolute top-15 right-0 bg-white z-5 m-2 shadow-lg rounded-lg p-4 w-48'>
+            <div className='absolute top-15 right-0 bg-white z-5 m-2 shadow-lg rounded-lg p-4 w-53 sm:w-60'>
               < DropdownMenu role={user?.role}
                 options={[
 
@@ -117,26 +95,30 @@ function Navbar({ isAdmin }) {
                 Menu
               </DropdownMenu>
 
-              <div className=' flex  flex-col justify-between items-start my-5   font-semibold text-lg gap-4'>
-                {isAdmin && (
-                  Adminlinks.map((item, index) => (
-                    <Link key={index} href={item.href} onClick={() => setIsOpen(false)} className='hover:text-[#111111d1] transition-colors duration-300'>
-                      {item.label}
-                    </Link>
-                  ))
-                )}
-                {Userlinks.map((item, index) => (
-                  <Link key={index} href={item.href} onClick={() => setIsOpen(false)} className='hover:text-[#111111d1] transition-colors duration-300'>
-                    {item.label}
-                  </Link>
-                ))}
+              <div className=' flex  flex-col justify-between items-start my-5   font-semibold sm:text-lg text-sm gap-4'>
+                {
+                  adminLinks?.map((item, index) => (
+                    <div key={index}  className='hover:text-[#111111d1] transition-colors duration-300'>
+                      {item?.label}
+                      <div className="flex flex-col">
+                        {item?.sub?.map((sub, idx) => (
+                          <Link key={idx} href={sub?.href} onClick={() => setIsOpen(false)} 
+                          className={ pathname == sub?.href ? `flex items-center ml-5 border-blue-300 border-b-1 justify-start gap-2 group/sidebar py-2 hover:text-black text-black/80     transition-colors duration-300` : `flex items-center ml-5 border-blue-300 border-b-1 justify-start gap-2 group/sidebar py-2 hover:text-[#111111d1]   transition-colors duration-300` }
+                          >
+                            {sub?.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )
+                  )}
+
               </div>
             </div>
           )
           }
         </div>
       </nav >
-
     </div >
   )
 }
